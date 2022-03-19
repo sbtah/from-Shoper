@@ -68,5 +68,3 @@ def get_all_products():
 
     return res
 
-
-print(get_all_products())

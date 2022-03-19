@@ -26,11 +26,11 @@ def create_product():
     url = f"https://{SHOPIFY_STORE}.myshopify.com/admin/api/2022-01/products.json"
     payload = {
         "product": {
-            "title": "test",
-            "body_html": "<h1>TEST</h1>",
-            "vendor": "Test vendor",
-            "product_type": "ooo",
-            "published": "false",
+            "title": f"test",
+            "body_html": f"<h1>TEST</h1>",
+            "vendor": f"Test vendor",
+            "product_type": f"ooo",
+            "published": f"false",
         }
     }
     headers = {
@@ -42,4 +42,4 @@ def create_product():
     return response.json()
 
 
-print(create_product())
+print(get_products())

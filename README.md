@@ -1,4 +1,4 @@
-# Simple app that loads all products from SHOPER Api and then creates products on SHOPIFY platform.
+# Simple Django app that loads all products from SHOPER Api and then creates products on SHOPIFY platform.
 
 
 Currently my company is starting a branch in USA. On European market we are running a store via Shoper platform, but for US market we decided to go with Shopify.

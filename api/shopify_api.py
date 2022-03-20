@@ -53,5 +53,5 @@ def create_product():
 
 
 # == DEBUGING ==
-# print(get_products())
+print(get_products())
 # print(create_product())

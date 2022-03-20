@@ -31,6 +31,16 @@ def create_product():
             "vendor": f"Test vendor",
             "product_type": f"ooo",
             "published": f"false",
+            "images": [
+                {
+                    "src": f"https://meowbaby.eu/userdata/public/gfx/3593/Gotowy-zestaw-basen-z-kulkami-000230.jpg"
+                }
+            ],
+            "presentment_prices": [
+                {
+                    "price": {"amount": "0.00", "currency_code": "USD"},
+                }
+            ],
         }
     }
     headers = {
@@ -42,4 +52,6 @@ def create_product():
     return response.json()
 
 
-print(get_products())
+# == DEBUGING ==
+# print(get_products())
+# print(create_product())

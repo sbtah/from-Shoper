@@ -3,7 +3,6 @@ import time
 import os
 from dotenv import load_dotenv
 from django.core.management.base import BaseCommand
-from django.db.utils import OperationalError
 from images.models import Image
 
 
@@ -52,39 +51,19 @@ def copy_all_product_images_from_shoper_api():
         res = response.json()
         items = res.get("list")
         for i in items:
-            # print(i)
+            # print(i) # for debuging!
             image = Image.objects.create(
                 shoper_id=i.get("gfx_id"),
                 shoper_product_id=i.get("product_id"),
                 shoper_main=i.get("main"),
                 order=i.get("order"),
-                shoper_link=f'https://meowbaby.eu/userdata/public/gfx/{i.get("gfx_id")}/{i.get("name")}.jpg',
+                shoper_link=f'https://{SHOPER_STORE}/userdata/public/gfx/{i.get("gfx_id")}/{i.get("name")}.jpg',
                 shoper_unic=i.get("unic_name"),
                 hidden=i.get("hidden"),
                 extension=f'{i.get("extension")}',
             )
             image.save()
-
-            # shoper_id = i.get("gfx_id")
-            # shoper_product_id = i.get("product_id")
-            # shoper_main = i.get("main")
-            # order = i.get("order")
-            # shoper_link = f'https://meowbaby.eu/userdata/public/gfx/{i.get("gfx_id")}/{i.get("name")}.jpg'
-            # shoper_unic = i.get("unic_name")
-            # hidden = i.get("hidden")
-            # extension = f'{i.get("extension")}'
-            # print(
-            #     shoper_id,
-            #     shoper_product_id,
-            #     shoper_main,
-            #     order,
-            #     shoper_link,
-            #     shoper_unic,
-            #     hidden,
-            #     extension,
-            # )
-
-            time.sleep(0.5)
+            time.sleep(1)
             print(f"Object with ID:{image.id} Created")
 
     return
@@ -95,15 +74,16 @@ def clear_data():
 
 
 class Command(BaseCommand):
-    """"""
+    """Main class for command object that imports images from shoper."""
 
     def handle(self, *args, **options):
-        """"""
+        """Custom handle method."""
 
         clear_data()
+        self.stdout.write(
+            self.style.SUCCESS(
+                f"Database cleared Image objects count: {Image.objects.all().count()}"
+            )
+        )
         copy_all_product_images_from_shoper_api()
-        print("completed")
         self.stdout.write(self.style.SUCCESS("Database available!"))
-
-
-copy_all_product_images_from_shoper_api()

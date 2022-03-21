@@ -45,4 +45,4 @@ class Image(models.Model):
 
     def __str__(self):
 
-        return f"ID-{self.id};Shoper ID-{self.shoper_id};Shopify ID-{self.shopify_id}; Shoper Product ID-{self.shoper_product_id}"
+        return f"ID-{self.id};Shoper ID-{self.shoper_id};Shopify ID-{self.shopify_id}; Shoper Product ID-{self.shoper_product_id}; Order-{self.order}"

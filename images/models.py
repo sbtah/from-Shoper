@@ -20,6 +20,13 @@ class Image(models.Model):
         sixth = 6
         seventh = 7
         eighth = 8
+        ninth = 9
+        tenth = 10
+        eleventh = 11
+        twelfth = 12
+        thirteenth = 13
+        fourteenth = 14
+        fifteenth = 15
 
     order = models.IntegerField(
         choices=Order.choices, validators=[MinValueValidator(1), MaxValueValidator(15)]
@@ -38,4 +45,4 @@ class Image(models.Model):
 
     def __str__(self):
 
-        return f"ID {self.id};Shoper ID {self.shoper_id};Shopify ID {self.shopify_id};Product ID {self.product_id}"
+        return f"ID-{self.id};Shoper ID-{self.shoper_id};Shopify ID-{self.shopify_id}; Shoper Product ID-{self.shoper_product_id}"

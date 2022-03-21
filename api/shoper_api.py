@@ -3,6 +3,7 @@ import time
 import os
 import json
 from dotenv import load_dotenv
+from images.models import Image
 
 
 # Get private data fron .env variable

@@ -8,7 +8,7 @@ class Image(models.Model):
     shoper_id = models.CharField(max_length=20, unique=True)
     shopify_id = models.CharField(max_length=20, blank=True, null=True)
     shoper_product_id = models.CharField(max_length=20, blank=True, null=True)
-    shoper_product_id = models.CharField(max_length=20, blank=True, null=True)
+    shopify_product_id = models.CharField(max_length=20, blank=True, null=True)
     shoper_main = models.BooleanField(default=False)
 
     class Order(models.IntegerChoices):
@@ -22,11 +22,11 @@ class Image(models.Model):
         eighth = 8
 
     order = models.IntegerField(
-        choices=Order.choices, validators=[MinValueValidator(1), MaxValueValidator(8)]
+        choices=Order.choices, validators=[MinValueValidator(1), MaxValueValidator(15)]
     )
     shoper_link = models.CharField(max_length=255, unique=True, blank=True, null=True)
     shopify_link = models.CharField(max_length=255, unique=True, blank=True, null=True)
-    shoper_unic = models.CharField(max_length=255)
+    shoper_unic = models.CharField(max_length=255, unique=True)
     hidden = models.BooleanField(default=False)
     extension = models.CharField(max_length=3, blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
@@ -34,7 +34,7 @@ class Image(models.Model):
 
     class Meta:
 
-        ordering = "-created"
+        ordering = ("-created",)
 
     def __str__(self):
 

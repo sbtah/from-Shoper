@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 SHOPIFY_STORE = os.environ.get("SHOPIFY_STORE")
 SHOPIFY_TOKEN = os.environ.get("SHOPIFY_TOKEN")
+SHOPER_STORE = os.environ.get("SHOPER_STORE")
 
 
 def get_products():
@@ -20,7 +21,12 @@ def get_products():
     return response.json()
 
 
-def create_product():
+# for product in products:
+
+#     product.create_product()
+
+
+def create_product_at_shopify():
     """"""
 
     url = f"https://{SHOPIFY_STORE}.myshopify.com/admin/api/2022-01/products.json"
@@ -33,7 +39,7 @@ def create_product():
             "published": f"false",
             "images": [
                 {
-                    "src": f"https://meowbaby.eu/userdata/public/gfx/3593/Gotowy-zestaw-basen-z-kulkami-000230.jpg"
+                    "src": f"https:/{SHOPER_STORE}/userdata/public/gfx/3593/Gotowy-zestaw-basen-z-kulkami-000230.jpg"
                 }
             ],
             "presentment_prices": [
@@ -47,8 +53,12 @@ def create_product():
         "X-Shopify-Access-Token": f"{SHOPIFY_TOKEN}",
         "Content-Type": "application/json",
     }
-    response = requests.request("POST", url, headers=headers, data=json.dumps(payload))
+    # shoper_product = Product.objects.get(sku=payload.get("product").get("sku"))
 
+    response = requests.request("POST", url, headers=headers, data=json.dumps(payload))
+    # shoper_product.save(
+    #     field=response.get("product").get("sku"),
+    # )
     return response.json()
 
 

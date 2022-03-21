@@ -158,12 +158,12 @@ def get_product_data_for_shopify(id):
     art_ean = res.get("ean")
     price = res.get("stock").get("price")
     description = res.get("translations").get("en_GB").get("description")
-    main_image = f'https://meowbaby.eu/userdata/public/gfx/{res.get("main_image").get("gfx_id")}/{res.get("main_image").get("name")}'
+    main_image = f'https://{SHOPER_STORE}/userdata/public/gfx/{res.get("main_image").get("gfx_id")}/{res.get("main_image").get("name")}'
     images_list = []
     for image in get_list_of_all_shoper_image_ids():
         if image.get("product_id") == id:
             images_list.append(
-                f'https://meowbaby.eu/userdata/public/gfx/{res.get("gfx_id")}/{res.get("en_GB").get("name")}.jpg'
+                f'https://{SHOPER_STORE}/userdata/public/gfx/{res.get("gfx_id")}/{res.get("en_GB").get("name")}.jpg'
             )
 
     time.sleep(0.5)

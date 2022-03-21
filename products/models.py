@@ -5,13 +5,24 @@ from images.models import Image
 class Product(models.Model):
     """Model for Product object."""
 
-    title = models.CharField(max_length=200)
-    description = models.TextField(blank=True, null=True)
-    vendor = models.CharField(max_length=100)
-    shoper_id = models.IntegerField(unique=True, blank=True, null=True)
+    shoper_title_pl = models.CharField(max_length=200)
+    shoper_title_en = models.CharField(max_length=200)
+    shoper_title_fr = models.CharField(max_length=200)
+    shoper_title_de = models.CharField(max_length=200)
+    shoper_description_pl = models.TextField(blank=True, null=True)
+    shoper_description_en = models.TextField(blank=True, null=True)
+    shoper_description_fr = models.TextField(blank=True, null=True)
+    shoper_description_de = models.TextField(blank=True, null=True)
+    shopify_title = models.CharField(max_length=200, blank=True, null=True)
+    shopify_description = models.TextField(blank=True, null=True)
+
+    vendor_brand = models.CharField(max_length=100)
+    shoper_id = models.IntegerField(unique=True)
     shopify_id = models.IntegerField(unique=True, blank=True, null=True)
-    ean = models.CharField(max_length=13, unique=True)
-    sku = models.CharField(max_length=25, unique=True)
+    shoper_ean = models.CharField(max_length=13, unique=True)
+    shoper_sku = models.CharField(max_length=25, unique=True)
+    shopify_ean = models.CharField(max_length=13, unique=True, blank=True)
+    shopify_sku = models.CharField(max_length=25, unique=True, blank=True)
     images = models.ManyToManyField(Image, blank=True)
     shopify_position = models.IntegerField(blank=True, null=True)
     shoper_weight = models.IntegerField(blank=True, null=True)
@@ -21,6 +32,10 @@ class Product(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     updated_shopify = models.DateTimeField(blank=True, null=True)
+    shoper_price = models.CharField(max_length=40)
+    shoper_gauge_id = models.IntegerField()
+    shopify_seo_title = models.CharField(max_length=200)
+    shopify_seo_description = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return f"Title-{self.title};Shoper_ID-{self.shoper_id};Shopify_ID-{self.shopify_id}"

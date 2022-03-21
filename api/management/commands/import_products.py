@@ -62,9 +62,9 @@ def copy_all_products_from_shoper_api():
             description = i.get("translations").get("en_GB").get("description")
             vendor = "MeowBaby"
             shoper_id = i.get("product_id")
-
             sku = i.get("code")
             ean = i.get("ean")
+            shoper_weight = i.get("vol_weight")
             # print(title, description, vendor, shoper_id, sku, ean)
             # print(
             #     "==============================================================================="

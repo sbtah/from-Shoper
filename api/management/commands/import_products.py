@@ -158,6 +158,7 @@ def copy_all_products_from_shoper_api():
                 updated_shoper=updated_shoper,
                 shoper_price=shoper_price,
                 shoper_gauge_id=shoper_gauge_id,
+                is_on_shoper=is_on_shoper,
             )
             time.sleep(1)
             print(f"Product created: {shoper_id} ")

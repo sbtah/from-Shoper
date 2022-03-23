@@ -29,7 +29,8 @@ class Image(models.Model):
         fifteenth = 15
 
     order = models.IntegerField(
-        choices=Order.choices, validators=[MinValueValidator(1), MaxValueValidator(15)]
+        choices=Order.choices,
+        validators=[MinValueValidator(1), MaxValueValidator(15)],
     )
     shoper_link = models.CharField(max_length=255, unique=True, blank=True, null=True)
     shopify_link = models.CharField(max_length=255, unique=True, blank=True, null=True)

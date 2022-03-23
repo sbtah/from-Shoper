@@ -56,50 +56,50 @@ def copy_all_products_from_shoper_api():
             try:
                 shoper_title_pl = i.get("translations").get("pl_PL").get("name")
             except AttributeError:
-                shoper_title_pl = ""
+                continue
 
             try:
                 shoper_title_en = i.get("translations").get("en_GB").get("name")
             except AttributeError:
-                shoper_title_en = ""
+                continue
 
             try:
                 shoper_title_de = i.get("translations").get("de_DE").get("name")
             except AttributeError:
-                shoper_title_de = ""
+                continue
 
             try:
                 shoper_title_fr = i.get("translations").get("fr_FR").get("name")
             except AttributeError:
-                shoper_title_fr = ""
+                continue
 
             try:
                 shoper_description_pl = (
                     i.get("translations").get("pl_PL").get("description")
                 )
             except AttributeError:
-                shoper_description_pl = ""
+                continue
 
             try:
                 shoper_description_en = (
                     i.get("translations").get("en_GB").get("description")
                 )
             except AttributeError:
-                shoper_description_en = ""
+                continue
 
             try:
                 shoper_description_fr = (
                     i.get("translations").get("de_DE").get("description")
                 )
             except AttributeError:
-                shoper_description_fr = ""
+                continue
 
             try:
                 shoper_description_de = (
                     i.get("translations").get("fr_FR").get("description")
                 )
             except AttributeError:
-                shoper_description_de = ""
+                continue
 
             vendor_brand = SHOPER_STORE[0:-3].capitalize()
             shoper_id = i.get("product_id")
@@ -107,24 +107,37 @@ def copy_all_products_from_shoper_api():
             try:
                 shoper_ean = i.get("ean")
             except AttributeError:
-                shoper_ean = ""
+                continue
 
             shoper_sku = i.get("code")
 
             try:
                 shoper_weight = i.get("vol_weight")
             except AttributeError:
-                shoper_weight = ""
+                continue
+
             is_active_shoper = i.get("stock").get("active")  # dunno if this is right
             created_shoper = i.get("add_date")
 
             try:
                 updated_shoper = i.get("edit_date")
             except AttributeError:
-                updated_shoper = ""
+                continue
 
-            shoper_price = i.get("stock").get("price")
-            shoper_gauge_id = i.get("gauge_id")
+            try:
+                is_on_shoper = f'{True if i.get("add_date") else ""}'
+            except AttributeError:
+                continue
+
+            try:
+                shoper_price = i.get("stock").get("price")
+            except AttributeError:
+                continue
+
+            try:
+                shoper_gauge_id = i.get("gauge_id")
+            except:
+                continue
 
             Product.objects.create(
                 shoper_title_pl=shoper_title_pl,
@@ -150,9 +163,6 @@ def copy_all_products_from_shoper_api():
             print(f"Product created: {shoper_id} ")
 
     return
-
-
-# copy_all_products_from_shoper_api()
 
 
 def clear_data():

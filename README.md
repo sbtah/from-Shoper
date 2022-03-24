@@ -6,4 +6,5 @@ Although, I could import all our products via csv file, I decided to create an A
 
 - Management command that pulls Images from Shoper is implemented!
 - Second management command that downloads Products from Shoper is working.
-- Working on: Adding Images to Product on creation of Product object.
+- Adding Images to parrent Product on creation of Product object is working.
+- Working on: testing...

@@ -56,50 +56,50 @@ def copy_all_products_from_shoper_api():
             try:
                 shoper_title_pl = i.get("translations").get("pl_PL").get("name")
             except AttributeError:
-                continue
+                shoper_title_pl = ""
 
             try:
                 shoper_title_en = i.get("translations").get("en_GB").get("name")
             except AttributeError:
-                continue
+                shoper_title_en = ""
 
             try:
                 shoper_title_de = i.get("translations").get("de_DE").get("name")
             except AttributeError:
-                continue
+                shoper_title_de = ""
 
             try:
                 shoper_title_fr = i.get("translations").get("fr_FR").get("name")
             except AttributeError:
-                continue
+                shoper_title_fr = ""
 
             try:
                 shoper_description_pl = (
                     i.get("translations").get("pl_PL").get("description")
                 )
             except AttributeError:
-                continue
+                shoper_description_pl = ""
 
             try:
                 shoper_description_en = (
                     i.get("translations").get("en_GB").get("description")
                 )
             except AttributeError:
-                continue
+                shoper_description_en = ""
 
             try:
                 shoper_description_fr = (
-                    i.get("translations").get("de_DE").get("description")
-                )
-            except AttributeError:
-                continue
-
-            try:
-                shoper_description_de = (
                     i.get("translations").get("fr_FR").get("description")
                 )
             except AttributeError:
-                continue
+                shoper_description_fr = ""
+
+            try:
+                shoper_description_de = (
+                    i.get("translations").get("de_DE").get("description")
+                )
+            except AttributeError:
+                shoper_description_de = ""
 
             vendor_brand = SHOPER_STORE[0:-3].capitalize()
             shoper_id = i.get("product_id")
@@ -107,14 +107,14 @@ def copy_all_products_from_shoper_api():
             try:
                 shoper_ean = i.get("ean")
             except AttributeError:
-                continue
+                shoper_ean = ""
 
             shoper_sku = i.get("code")
 
             try:
                 shoper_weight = i.get("vol_weight")
             except AttributeError:
-                continue
+                shoper_weight = ""
 
             is_active_shoper = i.get("stock").get("active")  # dunno if this is right
             created_shoper = i.get("add_date")
@@ -122,24 +122,24 @@ def copy_all_products_from_shoper_api():
             try:
                 updated_shoper = i.get("edit_date")
             except AttributeError:
-                continue
+                updated_shoper = ""
 
             try:
                 is_on_shoper = f'{True if i.get("add_date") else ""}'
             except AttributeError:
-                continue
+                is_on_shoper = ""
 
             try:
                 shoper_price = i.get("stock").get("price")
             except AttributeError:
-                continue
+                shoper_price = ""
 
             try:
                 shoper_gauge_id = i.get("gauge_id")
             except:
-                continue
+                shoper_gauge_id = ""
 
-            Product.objects.create(
+            Product.objects.update_or_create(
                 shoper_title_pl=shoper_title_pl,
                 shoper_title_en=shoper_title_en,
                 shoper_title_de=shoper_title_de,
@@ -161,7 +161,7 @@ def copy_all_products_from_shoper_api():
                 is_on_shoper=is_on_shoper,
             )
             time.sleep(1)
-            print(f"Product created: {shoper_id} ")
+            print(f"Product ID:{shoper_id} downloaded.")
 
     return
 
@@ -171,12 +171,11 @@ def clear_data():
 
 
 class Command(BaseCommand):
-    """Main class for command object that imports images from shoper."""
+    """Main class for command object that imports products from shoper."""
 
     def handle(self, *args, **options):
         """Custom handle method."""
 
-        clear_data()
         self.stdout.write(
             self.style.SUCCESS(
                 f"Database cleared Product objects count: {Product.objects.all().count()}"

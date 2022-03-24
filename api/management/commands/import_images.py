@@ -51,20 +51,99 @@ def copy_all_product_images_from_shoper_api():
         res = response.json()
         items = res.get("list")
         for i in items:
-            # print(i) # for debuging!
+
+            shoper_gfx_id = i.get("gfx_id")
+
+            try:
+                shoper_product_id = i.get("product_id")
+            except AttributeError:
+                shoper_product_id = ""
+
+            try:
+                shoper_main = i.get("main")
+            except AttributeError:
+                shoper_main = ""
+
+            try:
+                shoper_title_pl = i.get("translations").get("pl_PL").get("name")
+            except AttributeError:
+                shoper_title_pl = ""
+
+            try:
+                shoper_title_en = i.get("translations").get("en_GB").get("name")
+            except AttributeError:
+                shoper_title_en = ""
+
+            try:
+                shoper_title_de = i.get("translations").get("de_DE").get("name")
+            except AttributeError:
+                shoper_title_de = ""
+
+            try:
+                shoper_title_fr = i.get("translations").get("fr_FR").get("name")
+            except AttributeError:
+                shoper_title_fr = ""
+
+            try:
+                order = i.get("order")
+            except AttributeError:
+                order = ""
+
+            try:
+                shoper_link_pl = f'https://{SHOPER_STORE}/userdata/public/gfx/{i.get("gfx_id")}/{shoper_title_pl[:-4] if ".jpg" in shoper_title_pl else shoper_title_pl}.jpg'
+            except AttributeError:
+                shoper_link_pl = ""
+
+            try:
+                shoper_link_en = f'https://{SHOPER_STORE}/userdata/public/gfx/{i.get("gfx_id")}/{shoper_title_en[:-4] if ".jpg" in shoper_title_en else shoper_title_en}.jpg'
+            except AttributeError:
+                shoper_link_en = ""
+
+            try:
+                shoper_link_de = f'https://{SHOPER_STORE}/userdata/public/gfx/{i.get("gfx_id")}/{shoper_title_de[:-4] if ".jpg" in shoper_title_de else shoper_title_de}.jpg'
+            except AttributeError:
+                shoper_link_de = ""
+
+            try:
+                shoper_link_fr = f'https://{SHOPER_STORE}/userdata/public/gfx/{i.get("gfx_id")}/{shoper_title_fr[:-4] if ".jpg" in shoper_title_fr else shoper_title_fr}.jpg'
+            except AttributeError:
+                shoper_link_fr = ""
+
+            try:
+                shoper_unic = i.get("unic_name")
+            except AttributeError:
+                shoper_unic = ""
+
+            try:
+                hidden = i.get("hidden")
+            except AttributeError:
+                hidden = ""
+
+            try:
+                extension = f'{i.get("extension")}'
+            except AttributeError:
+                extension = ""
+
             image = Image.objects.create(
-                shoper_id=i.get("gfx_id"),
-                shoper_product_id=i.get("product_id"),
-                shoper_main=i.get("main"),
-                order=i.get("order"),
-                shoper_link=f'https://{SHOPER_STORE}/userdata/public/gfx/{i.get("gfx_id")}/{i.get("name")}.jpg',
-                shoper_unic=i.get("unic_name"),
-                hidden=i.get("hidden"),
-                extension=f'{i.get("extension")}',
+                shoper_gfx_id=shoper_gfx_id,
+                shoper_product_id=shoper_product_id,
+                shoper_main=shoper_main,
+                shoper_title_pl=shoper_title_pl,
+                shoper_title_en=shoper_title_en,
+                shoper_title_de=shoper_title_de,
+                shoper_title_fr=shoper_title_fr,
+                order=order,
+                shoper_link_pl=shoper_link_pl,
+                shoper_link_en=shoper_link_en,
+                shoper_link_de=shoper_link_de,
+                shoper_link_fr=shoper_link_fr,
+                shoper_unic=shoper_unic,
+                hidden=hidden,
+                extension=extension,
             )
             image.save()
             time.sleep(1)
-            print(f"Object with ID:{image.id} Created")
+            print(f"Image for Product ID:{image.shoper_product_id} Downloaded")
 
     return
 

@@ -1,5 +1,7 @@
 from django.db import models
 from images.models import Image
+from django.db.models.signals import post_save, m2m_changed
+from django.dispatch import receiver
 
 
 class Product(models.Model):
@@ -44,15 +46,32 @@ class Product(models.Model):
     is_on_shopify = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"Title-{self.shoper_title_pl};Shoper_ID-{self.shoper_id};Shopify_ID-{self.shopify_id}"
+        return f"{self.shoper_title_pl} ShoperID:{self.shoper_id} ShopifyID:{self.shopify_id}"
 
     def save(self, *args, **kwargs):
         """Custom save method that add related images to Product."""
 
+        super().save(*args, **kwargs)
         images = Image.objects.all()
         for image in images:
             if image.shoper_product_id == self.shoper_id:
                 self.images.add(image)
-                self.save()
 
-        super().save(*args, **kwargs)
+
+@receiver(m2m_changed, sender=Product.images.through)
+def image_post_used(sender, instance, action, *args, **kwargs):
+    if action == "post_add":
+        print(kwargs)
+        qs = kwargs.get("model").objects.filter(pk__in=kwargs.get("pk_set"))
+        for item in qs:
+            item.shoper_product_id = instance.shoper_id
+            item.save()
+
+    elif action == "post_remove":
+        qs = kwargs.get("model").objects.filter(pk__in=kwargs.get("pk_set"))
+        for item in qs:
+            item.shoper_product_id = None
+            item.order = None
+            item.shoper_main = False
+            item.shoper_unic = False
+            item.save()

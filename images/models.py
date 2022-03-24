@@ -5,11 +5,15 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 class Image(models.Model):
     """Class for Image object."""
 
-    shoper_id = models.CharField(max_length=20, unique=True)
+    shoper_gfx_id = models.CharField(max_length=20, unique=True)
     shopify_id = models.CharField(max_length=20, blank=True, null=True)
     shoper_product_id = models.CharField(max_length=20, blank=True, null=True)
     shopify_product_id = models.CharField(max_length=20, blank=True, null=True)
     shoper_main = models.BooleanField(default=False)
+    shoper_title_pl = models.CharField(max_length=100, blank=True, null=True)
+    shoper_title_en = models.CharField(max_length=100, blank=True, null=True)
+    shoper_title_de = models.CharField(max_length=100, blank=True, null=True)
+    shoper_title_fr = models.CharField(max_length=100, blank=True, null=True)
 
     class Order(models.IntegerChoices):
         first = 1
@@ -31,8 +35,21 @@ class Image(models.Model):
     order = models.IntegerField(
         choices=Order.choices,
         validators=[MinValueValidator(1), MaxValueValidator(15)],
+        blank=True,
+        null=True,
     )
-    shoper_link = models.CharField(max_length=255, unique=True, blank=True, null=True)
+    shoper_link_pl = models.CharField(
+        max_length=255, unique=True, blank=True, null=True
+    )
+    shoper_link_en = models.CharField(
+        max_length=255, unique=True, blank=True, null=True
+    )
+    shoper_link_de = models.CharField(
+        max_length=255, unique=True, blank=True, null=True
+    )
+    shoper_link_fr = models.CharField(
+        max_length=255, unique=True, blank=True, null=True
+    )
     shopify_link = models.CharField(max_length=255, unique=True, blank=True, null=True)
     shoper_unic = models.CharField(max_length=255, unique=True)
     hidden = models.BooleanField(default=False)
@@ -46,4 +63,4 @@ class Image(models.Model):
 
     def __str__(self):
 
-        return f"ID-{self.id};Shoper ID-{self.shoper_id};Shopify ID-{self.shopify_id}; Shoper Product ID-{self.shoper_product_id}; Order-{self.order}"
+        return f"GFX-ID:{self.shoper_gfx_id} Product-ID:{self.shoper_product_id}"

@@ -124,7 +124,7 @@ def copy_all_product_images_from_shoper_api():
             except AttributeError:
                 extension = ""
 
-            image = Image.objects.create(
+            image = Image.objects.update_or_create(
                 shoper_gfx_id=shoper_gfx_id,
                 shoper_product_id=shoper_product_id,
                 shoper_main=shoper_main,

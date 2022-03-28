@@ -6,6 +6,7 @@ apps = [
     "api",
     "products",
     "images",
+    "users",
 ]
 
 

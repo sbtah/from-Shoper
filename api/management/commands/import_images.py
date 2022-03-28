@@ -1,6 +1,7 @@
 import requests
 import time
 import os
+import sys
 from dotenv import load_dotenv
 from django.core.management.base import BaseCommand
 from images.models import Image
@@ -141,15 +142,10 @@ def copy_all_product_images_from_shoper_api():
                 hidden=hidden,
                 extension=extension,
             )
-            image.save()
+            print(image)
             time.sleep(1)
-            print(f"Image for Product ID:{image.shoper_product_id} Downloaded")
 
     return
-
-
-def clear_data():
-    Image.objects.all().delete()
 
 
 class Command(BaseCommand):
@@ -158,11 +154,14 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         """Custom handle method."""
 
-        clear_data()
         self.stdout.write(
             self.style.SUCCESS(
-                f"Database cleared Image objects count: {Image.objects.all().count()}"
+                f"Starting update. Number of Images: {Image.objects.all().count()}"
             )
         )
         copy_all_product_images_from_shoper_api()
-        self.stdout.write(self.style.SUCCESS("Database available!"))
+        self.stdout.write(
+            self.style.SUCCESS(
+                f"Database available, number of Images after update: {Image.objects.all().count()}"
+            )
+        )

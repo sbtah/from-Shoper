@@ -61,7 +61,7 @@ class Product(models.Model):
 @receiver(m2m_changed, sender=Product.images.through)
 def image_post_used(sender, instance, action, *args, **kwargs):
     if action == "post_add":
-        print(kwargs)
+        # print(kwargs)
         qs = kwargs.get("model").objects.filter(pk__in=kwargs.get("pk_set"))
         for item in qs:
             item.shoper_product_id = instance.shoper_id

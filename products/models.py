@@ -18,7 +18,7 @@ class Product(models.Model):
     shopify_title = models.CharField(max_length=200, blank=True, null=True)
     shopify_description = models.TextField(blank=True, null=True)
     vendor_brand = models.CharField(max_length=100, blank=True)  #
-    shoper_id = models.IntegerField(unique=True)
+    shoper_id = models.CharField(max_length=20, unique=True, blank=True, null=True)
     shopify_id = models.IntegerField(unique=True, blank=True, null=True)
     shoper_ean = models.CharField(max_length=13, blank=True)  #
     shoper_sku = models.CharField(max_length=25, unique=True, blank=True)  #
@@ -57,9 +57,24 @@ class Product(models.Model):
             if image.shoper_product_id == self.shoper_id:
                 self.images.add(image)
 
+    def create_on_shopify(self):
+        """Create instance of Product on Shopify store."""
+
+        pass
+
+    def update_to_shopify(self):
+        """Update Product on Shopify store."""
+
+        pass
+
+    def update_from_shopify(self):
+        """Get Product data from Shopify store."""
+
+        pass
+
 
 @receiver(m2m_changed, sender=Product.images.through)
-def image_post_used(sender, instance, action, *args, **kwargs):
+def image_added_removed_product(sender, instance, action, *args, **kwargs):
     if action == "post_add":
         # print(kwargs)
         qs = kwargs.get("model").objects.filter(pk__in=kwargs.get("pk_set"))
@@ -70,8 +85,8 @@ def image_post_used(sender, instance, action, *args, **kwargs):
     elif action == "post_remove":
         qs = kwargs.get("model").objects.filter(pk__in=kwargs.get("pk_set"))
         for item in qs:
-            item.shoper_product_id = None
-            item.order = None
+            item.shoper_product_id = ""
+            item.order = ""
             item.shoper_main = False
-            item.shoper_unic = False
+            item.shoper_unic = ""
             item.save()

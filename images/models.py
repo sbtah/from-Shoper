@@ -15,26 +15,27 @@ class Image(models.Model):
     shoper_title_de = models.CharField(max_length=100, blank=True, null=True)
     shoper_title_fr = models.CharField(max_length=100, blank=True, null=True)
 
-    class Order(models.IntegerChoices):
-        first = 1
-        second = 2
-        third = 3
-        fourth = 4
-        fifth = 5
-        sixth = 6
-        seventh = 7
-        eighth = 8
-        ninth = 9
-        tenth = 10
-        eleventh = 11
-        twelfth = 12
-        thirteenth = 13
-        fourteenth = 14
-        fifteenth = 15
+    class Order(models.TextChoices):
+        first = "1"
+        second = "2"
+        third = "3"
+        fourth = "4"
+        fifth = "5"
+        sixth = "6"
+        seventh = "7"
+        eighth = "8"
+        ninth = "9"
+        tenth = "10"
+        eleventh = "11"
+        twelfth = "12"
+        thirteenth = "13"
+        fourteenth = "14"
+        fifteenth = "15"
 
-    order = models.IntegerField(
+    order = models.CharField(
         choices=Order.choices,
         validators=[MinValueValidator(1), MaxValueValidator(15)],
+        max_length=2,
         blank=True,
         null=True,
     )

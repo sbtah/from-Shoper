@@ -71,7 +71,7 @@ def create_product_at_shopify(self):
 
 
 # == DEBUGING ==
-print(get_products())
+# print(get_products())
 # print(create_product())
 
 # [

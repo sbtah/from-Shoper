@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     "products",
     "images",
     "users",
+    "panel",
 ]
 
 MIDDLEWARE = [
@@ -48,7 +49,7 @@ ROOT_URLCONF = "core.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -75,6 +76,8 @@ DATABASES = {
 }
 
 AUTH_USER_MODEL = "users.User"
+# CUSTOM USER LOGIN URL
+LOGIN_URL = "panel:login"
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators

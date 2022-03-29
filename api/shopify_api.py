@@ -30,7 +30,7 @@ def create_product_at_shopify(self):
     """"""
 
     list_of_images = []
-    for image in self.images:
+    for image in self.images.all():
         list_of_images.append(
             {
                 "id": f"product_id",

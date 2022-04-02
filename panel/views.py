@@ -33,6 +33,22 @@ class PanelView(LoginRequiredMixin, generic.TemplateView):
         """Get data about Images and Products to context."""
 
         context = super().get_context_data(**kwargs)
-        context["images"] = Image.objects.all()
-        context["products"] = Product.objects.all()
+        context["images_number"] = Image.objects.all().count()
+        context["products_number"] = Product.objects.all().count()
         return context
+
+
+class ImageListView(generic.ListView):
+
+    model = Image
+    context_object_name = "images"
+    paginate_by = 10
+    template_name = "panel/image_list.html"
+
+
+class ProductListView(generic.ListView):
+
+    model = Product
+    context_object_name = "products"
+    paginate_by = 10
+    template_name = "panel/product_list.html"

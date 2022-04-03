@@ -125,24 +125,47 @@ def copy_all_product_images_from_shoper_api():
             except AttributeError:
                 extension = ""
 
-            image = Image.objects.update_or_create(
-                shoper_gfx_id=shoper_gfx_id,
-                shoper_product_id=shoper_product_id,
-                shoper_main=shoper_main,
-                shoper_title_pl=shoper_title_pl,
-                shoper_title_en=shoper_title_en,
-                shoper_title_de=shoper_title_de,
-                shoper_title_fr=shoper_title_fr,
-                order=order,
-                shoper_link_pl=shoper_link_pl,
-                shoper_link_en=shoper_link_en,
-                shoper_link_de=shoper_link_de,
-                shoper_link_fr=shoper_link_fr,
-                shoper_unic=shoper_unic,
-                hidden=hidden,
-                extension=extension,
-            )
-            print(image)
+            try:
+                image = Image.objects.get(
+                    shoper_gfx_id=shoper_gfx_id,
+                )
+                image.shoper_gfx_id = shoper_gfx_id
+                image.shoper_product_id = shoper_product_id
+                image.shoper_main = shoper_main
+                image.shoper_title_pl = shoper_title_pl
+                image.shoper_title_en = shoper_title_en
+                image.shoper_title_de = shoper_title_de
+                image.shoper_title_fr = shoper_title_fr
+                image.order = order
+                image.shoper_link_pl = shoper_link_pl
+                image.shoper_link_en = shoper_link_en
+                image.shoper_link_de = shoper_link_de
+                image.shoper_link_fr = shoper_link_fr
+                image.shoper_unic = shoper_unic
+                image.hidden = hidden
+                image.extension = extension
+                image.save()
+                print("UPDATED: ", image)
+            except Image.DoesNotExist:
+
+                Image.objects.create(
+                    shoper_gfx_id=shoper_gfx_id,
+                    shoper_product_id=shoper_product_id,
+                    shoper_main=shoper_main,
+                    shoper_title_pl=shoper_title_pl,
+                    shoper_title_en=shoper_title_en,
+                    shoper_title_de=shoper_title_de,
+                    shoper_title_fr=shoper_title_fr,
+                    order=order,
+                    shoper_link_pl=shoper_link_pl,
+                    shoper_link_en=shoper_link_en,
+                    shoper_link_de=shoper_link_de,
+                    shoper_link_fr=shoper_link_fr,
+                    shoper_unic=shoper_unic,
+                    hidden=hidden,
+                    extension=extension,
+                )
+                print("CREATED: ", Image)
             time.sleep(1)
 
     return

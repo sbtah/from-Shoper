@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{ product.id }}{% endblock title %}
+{% block content %}
+<div class="container">
+    <h1>{{ product.shoper_title_pl }}</h1>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for image in product.images.all %}
+        <div class="col">
+            <div class="card">
+                <img src="{{ image.shoper_link_pl }}" alt="...">
+                <div class="card-body">
+                    <p class="card-title">Shoper Image ID: {{ image.shoper_gfx_id }}</p>
+                    <p class="card-text">Shoper Order: {{ image.order }}</p>
+                    <p class="card-text">This is a longer card with supporting text below as a natural lead-in to
+                        additional
+                        content. This content is a little bit longer.</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %}

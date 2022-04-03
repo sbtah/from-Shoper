@@ -2,6 +2,7 @@ from django.db import models
 from images.models import Image
 from django.db.models.signals import post_save, m2m_changed
 from django.dispatch import receiver
+from django.urls import reverse
 
 
 class Product(models.Model):
@@ -46,7 +47,7 @@ class Product(models.Model):
     is_on_shopify = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.shoper_title_pl} ShoperID:{self.shoper_id} ShopifyID:{self.shopify_id}"
+        return f"ID:{self.shoper_id} | {self.shoper_title_pl}"
 
     def save(self, *args, **kwargs):
         """Custom save method that add related images to Product."""
@@ -71,6 +72,9 @@ class Product(models.Model):
         """Get Product data from Shopify store."""
 
         pass
+
+    def get_absolute_url(self):
+        return reverse("panel:product-detail", kwargs={"pk": self.id})
 
 
 @receiver(m2m_changed, sender=Product.images.through)

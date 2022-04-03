@@ -52,7 +52,7 @@ class Image(models.Model):
         max_length=255, unique=True, blank=True, null=True
     )
     shopify_link = models.CharField(max_length=255, unique=True, blank=True, null=True)
-    shoper_unic = models.CharField(max_length=255, unique=True)
+    shoper_unic = models.CharField(max_length=255)
     hidden = models.BooleanField(default=False)
     extension = models.CharField(max_length=3, blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
@@ -64,4 +64,4 @@ class Image(models.Model):
 
     def __str__(self):
 
-        return f"GFX-ID:{self.shoper_gfx_id} Product-ID:{self.shoper_product_id}"
+        return f"ImageID:{self.shoper_gfx_id} | {self.shoper_title_pl}"

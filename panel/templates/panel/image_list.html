@@ -1,11 +1,13 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="list-group">
-    {% for image in images %}
-    <a href="#" class="list-group-item list-group-item-action" aria-current="true">
-        {{ image }}
-    </a>
-    {% endfor %}
-    {% include "pagination.html" %}
+<div class="container">
+    <div class="list-group">
+        {% for image in images %}
+        <a href="#" class="list-group-item list-group-item-action" aria-current="true">
+            {{ image }}
+        </a>
+        {% endfor %}
+        {% include "pagination.html" %}
+    </div>
 </div>
 {% endblock content %}

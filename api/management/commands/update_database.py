@@ -126,24 +126,47 @@ def copy_all_product_images_from_shoper_api():
             except AttributeError:
                 extension = ""
 
-            image = Image.objects.update_or_create(
-                shoper_gfx_id=shoper_gfx_id,
-                shoper_product_id=shoper_product_id,
-                shoper_main=shoper_main,
-                shoper_title_pl=shoper_title_pl,
-                shoper_title_en=shoper_title_en,
-                shoper_title_de=shoper_title_de,
-                shoper_title_fr=shoper_title_fr,
-                order=order,
-                shoper_link_pl=shoper_link_pl,
-                shoper_link_en=shoper_link_en,
-                shoper_link_de=shoper_link_de,
-                shoper_link_fr=shoper_link_fr,
-                shoper_unic=shoper_unic,
-                hidden=hidden,
-                extension=extension,
-            )
-            print(image)
+            try:
+                image = Image.objects.get(
+                    shoper_gfx_id=shoper_gfx_id,
+                )
+                image.shoper_gfx_id = shoper_gfx_id
+                image.shoper_product_id = shoper_product_id
+                image.shoper_main = shoper_main
+                image.shoper_title_pl = shoper_title_pl
+                image.shoper_title_en = shoper_title_en
+                image.shoper_title_de = shoper_title_de
+                image.shoper_title_fr = shoper_title_fr
+                image.order = order
+                image.shoper_link_pl = shoper_link_pl
+                image.shoper_link_en = shoper_link_en
+                image.shoper_link_de = shoper_link_de
+                image.shoper_link_fr = shoper_link_fr
+                image.shoper_unic = shoper_unic
+                image.hidden = hidden
+                image.extension = extension
+                image.save()
+                print("UPDATED: ", image)
+            except Image.DoesNotExist:
+
+                Image.objects.create(
+                    shoper_gfx_id=shoper_gfx_id,
+                    shoper_product_id=shoper_product_id,
+                    shoper_main=shoper_main,
+                    shoper_title_pl=shoper_title_pl,
+                    shoper_title_en=shoper_title_en,
+                    shoper_title_de=shoper_title_de,
+                    shoper_title_fr=shoper_title_fr,
+                    order=order,
+                    shoper_link_pl=shoper_link_pl,
+                    shoper_link_en=shoper_link_en,
+                    shoper_link_de=shoper_link_de,
+                    shoper_link_fr=shoper_link_fr,
+                    shoper_unic=shoper_unic,
+                    hidden=hidden,
+                    extension=extension,
+                )
+                print("CREATED: ", Image)
             time.sleep(1)
 
     return
@@ -262,31 +285,65 @@ def copy_all_products_from_shoper_api():
             except:
                 shoper_gauge_id = ""
 
-            product = Product.objects.update_or_create(
-                shoper_title_pl=shoper_title_pl,
-                shoper_title_en=shoper_title_en,
-                shoper_title_de=shoper_title_de,
-                shoper_title_fr=shoper_title_fr,
-                shoper_description_pl=shoper_description_pl,
-                shoper_description_en=shoper_description_en,
-                shoper_description_fr=shoper_description_fr,
-                shoper_description_de=shoper_description_de,
-                vendor_brand=vendor_brand,
-                shoper_id=shoper_id,
-                shoper_ean=shoper_ean,
-                shoper_sku=shoper_sku,
-                shoper_weight=shoper_weight,
-                is_active_shoper=is_active_shoper,
-                created_shoper=created_shoper,
-                updated_shoper=updated_shoper,
-                shoper_price=shoper_price,
-                shoper_gauge_id=shoper_gauge_id,
-                is_on_shoper=is_on_shoper,
-            )
-            print(product)
+            try:
+                product = Product.objects.get(
+                    shoper_sku=shoper_sku,
+                )
+                product.shoper_title_pl = shoper_title_pl
+                product.shoper_title_en = shoper_title_en
+                product.shoper_title_de = shoper_title_de
+                product.shoper_title_fr = shoper_title_fr
+                product.shoper_description_pl = shoper_description_pl
+                product.shoper_description_en = shoper_description_en
+                product.shoper_description_fr = shoper_description_fr
+                product.shoper_description_de = shoper_description_de
+                product.vendor_brand = vendor_brand
+                product.shoper_id = shoper_id
+                product.shoper_ean = shoper_ean
+                product.shoper_sku = shoper_sku
+                product.shoper_weight = shoper_weight
+                product.is_active_shoper = is_active_shoper
+                product.created_shoper = created_shoper
+                product.updated_shoper = updated_shoper
+                product.shoper_price = shoper_price
+                product.shoper_gauge_id = shoper_gauge_id
+                product.is_on_shoper = is_on_shoper
+                product.save()
+                print("UPDATED: ", product)
+            except Product.DoesNotExist:
+                Product.objects.create(
+                    shoper_title_pl=shoper_title_pl,
+                    shoper_title_en=shoper_title_en,
+                    shoper_title_de=shoper_title_de,
+                    shoper_title_fr=shoper_title_fr,
+                    shoper_description_pl=shoper_description_pl,
+                    shoper_description_en=shoper_description_en,
+                    shoper_description_fr=shoper_description_fr,
+                    shoper_description_de=shoper_description_de,
+                    vendor_brand=vendor_brand,
+                    shoper_id=shoper_id,
+                    shoper_ean=shoper_ean,
+                    shoper_sku=shoper_sku,
+                    shoper_weight=shoper_weight,
+                    is_active_shoper=is_active_shoper,
+                    created_shoper=created_shoper,
+                    updated_shoper=updated_shoper,
+                    shoper_price=shoper_price,
+                    shoper_gauge_id=shoper_gauge_id,
+                    is_on_shoper=is_on_shoper,
+                )
+                print("CREATED: ", Product)
+
             time.sleep(1)
 
     return
+
+
+def clear_database():
+    """..."""
+
+    Image.objects.all().delete()
+    Product.objects.all().delete()
 
 
 class Command(BaseCommand):

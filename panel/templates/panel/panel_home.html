@@ -1,15 +1,50 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="container">
-    <div class="row">
-        <div class="col">
-            Column 1
+<div class="row mt-5">
+    <div class="col">
+        <div class="cold-md">
+            <div class="card text-center mb-3 shadow" id="total-orders">
+                <div class="card-header">
+                    <h5 class="card-title p-2">Last Images:</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        {% for image in images_updated %}
+                        <li class="list-group-item"><a href="">{{ image }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
         </div>
-        <div class="col">
-            Column 2
+    </div>
+
+    <div class="col">
+        <div class="col-md">
+            <div class="card text-center mb-3 shadow" id="orders-delivered">
+                <div class="card-header">
+                    <h5 class="card-title p-2">Last Products:</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        {% for product in products_updated %}
+                        <li class="list-group-item"><a href="{{ product.get_absolute_url }}">{{ product }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
         </div>
-        <div class="col">
-            Column 3
+    </div>
+
+    <div class="col">
+        <div class="col-md">
+            <div class="card text-center mb-3 shadow" id="orders-pending">
+                <div class="card-header">
+                    <h5 class="card-title p-2">Statistics:</h5>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">{{ pending }}</h3>
+                </div>
+            </div>
         </div>
     </div>
 </div>

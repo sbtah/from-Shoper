@@ -1,7 +1,6 @@
 import requests
 import time
 import os
-import sys
 from dotenv import load_dotenv
 from django.core.management.base import BaseCommand
 from images.models import Image

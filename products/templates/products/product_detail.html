@@ -4,6 +4,19 @@
 {% block content %}
 <div class="container">
     <h1>{{ product.shoper_title_pl }}</h1>
+    <div class="card">
+        <div class="card-body">
+            <a href="#" class="btn btn-primary">Update</a>
+            <a href="{% url 'panel:product-from-shoper-update' product.id %}" class="btn btn-primary">Update from
+                Shoper</a>
+            <a href="#" class="btn btn-primary">Push to Shoper</a>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <p>{{ product.shoper_description_pl|safe }}</p>
+        </div>
+    </div>
     <div class="row row-cols-1 row-cols-md-3 g-4">
         {% for image in product.images.all %}
         <div class="col">

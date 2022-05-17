@@ -46,19 +46,3 @@ class ImageListView(LoginRequiredMixin, generic.ListView):
     context_object_name = "images"
     paginate_by = 10
     template_name = "panel/image_list.html"
-
-
-class ProductListView(LoginRequiredMixin, generic.ListView):
-
-    model = Product
-    context_object_name = "products"
-    paginate_by = 10
-    template_name = "panel/product_list.html"
-
-
-class ProductDetailView(LoginRequiredMixin, generic.DetailView):
-    """Public DetailView for ImagePost object."""
-
-    model = Product
-    template_name = "panel/product_detail.html"
-    context_object_name = "product"

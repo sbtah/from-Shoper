@@ -1,7 +1,11 @@
+from django.shortcuts import render
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from products.models import Product
+from django.urls import reverse, reverse_lazy
+from products.forms import ProductUpdateFromShoperForm
+from products.services import get_single_product
 
 
 class ProductListView(LoginRequiredMixin, generic.ListView):
@@ -30,8 +34,6 @@ class ProductUpdateFromShoperView(LoginRequiredMixin, generic.UpdateView):
     """UpdateView for Product object that pulls data from Shoper API."""
 
     model = Product
-
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        print("==================", self.object.shoper_id)
-        return super().get(request, *args, **kwargs)
+    form_class = ProductUpdateFromShoperForm
+    template_name = "products/product_update_from_shoper.html"
+    success_url = reverse_lazy("panel:panel")

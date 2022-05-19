@@ -1,7 +1,7 @@
 import requests
 import time
 import os
-import sys
+from datetime import datetime
 from dotenv import load_dotenv
 from django.core.management.base import BaseCommand
 from products.models import Product
@@ -144,27 +144,35 @@ def copy_all_products_from_shoper_api():
                 product = Product.objects.get(
                     shoper_sku=shoper_sku,
                 )
-                product.shoper_title_pl = shoper_title_pl
-                product.shoper_title_en = shoper_title_en
-                product.shoper_title_de = shoper_title_de
-                product.shoper_title_fr = shoper_title_fr
-                product.shoper_description_pl = shoper_description_pl
-                product.shoper_description_en = shoper_description_en
-                product.shoper_description_fr = shoper_description_fr
-                product.shoper_description_de = shoper_description_de
-                product.vendor_brand = vendor_brand
-                product.shoper_id = shoper_id
-                product.shoper_ean = shoper_ean
-                product.shoper_sku = shoper_sku
-                product.shoper_weight = shoper_weight
-                product.is_active_shoper = is_active_shoper
-                product.created_shoper = created_shoper
-                product.updated_shoper = updated_shoper
-                product.shoper_price = shoper_price
-                product.shoper_gauge_id = shoper_gauge_id
-                product.is_on_shoper = is_on_shoper
-                product.save()
-                print("UPDATED: ", product)
+
+                if (
+                    datetime.strptime(updated_shoper, "%Y-%m-%d %H:%M:%S")
+                    > product.updated_shoper
+                ):
+                    product.shoper_title_pl = shoper_title_pl
+                    product.shoper_title_en = shoper_title_en
+                    product.shoper_title_de = shoper_title_de
+                    product.shoper_title_fr = shoper_title_fr
+                    product.shoper_description_pl = shoper_description_pl
+                    product.shoper_description_en = shoper_description_en
+                    product.shoper_description_fr = shoper_description_fr
+                    product.shoper_description_de = shoper_description_de
+                    product.vendor_brand = vendor_brand
+                    product.shoper_id = shoper_id
+                    product.shoper_ean = shoper_ean
+                    product.shoper_sku = shoper_sku
+                    product.shoper_weight = shoper_weight
+                    product.is_active_shoper = is_active_shoper
+                    product.created_shoper = created_shoper
+                    product.updated_shoper = updated_shoper
+                    product.shoper_price = shoper_price
+                    product.shoper_gauge_id = shoper_gauge_id
+                    product.is_on_shoper = is_on_shoper
+                    product.save()
+                    print("UPDATED: ", product)
+                else:
+                    print(f"No update detected for: {product}")
+                    continue
             except Product.DoesNotExist:
                 Product.objects.create(
                     shoper_title_pl=shoper_title_pl,
@@ -195,6 +203,7 @@ def copy_all_products_from_shoper_api():
 
 
 def clear_data():
+    """Use only to clear entire database. For test use only."""
     Product.objects.all().delete()
 
 

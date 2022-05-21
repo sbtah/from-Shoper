@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{ product.id }}{% endblock title %}
+{% block content %}
+<div class="container">
+    <h1>{{ product.shoper_title_pl }}</h1>
+    <div class="card">
+        <div class="card-body">
+            <a href="#" class="btn btn-primary">Update</a>
+            <a href="{% url 'panel:product-from-shoper-update' product.id %}" class="btn btn-primary">Update from
+                Shoper</a>
+            <a href="#" class="btn btn-primary">Push to Shoper</a>
+        </div>
+    </div>
+    <!--  -->
+    <div class="row mt-5">
+        <div class="col">
+            <div class="cold-md">
+                <div class="card text-center mb-3 shadow">
+                    <div class="card-header">
+                        <h5 class="card-title p-2">Product Important:</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                            <li class="list-group-item">Price: {{ product.shoper_price }}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="col-md">
+                <div class="card text-center mb-3 shadow">
+                    <div class="card-header">
+                        <h5 class="card-title p-2">Product Minor:</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                            <li class="list-group-item">{{ product.is_active_shoper }}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="col-md">
+                <div class="card text-center mb-3 shadow">
+                    <div class="card-header">
+                        <h5 class="card-title p-2">Statistics:</h5>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title">{{ product.shoper_weight }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--  -->
+    <div class="card">
+        <h2>Product Descriptions:</h2>
+        <div class="card-body">
+            <p>{{ product.shoper_description_pl|safe }}</p>
+        </div>
+    </div>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for image in product.images.all %}
+        <div class="col">
+            <div class="card">
+                <img src="{{ image.shoper_link_pl }}" alt="...">
+                <div class="card-body">
+                    <p class="card-title">Shoper Image ID: {{ image.shoper_gfx_id }}</p>
+                    <p class="card-text">Shoper Order: {{ image.order }}</p>
+                    <p class="card-text">This is a longer card with supporting text below as a natural lead-in to
+                        additional
+                        content. This content is a little bit longer.</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %}

@@ -48,6 +48,19 @@ def get_single_product(id):
     return res
 
 
+# Get number of pages from product list API.
+def get_number_of_product_pages():
+    """Get number of all product pages from SHOPER api"""
+
+    url = f"https://{SHOPER_STORE}/webapi/rest/products"
+    headers = {"Authorization": f"Bearer {TOKEN}"}
+    response = requests.get(url, headers=headers)
+    res = response.json()
+    pages = res.get("pages")
+
+    return pages
+
+
 def get_all_images():
     """
     Return a reponse with all images
@@ -76,19 +89,6 @@ def get_gfx_image_by_id(id):
     return res
 
 
-# Get number of pages from product list API.
-def get_number_of_product_pages():
-    """Get number of all product pages from SHOPER api"""
-
-    url = f"https://{SHOPER_STORE}/webapi/rest/products"
-    headers = {"Authorization": f"Bearer {TOKEN}"}
-    response = requests.get(url, headers=headers)
-    res = response.json()
-    pages = res.get("pages")
-
-    return pages
-
-
 # Get number of pages from image list API.
 def get_number_of_image_pages():
     """Get number of all image pages from SHOPER api"""
@@ -100,6 +100,32 @@ def get_number_of_image_pages():
     pages = res.get("pages")
 
     return pages
+
+
+# Get data for all redirects from Shoper API.
+def get_all_redirects():
+    """
+    Return a reponse with all redirects
+    https://shop.url//webapi/rest/redirects
+    """
+
+    url = f"https://{SHOPER_STORE}/webapi/rest/redirects"
+    headers = {"Authorization": f"Bearer {TOKEN}"}
+    response = requests.get(url, headers=headers)
+    res = response.json()
+
+    return res
+
+
+def get_single_redirect(redirect_id):
+    """Return a response with data from single redirect endpoint."""
+
+    url = f"https://{SHOPER_STORE}/webapi/rest/redirects/{id}"
+    headers = {"Authorization": f"Bearer {TOKEN}"}
+    response = requests.get(url, headers=headers)
+    res = response.json()
+
+    return res
 
 
 # Get all ID numbers of products from SHOPER Api.
@@ -184,4 +210,8 @@ def get_product_data_for_shopify(id):
 # print(get_number_of_product_pages())
 # print(get_number_of_image_pages())
 # print(get_list_of_all_shoper_image_ids())
+<<<<<<< Updated upstream
 print(get_gfx_image_by_id(661))
+=======
+# print(get_all_redirects())
+>>>>>>> Stashed changes

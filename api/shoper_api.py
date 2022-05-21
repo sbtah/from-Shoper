@@ -184,4 +184,4 @@ def get_product_data_for_shopify(id):
 # print(get_number_of_product_pages())
 # print(get_number_of_image_pages())
 # print(get_list_of_all_shoper_image_ids())
-# print(get_gfx_image_by_id(661))
+print(get_gfx_image_by_id(661))

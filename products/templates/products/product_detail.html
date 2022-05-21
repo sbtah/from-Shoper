@@ -12,7 +12,52 @@
             <a href="#" class="btn btn-primary">Push to Shoper</a>
         </div>
     </div>
+    <!--  -->
+    <div class="row mt-5">
+        <div class="col">
+            <div class="cold-md">
+                <div class="card text-center mb-3 shadow">
+                    <div class="card-header">
+                        <h5 class="card-title p-2">Product Important:</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                            <li class="list-group-item">Price: {{ product.shoper_price }}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="col-md">
+                <div class="card text-center mb-3 shadow">
+                    <div class="card-header">
+                        <h5 class="card-title p-2">Product Minor:</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                            <li class="list-group-item">{{ product.is_active_shoper }}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="col-md">
+                <div class="card text-center mb-3 shadow">
+                    <div class="card-header">
+                        <h5 class="card-title p-2">Statistics:</h5>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title">{{ product.shoper_weight }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--  -->
     <div class="card">
+        <h2>Product Descriptions:</h2>
         <div class="card-body">
             <p>{{ product.shoper_description_pl|safe }}</p>
         </div>

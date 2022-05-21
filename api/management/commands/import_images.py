@@ -85,9 +85,9 @@ def copy_all_product_images_from_shoper_api():
                 shoper_title_fr = ""
 
             try:
-                order = i.get("order")
+                shoper_order = i.get("order")
             except AttributeError:
-                order = ""
+                shoper_order = ""
 
             try:
                 shoper_link_pl = f'https://{SHOPER_STORE}/userdata/public/gfx/{i.get("gfx_id")}/{shoper_title_pl[:-4] if ".jpg" in shoper_title_pl else shoper_title_pl}.jpg'
@@ -115,38 +115,59 @@ def copy_all_product_images_from_shoper_api():
                 shoper_unic = ""
 
             try:
-                hidden = i.get("hidden")
+                shoper_hidden = i.get("hidden")
+                # i.get("hidden")
             except AttributeError:
-                hidden = ""
+                shoper_hidden = ""
 
             try:
-                extension = f'{i.get("extension")}'
+                shoper_extension = i.get("extension")
             except AttributeError:
-                extension = ""
+                shoper_extension = ""
 
             try:
                 image = Image.objects.get(
                     shoper_gfx_id=shoper_gfx_id,
                 )
-                image.shoper_gfx_id = shoper_gfx_id
-                image.shoper_product_id = shoper_product_id
-                image.shoper_main = shoper_main
-                image.shoper_title_pl = shoper_title_pl
-                image.shoper_title_en = shoper_title_en
-                image.shoper_title_de = shoper_title_de
-                image.shoper_title_fr = shoper_title_fr
-                image.order = order
-                image.shoper_link_pl = shoper_link_pl
-                image.shoper_link_en = shoper_link_en
-                image.shoper_link_de = shoper_link_de
-                image.shoper_link_fr = shoper_link_fr
-                image.shoper_unic = shoper_unic
-                image.hidden = hidden
-                image.extension = extension
-                image.save()
-                print("UPDATED: ", image)
-            except Image.DoesNotExist:
+                if (
+                    (str(image.shoper_gfx_id) != str(shoper_gfx_id))
+                    or (str(image.shoper_product_id) != str(shoper_product_id))
+                    or (str(image.shoper_main) != str(shoper_main))
+                    or (str(image.shoper_title_pl) != str(shoper_title_pl))
+                    or (str(image.shoper_title_en) != str(shoper_title_en))
+                    or (str(image.shoper_title_de) != str(shoper_title_de))
+                    or (str(image.shoper_title_fr) != str(shoper_title_fr))
+                    or (str(image.shoper_order) != str(shoper_order))
+                    or (str(image.shoper_link_pl) != str(shoper_link_pl))
+                    or (str(image.shoper_link_en) != str(shoper_link_en))
+                    or (str(image.shoper_link_de) != str(shoper_link_de))
+                    or (str(image.shoper_link_fr) != str(shoper_link_fr))
+                    or (str(image.shoper_unic) != str(shoper_unic))
+                    or (str(image.shoper_hidden) != str(shoper_hidden))
+                    or (str(image.shoper_extension) != str(shoper_extension))
+                ):
+                    image.shoper_gfx_id = shoper_gfx_id
+                    image.shoper_product_id = shoper_product_id
+                    image.shoper_main = shoper_main
+                    image.shoper_title_pl = shoper_title_pl
+                    image.shoper_title_en = shoper_title_en
+                    image.shoper_title_de = shoper_title_de
+                    image.shoper_title_fr = shoper_title_fr
+                    image.shoper_order = shoper_order
 
+                    image.shoper_link_pl = shoper_link_pl
+                    image.shoper_link_en = shoper_link_en
+                    image.shoper_link_de = shoper_link_de
+                    image.shoper_link_fr = shoper_link_fr
+                    image.shoper_unic = shoper_unic
+                    image.shoper_hidden = shoper_hidden
+
+                    image.shoper_extension = shoper_extension
+                    image.save()
+                    print(f"UPDATED: {image}")
+                else:
+                    print(f"No update detected for: {image}")
+            except Image.DoesNotExist:
                 Image.objects.create(
                     shoper_gfx_id=shoper_gfx_id,
                     shoper_product_id=shoper_product_id,
@@ -155,18 +176,17 @@ def copy_all_product_images_from_shoper_api():
                     shoper_title_en=shoper_title_en,
                     shoper_title_de=shoper_title_de,
                     shoper_title_fr=shoper_title_fr,
-                    order=order,
+                    shoper_order=shoper_order,
                     shoper_link_pl=shoper_link_pl,
                     shoper_link_en=shoper_link_en,
                     shoper_link_de=shoper_link_de,
                     shoper_link_fr=shoper_link_fr,
                     shoper_unic=shoper_unic,
-                    hidden=hidden,
-                    extension=extension,
+                    shoper_hidden=shoper_hidden,
+                    shoper_extension=shoper_extension,
                 )
-                print("CREATED: ", Image)
+                print(f"CREATED: {Image}")
             time.sleep(1)
-
     return
 
 

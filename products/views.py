@@ -38,6 +38,11 @@ class ProductUpdateFromShoperView(LoginRequiredMixin, generic.DetailView):
     template_name = "products/product_detail.html"
 
     def get(self, request, *args, **kwargs):
+        """
+        Modifed get method that calls get_single_product function from services.py.
+        Function returns a dictionary of needed values from API call for ID of product.
+        """
+
         product = self.get_object()
         response = get_single_product(product.shoper_id)
 
@@ -69,12 +74,3 @@ class ProductUpdateFromShoperView(LoginRequiredMixin, generic.DetailView):
         else:
             messages.success(request, ("There was nothing to update."))
         return super().get(request, *args, **kwargs)
-
-
-def update_product_from_shoper(request, pk):
-
-    if request.method == "GET":
-        object = get_single_product(pk)
-        print(object)
-
-        return render(request, "products/product_detail.html")

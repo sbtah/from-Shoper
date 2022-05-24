@@ -46,10 +46,9 @@ class ProductUpdateFromShoperView(LoginRequiredMixin, generic.DetailView):
         product = self.get_object()
         response = get_single_product(product.shoper_id)
 
-        if (
-            datetime.strptime(response["updated_shoper"], "%Y-%m-%d %H:%M:%S")
-            > product.updated_shoper
-        ):
+        if datetime.strptime(
+            response["updated_shoper"], "%Y-%m-%d %H:%M:%S"
+        ) > datetime.strptime(product.updated_shoper, "%Y-%m-%d %H:%M:%S"):
             product.shoper_title_pl = response["shoper_title_pl"]
             product.shoper_title_en = response["shoper_title_en"]
             product.shoper_title_de = response["shoper_title_de"]

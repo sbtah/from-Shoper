@@ -1,3 +1,4 @@
+from pyexpat import model
 from django import forms
 from products.models import Product
 from products.services import get_single_product
@@ -19,15 +20,20 @@ class ProductUpdateFromShoperForm(forms.ModelForm):
             "vendor_brand",
             "shoper_ean",
             "shoper_sku",
-            "images",
+            "shoper_images",
             "shoper_weight",
             "is_active_shoper",
             "shoper_tags",
             "shoper_price",
             "shoper_gauge_id",
-            "is_on_shoper",
         ]
 
 
 class PickLanguagetoCopyForm(forms.Form):
-    """"""
+
+    pick_language = forms.ChoiceField(
+        widget=forms.Select(),
+        choices=([("pl_PL", "1"), ("en_EU", "2"), ("en_GB", "3"), ("fr_FR", "4")]),
+        initial="3",
+        required=True,
+    )

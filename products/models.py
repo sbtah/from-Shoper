@@ -31,6 +31,15 @@ class Product(models.Model):
     )
     shoper_images = models.ManyToManyField(Image, blank=True)
     shoper_tags = models.CharField(max_length=200, blank=True)  # M2M ? not used now..
+    # Updated from Shoper CSV File.
+    shoper_url_image_1 = models.CharField(max_length=255, blank=True)
+    shoper_url_image_2 = models.CharField(max_length=255, blank=True)
+    shoper_url_image_3 = models.CharField(max_length=255, blank=True)
+    shoper_url_image_4 = models.CharField(max_length=255, blank=True)
+    shoper_url_image_5 = models.CharField(max_length=255, blank=True)
+    shoper_url_image_6 = models.CharField(max_length=255, blank=True)
+    shoper_url_image_7 = models.CharField(max_length=255, blank=True)
+    shoper_url_image_8 = models.CharField(max_length=255, blank=True)
     # Titles all languages.
     shoper_title_pl = models.CharField(max_length=200)
     shoper_title_en = models.CharField(max_length=200, blank=True)

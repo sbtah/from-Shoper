@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}Create a Copy at Shoper{% endblock title %}
+{% block content %}
+<div class="container-sm mt-3 text-center mt-5 shadow mt-3 p-4 mb-5 rounded text-white border border-info">
+    <form action="" method="POST" enctype="">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="w-100 btn btn-dark mt-4" type="submit">Create Copy</button>
+    </form>
+</div>
+{% endblock content %}

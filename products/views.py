@@ -8,7 +8,7 @@ from products.models import Product
 from django.contrib import messages
 from django.urls import reverse, reverse_lazy
 from products.services import get_single_product
-from external.post_product import create_single_product_for_laguage
+from products.forms import PickLanguagetoCopyForm
 
 
 class ProductListView(LoginRequiredMixin, generic.ListView):
@@ -81,27 +81,5 @@ class CreateLanguageCopyOfProductAtShoper(LoginRequiredMixin, generic.FormView):
     """Update data for Product from API."""
 
     model = Product
-    template_name = "products/product_detail.html"
-
-    # def get(self, request, *args, **kwargs):
-    #     print(request)
-    #     print(args)
-    #     print(kwargs)
-
-    #     product = self.get_object()
-    #     print(product)
-
-    #     """
-    #     Modifed get method that calls get_single_product function from services.py.
-    #     Function returns a dictionary of needed values from API call for ID of product.
-    #     """
-    #     return super().get(request, *args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
-        self.object = self.get_object()  # assign the object to the view
-        form = self.get_form()
-        if form.is_valid():
-            form.save()
-            return self.form_valid(form)
-        else:
-            return self.form_invalid(form)
+    form_class = PickLanguagetoCopyForm
+    template_name = "products/product_create_copy_at_shoper.html"

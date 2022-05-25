@@ -79,6 +79,8 @@ def copy_all_products_from_shoper_api():
                 vendor_brand = SHOPER_STORE[0:-3].capitalize()
             except AttributeError:
                 vendor_brand = ""
+
+                
             try:
                 created_shoper = i.get("add_date")
             except AttributeError:

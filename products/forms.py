@@ -29,11 +29,35 @@ class ProductUpdateFromShoperForm(forms.ModelForm):
         ]
 
 
-class PickLanguagetoCopyForm(forms.Form):
+class PickLanguageToCopyForm(forms.Form):
 
-    pick_language = forms.ChoiceField(
+    from_language = forms.ChoiceField(
         widget=forms.Select(),
-        choices=([("pl_PL", "1"), ("en_EU", "2"), ("en_GB", "3"), ("fr_FR", "4")]),
-        initial="3",
+        choices=(
+            [
+                ("pl_PL", "PL"),
+                ("de_DE", "DE"),
+                ("en_EU", "EU"),
+                ("en_GB", "GB"),
+                ("fr_FR", "FR"),
+                ("en_US", "US"),
+            ]
+        ),
+        initial="1",
+        required=True,
+    )
+    to_language = forms.ChoiceField(
+        widget=forms.Select(),
+        choices=(
+            [
+                ("pl_PL", "PL"),
+                ("de_DE", "DE"),
+                ("en_EU", "EU"),
+                ("en_GB", "GB"),
+                ("fr_FR", "FR"),
+                ("en_US", "US"),
+            ]
+        ),
+        initial="1",
         required=True,
     )

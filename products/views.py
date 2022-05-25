@@ -2,13 +2,14 @@ from datetime import datetime
 from itertools import product
 from django.shortcuts import render
 from django.views import generic
+from django.views.generic.edit import FormMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from products.models import Product
 from django.contrib import messages
 from django.urls import reverse, reverse_lazy
 from products.services import get_single_product
-from products.forms import PickLanguagetoCopyForm
+from products.forms import PickLanguageToCopyForm
 
 
 class ProductListView(LoginRequiredMixin, generic.ListView):
@@ -46,6 +47,8 @@ class ProductUpdateFromShoperView(LoginRequiredMixin, generic.DetailView):
         """
 
         product = self.get_object()
+        print(product)
+        # Call get_single_product function from services.py
         response = get_single_product(product.shoper_id)
 
         if datetime.strptime(
@@ -77,9 +80,43 @@ class ProductUpdateFromShoperView(LoginRequiredMixin, generic.DetailView):
         return super().get(request, *args, **kwargs)
 
 
-class CreateLanguageCopyOfProductAtShoper(LoginRequiredMixin, generic.FormView):
+class CreateLanguageCopyOfProductAtShoper(
+    LoginRequiredMixin, FormMixin, generic.DetailView
+):
     """Update data for Product from API."""
 
     model = Product
-    form_class = PickLanguagetoCopyForm
+    form_class = PickLanguageToCopyForm
     template_name = "products/product_create_copy_at_shoper.html"
+
+    def get_success_url(self):
+        view_name = "products:product-detail"
+        product = self.get_object()
+        return reverse(view_name, kwargs={"pk": product.id})
+
+    def get(self, request, *args, **kwargs):
+
+        return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        """
+        Handle POST requests: instantiate a form instance with the passed
+        POST variables and then check if it's valid.
+        """
+
+        from_product = Product.objects.get(pk=kwargs.get("pk"))
+        print(from_product)
+        # print(request)
+        # print(args)
+        # print(kwargs)
+        # print(product)
+        form = self.get_form()
+
+        if form.is_valid():
+            to_language_tag = form.cleaned_data["to_language"]
+            from_language_tag = form.cleaned_data["from_language"]
+
+            print(to_language_tag, from_language_tag)
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)

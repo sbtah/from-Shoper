@@ -18,6 +18,13 @@ class Product(models.Model):
     created_shoper = models.CharField(max_length=50, blank=True, null=True)
     updated_shoper = models.CharField(max_length=50, blank=True, null=True)
     shoper_price = models.CharField(max_length=40, blank=True)
+
+    # Need to implement few new fields.
+    shoper_producer_id = models.IntegerField(blank=True, null=True)  #
+    shoper_category_id = models.IntegerField(blank=True, null=True)  #
+    shoper_delivery_id = models.IntegerField(blank=True, null=True)  #
+    shoper_other_price = models.CharField(max_length=40, blank=True)  #
+
     shoper_gauge_id = models.CharField(max_length=20, blank=True, null=True)
     shoper_discount_value = models.CharField(max_length=10, blank=True)
     shoper_promo_id = models.IntegerField(blank=True, null=True)
@@ -46,29 +53,45 @@ class Product(models.Model):
     shoper_title_fr = models.CharField(max_length=200, blank=True)
     shoper_title_de = models.CharField(max_length=200, blank=True)
     # PL SEO DATA
+    shoper_translation_us_active_pl = models.BooleanField(blank=True, null=True)  #
+    shoper_short_description_pl = models.TextField(blank=True)  #
     shoper_description_pl = models.TextField(blank=True)
     shoper_seo_title_pl = models.CharField(max_length=200, blank=True)
     shoper_meta_desc_pl = models.TextField(blank=True)
     shoper_permalink_pl = models.CharField(max_length=200, blank=True)
     shoper_seo_url_pl = models.CharField(max_length=200, blank=True)
     # EN SEO DATA
+    shoper_translation_us_active_en = models.BooleanField(blank=True, null=True)  #
+    shoper_short_description_en = models.TextField(blank=True)  #
     shoper_description_en = models.TextField(blank=True)
     shoper_seo_title_en = models.CharField(max_length=200, blank=True)
     shoper_meta_desc_en = models.TextField(blank=True)
     shoper_permalink_en = models.CharField(max_length=200, blank=True)
     shoper_seo_url_en = models.CharField(max_length=200, blank=True)
     # FR SEO DATA
+    shoper_translation_us_active_fr = models.BooleanField(blank=True, null=True)  #
+    shoper_short_description_fr = models.TextField(blank=True)  #
     shoper_description_fr = models.TextField(blank=True)
     shoper_seo_title_fr = models.CharField(max_length=200, blank=True)
     shoper_meta_desc_fr = models.TextField(blank=True)
     shoper_permalink_fr = models.CharField(max_length=200, blank=True)
     shoper_seo_url_fr = models.CharField(max_length=200, blank=True)
     # DE SEO DATA
+    shoper_translation_us_active_de = models.BooleanField(blank=True, null=True)  #
+    shoper_short_description_de = models.TextField(blank=True)  #
     shoper_description_de = models.TextField(blank=True)
     shoper_seo_title_de = models.CharField(max_length=200, blank=True)
     shoper_meta_desc_de = models.TextField(blank=True)
     shoper_permalink_de = models.CharField(max_length=200, blank=True)
     shoper_seo_url_de = models.CharField(max_length=200, blank=True)
+    # US SEO DATA
+    shoper_translation_us_active_us = models.BooleanField(blank=True, null=True)  #
+    shoper_short_description_us = models.TextField(blank=True)  #
+    shoper_description_us = models.TextField(blank=True)
+    shoper_seo_title_us = models.CharField(max_length=200, blank=True)
+    shoper_meta_desc_us = models.TextField(blank=True)
+    shoper_permalink_us = models.CharField(max_length=200, blank=True)
+    shoper_seo_url_us = models.CharField(max_length=200, blank=True)
     # Shopify Data - Not used yet!
     shopify_id = models.IntegerField(unique=True, blank=True, null=True)
     shopify_ean = models.CharField(max_length=13, blank=True)

@@ -27,3 +27,7 @@ class ProductUpdateFromShoperForm(forms.ModelForm):
             "shoper_gauge_id",
             "is_on_shoper",
         ]
+
+
+class PickLanguagetoCopyForm(forms.Form):
+    """"""

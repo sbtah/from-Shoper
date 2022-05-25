@@ -98,7 +98,7 @@ class Product(models.Model):
             )
 
     def get_absolute_url(self):
-        return reverse("panel:product-detail", kwargs={"pk": self.id})
+        return reverse("products:product-detail", kwargs={"pk": self.id})
 
 
 @receiver(m2m_changed, sender=Product.shoper_images.through)

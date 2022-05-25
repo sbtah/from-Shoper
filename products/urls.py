@@ -1,0 +1,27 @@
+from django.urls import path
+from panel import views
+from products.views import (
+    ProductListView,
+    ProductDetailView,
+    ProductUpdateFromShoperView,
+    CreateLanguageCopyOfProductAtShoper,
+)
+
+
+app_name = "products"
+
+
+urlpatterns = [
+    path("", ProductListView.as_view(), name="product-list"),
+    path("<int:pk>/", ProductDetailView.as_view(), name="product-detail"),
+    path(
+        "update-to-shoper/<int:pk>/",
+        ProductUpdateFromShoperView.as_view(),
+        name="product-from-shoper-update",
+    ),
+    path(
+        "create-language-copy/<int:pk>/",
+        CreateLanguageCopyOfProductAtShoper.as_view(),
+        name="product-create-language-copy",
+    ),
+]

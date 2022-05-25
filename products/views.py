@@ -1,4 +1,5 @@
 from datetime import datetime
+from itertools import product
 from django.shortcuts import render
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -7,6 +8,7 @@ from products.models import Product
 from django.contrib import messages
 from django.urls import reverse, reverse_lazy
 from products.services import get_single_product
+from external.post_product import create_single_product_for_laguage
 
 
 class ProductListView(LoginRequiredMixin, generic.ListView):
@@ -73,3 +75,33 @@ class ProductUpdateFromShoperView(LoginRequiredMixin, generic.DetailView):
         else:
             messages.success(request, ("There was nothing to update."))
         return super().get(request, *args, **kwargs)
+
+
+class CreateLanguageCopyOfProductAtShoper(LoginRequiredMixin, generic.FormView):
+    """Update data for Product from API."""
+
+    model = Product
+    template_name = "products/product_detail.html"
+
+    # def get(self, request, *args, **kwargs):
+    #     print(request)
+    #     print(args)
+    #     print(kwargs)
+
+    #     product = self.get_object()
+    #     print(product)
+
+    #     """
+    #     Modifed get method that calls get_single_product function from services.py.
+    #     Function returns a dictionary of needed values from API call for ID of product.
+    #     """
+    #     return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()  # assign the object to the view
+        form = self.get_form()
+        if form.is_valid():
+            form.save()
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)

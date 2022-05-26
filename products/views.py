@@ -112,9 +112,11 @@ class CreateLanguageCopyOfProductAtShoper(
             from_language = form.cleaned_data["from_language"]
             to_language = form.cleaned_data["to_language"]
             if from_language == "pl_PL":
+                # Calls a Product object method that returns needed values for creation of copy for language
                 creatation_object = from_product.prepare_pl_copy_data()
-                print(creatation_object)
+                # Calls a helper function that sends a POST request to SHOPER Api and creates a copy of Product.
                 response = create_copy_of_product_at_shoper(
+                    shoper_id=from_product.shoper_id,
                     to_language_code=to_language,
                     producer_id=from_product.producer_id,
                     category_id=from_product.category_id,
@@ -136,13 +138,42 @@ class CreateLanguageCopyOfProductAtShoper(
                     translations_description=creatation_object[
                         "translations_description"
                     ],
-                    seo_description=creatation_object["seo_description"],
                 )
-                # call a function from services.py that sends post req with creation object at Shoper store.
+                print(response)
+                # TODO:
+                # Work with this response to create a local instance of new created product at Shoper.
             elif from_language == "en_GB":
                 creatation_object = from_product.prepare_gb_copy_data()
-                print(creatation_object)
-
+                # Calls a Product object method that returns needed values for creation of copy for language
+                creatation_object = from_product.prepare_pl_copy_data()
+                # Calls a helper function that sends a POST request to SHOPER Api and creates a copy of Product.
+                response = create_copy_of_product_at_shoper(
+                    shoper_id=from_product.shoper_id,
+                    to_language_code=to_language,
+                    producer_id=from_product.producer_id,
+                    category_id=from_product.category_id,
+                    other_price=from_product.other_price,
+                    code=from_product.shoper_sku,
+                    ean=from_product.shoper_ean,
+                    shoper_vol_weight=from_product.shoper_vol_weigh,
+                    stock_price=from_product.shoper_stock_price,
+                    stock_weight=from_product.shoper_weight,
+                    stock_availability_id=from_product.shoper_availability_id,
+                    shoper_delivery_id=from_product.shoper_delivery_id,
+                    translations_name=creatation_object["shoper_translation_name"],
+                    translations_active=creatation_object[
+                        "shoper_translation_is_active"
+                    ],
+                    translations_short_description=creatation_object[
+                        "translations_short_description"
+                    ],
+                    translations_description=creatation_object[
+                        "translations_description"
+                    ],
+                )
+                print(response)
+                # TODO:
+                # Work with this response to create a local instance of new created product at Shoper.
             return self.form_valid(form)
         else:
             return self.form_invalid(form)

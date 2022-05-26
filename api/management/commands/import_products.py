@@ -148,32 +148,11 @@ def copy_all_products_from_shoper_api():
                 shoper_discount_value = i.get("special_offer").get("discount")
             except AttributeError:
                 shoper_discount_value = ""
-            # Titles all languages.
+            # PL SEO DATA
             try:
                 shoper_title_pl = i.get("translations").get("pl_PL").get("name")
             except AttributeError:
                 shoper_title_pl = ""
-            try:
-                shoper_title_gb = i.get("translations").get("en_GB").get("name")
-            except AttributeError:
-                shoper_title_gb = ""
-            try:
-                shoper_title_eu = i.get("translations").get("en_EU").get("name")
-            except AttributeError:
-                shoper_title_eu = ""
-            try:
-                shoper_title_fr = i.get("translations").get("fr_FR").get("name")
-            except AttributeError:
-                shoper_title_fr = ""
-            try:
-                shoper_title_de = i.get("translations").get("de_DE").get("name")
-            except AttributeError:
-                shoper_title_de = ""
-            try:
-                shoper_title_us = i.get("translations").get("en_US").get("name")
-            except AttributeError:
-                shoper_title_us = ""
-            # PL SEO DATA
             try:
                 shoper_translation_is_active_pl = (
                     i.get("translations").get("pl_PL").get("active")
@@ -216,6 +195,10 @@ def copy_all_products_from_shoper_api():
                 shoper_seo_url_pl = ""
             # GB SEO DATA
             try:
+                shoper_title_gb = i.get("translations").get("en_GB").get("name")
+            except AttributeError:
+                shoper_title_gb = ""
+            try:
                 shoper_translation_is_active_gb = (
                     i.get("translations").get("en_GB").get("active")
                 )
@@ -256,6 +239,10 @@ def copy_all_products_from_shoper_api():
             except AttributeError:
                 shoper_seo_url_gb = ""
             # EU SEO DATA
+            try:
+                shoper_title_eu = i.get("translations").get("en_EU").get("name")
+            except AttributeError:
+                shoper_title_eu = ""
             try:
                 shoper_translation_is_active_eu = (
                     i.get("translations").get("en_IE").get("active")
@@ -298,6 +285,10 @@ def copy_all_products_from_shoper_api():
                 shoper_seo_url_eu = ""
             # FR SEO DATA
             try:
+                shoper_title_fr = i.get("translations").get("fr_FR").get("name")
+            except AttributeError:
+                shoper_title_fr = ""
+            try:
                 shoper_translation_is_active_fr = (
                     i.get("translations").get("fr_FR").get("active")
                 )
@@ -338,6 +329,10 @@ def copy_all_products_from_shoper_api():
             except AttributeError:
                 shoper_seo_url_fr = ""
             # DE SEO DATA
+            try:
+                shoper_title_de = i.get("translations").get("de_DE").get("name")
+            except AttributeError:
+                shoper_title_de = ""
             try:
                 shoper_translation_is_active_de = (
                     i.get("translations").get("de_DE").get("active")
@@ -381,6 +376,10 @@ def copy_all_products_from_shoper_api():
             except AttributeError:
                 shoper_seo_url_de = ""
             # US SEO DATA
+            try:
+                shoper_title_us = i.get("translations").get("en_US").get("name")
+            except AttributeError:
+                shoper_title_us = ""
             try:
                 shoper_translation_is_active_us = (
                     i.get("translations").get("en_US").get("active")
@@ -461,14 +460,8 @@ def copy_all_products_from_shoper_api():
                     product.shoper_promo_start = shoper_promo_start
                     product.shoper_promo_ends = shoper_promo_ends
                     product.shoper_discount_value = shoper_discount_value
-                    # Titles all languages.
-                    product.shoper_title_pl = shoper_title_pl
-                    product.shoper_title_eu = shoper_title_eu
-                    product.shoper_title_gb = shoper_title_gb
-                    product.shoper_title_de = shoper_title_de
-                    product.shoper_title_fr = shoper_title_fr
-                    product.shoper_title_us = shoper_title_us
                     # PL SEO DATA
+                    product.shoper_title_pl = shoper_title_pl
                     product.shoper_translation_is_active_pl = (
                         shoper_translation_is_active_pl
                     )
@@ -479,6 +472,7 @@ def copy_all_products_from_shoper_api():
                     product.shoper_permalink_pl = shoper_permalink_pl
                     product.shoper_seo_url_pl = shoper_seo_url_pl
                     # GB SEO DATA
+                    product.shoper_title_gb = shoper_title_gb
                     product.shoper_translation_is_active_gb = (
                         shoper_translation_is_active_gb
                     )
@@ -489,6 +483,7 @@ def copy_all_products_from_shoper_api():
                     product.shoper_permalink_gb = shoper_permalink_gb
                     product.shoper_seo_url_gb = shoper_seo_url_gb
                     # EU SEO DATA
+                    product.shoper_title_eu = shoper_title_eu
                     product.shoper_translation_is_active_eu = (
                         shoper_translation_is_active_eu
                     )
@@ -499,6 +494,7 @@ def copy_all_products_from_shoper_api():
                     product.shoper_permalink_eu = shoper_permalink_eu
                     product.shoper_seo_url_eu = shoper_seo_url_eu
                     # FR SEO DATA
+                    product.shoper_title_fr = shoper_title_fr
                     product.shoper_translation_is_active_fr = (
                         shoper_translation_is_active_fr
                     )
@@ -509,6 +505,7 @@ def copy_all_products_from_shoper_api():
                     product.shoper_permalink_fr = shoper_permalink_fr
                     product.shoper_seo_url_fr = shoper_seo_url_fr
                     # DE SEO DATA
+                    product.shoper_title_de = shoper_title_de
                     product.shoper_translation_is_active_de = (
                         shoper_translation_is_active_de
                     )
@@ -518,6 +515,18 @@ def copy_all_products_from_shoper_api():
                     product.shoper_meta_desc_de = shoper_meta_desc_de
                     product.shoper_permalink_de = shoper_permalink_de
                     product.shoper_seo_url_de = shoper_seo_url_de
+                    # US SEO DATA
+                    product.shoper_title_us = shoper_title_us
+                    product.shoper_translation_is_active_us = (
+                        shoper_translation_is_active_us
+                    )
+                    product.shoper_short_description_us = shoper_short_description_us
+                    product.shoper_description_us = shoper_description_us
+                    product.shoper_seo_title_us = shoper_seo_title_us
+                    product.shoper_meta_desc_us = shoper_meta_desc_us
+                    product.shoper_permalink_us = shoper_permalink_us
+                    product.shoper_seo_url_us = shoper_seo_url_us
+
                     # Local Data
                     product.vendor_brand = vendor_brand
                     product.save()
@@ -552,14 +561,8 @@ def copy_all_products_from_shoper_api():
                     shoper_promo_start=shoper_promo_start,
                     shoper_promo_ends=shoper_promo_ends,
                     shoper_discount_value=shoper_discount_value,
-                    # Titles all languages.
-                    shoper_title_pl=shoper_title_pl,
-                    shoper_title_eu=shoper_title_eu,
-                    shoper_title_gb=shoper_title_gb,
-                    shoper_title_de=shoper_title_de,
-                    shoper_title_fr=shoper_title_fr,
-                    shoper_title_us=shoper_title_us,
                     # PL SEO DATA
+                    shoper_title_pl=shoper_title_pl,
                     shoper_translation_is_active_pl=shoper_translation_is_active_pl,
                     shoper_short_description_pl=shoper_short_description_pl,
                     shoper_description_pl=shoper_description_pl,
@@ -568,6 +571,7 @@ def copy_all_products_from_shoper_api():
                     shoper_permalink_pl=shoper_permalink_pl,
                     shoper_seo_url_pl=shoper_seo_url_pl,
                     # GB SEO DATA
+                    shoper_title_gb=shoper_title_gb,
                     shoper_translation_is_active_gb=shoper_translation_is_active_gb,
                     shoper_short_description_gb=shoper_short_description_gb,
                     shoper_description_gb=shoper_description_gb,
@@ -576,6 +580,7 @@ def copy_all_products_from_shoper_api():
                     shoper_permalink_gb=shoper_permalink_gb,
                     shoper_seo_url_gb=shoper_seo_url_gb,
                     # EU SEO DATA
+                    shoper_title_eu=shoper_title_eu,
                     shoper_translation_is_active_eu=shoper_translation_is_active_eu,
                     shoper_short_description_eu=shoper_short_description_eu,
                     shoper_description_eu=shoper_description_eu,
@@ -584,6 +589,7 @@ def copy_all_products_from_shoper_api():
                     shoper_permalink_eu=shoper_permalink_eu,
                     shoper_seo_url_eu=shoper_seo_url_eu,
                     # FR SEO DATA
+                    shoper_title_fr=shoper_title_fr,
                     shoper_translation_is_active_fr=shoper_translation_is_active_fr,
                     shoper_short_description_fr=shoper_short_description_fr,
                     shoper_description_fr=shoper_description_fr,
@@ -592,6 +598,7 @@ def copy_all_products_from_shoper_api():
                     shoper_permalink_fr=shoper_permalink_fr,
                     shoper_seo_url_fr=shoper_seo_url_fr,
                     # DE SEO DATA
+                    shoper_title_de=shoper_title_de,
                     shoper_translation_is_active_de=shoper_translation_is_active_de,
                     shoper_short_description_de=shoper_short_description_de,
                     shoper_description_de=shoper_description_de,
@@ -600,6 +607,7 @@ def copy_all_products_from_shoper_api():
                     shoper_permalink_de=shoper_permalink_de,
                     shoper_seo_url_de=shoper_seo_url_de,
                     # US SEO DATA
+                    shoper_title_us=shoper_title_us,
                     shoper_translation_is_active_us=shoper_translation_is_active_us,
                     shoper_short_description_us=shoper_short_description_us,
                     shoper_description_us=shoper_description_us,

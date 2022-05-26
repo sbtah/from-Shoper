@@ -1,15 +1,14 @@
 from datetime import datetime
-from itertools import product
-from django.shortcuts import render
 from django.views import generic
 from django.views.generic.edit import FormMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.messages.views import SuccessMessageMixin
 from products.models import Product
 from django.contrib import messages
 from django.urls import reverse, reverse_lazy
 from products.services import get_single_product
 from products.forms import PickLanguageToCopyForm
+from external.get_products import get_single_product
+from products.services import create_copy_of_product_at_shoper
 
 
 class ProductListView(LoginRequiredMixin, generic.ListView):
@@ -96,6 +95,8 @@ class CreateLanguageCopyOfProductAtShoper(
 
     def get(self, request, *args, **kwargs):
 
+        # print(get_single_product(102))
+
         return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
@@ -105,18 +106,43 @@ class CreateLanguageCopyOfProductAtShoper(
         """
 
         from_product = Product.objects.get(pk=kwargs.get("pk"))
-        print(from_product)
-        # print(request)
-        # print(args)
-        # print(kwargs)
-        # print(product)
+
         form = self.get_form()
-
         if form.is_valid():
-            to_language_tag = form.cleaned_data["to_language"]
-            from_language_tag = form.cleaned_data["from_language"]
+            from_language = form.cleaned_data["from_language"]
+            to_language = form.cleaned_data["to_language"]
+            if from_language == "pl_PL":
+                creatation_object = from_product.prepare_pl_copy_data()
+                print(creatation_object)
+                response = create_copy_of_product_at_shoper(
+                    to_language_code=to_language,
+                    producer_id=from_product.producer_id,
+                    category_id=from_product.category_id,
+                    other_price=from_product.other_price,
+                    code=from_product.shoper_sku,
+                    ean=from_product.shoper_ean,
+                    shoper_vol_weight=from_product.shoper_vol_weigh,
+                    stock_price=from_product.shoper_stock_price,
+                    stock_weight=from_product.shoper_weight,
+                    stock_availability_id=from_product.shoper_availability_id,
+                    shoper_delivery_id=from_product.shoper_delivery_id,
+                    translations_name=creatation_object["shoper_translation_name"],
+                    translations_active=creatation_object[
+                        "shoper_translation_is_active"
+                    ],
+                    translations_short_description=creatation_object[
+                        "translations_short_description"
+                    ],
+                    translations_description=creatation_object[
+                        "translations_description"
+                    ],
+                    seo_description=creatation_object["seo_description"],
+                )
+                # call a function from services.py that sends post req with creation object at Shoper store.
+            elif from_language == "en_GB":
+                creatation_object = from_product.prepare_gb_copy_data()
+                print(creatation_object)
 
-            print(to_language_tag, from_language_tag)
             return self.form_valid(form)
         else:
             return self.form_invalid(form)

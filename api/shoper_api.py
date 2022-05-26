@@ -128,6 +128,21 @@ def get_single_redirect(redirect_id):
     return res
 
 
+#
+def get_all_promtions():
+    """
+    Return a reponse with all promotions.
+    https://shop.url/webapi/rest/specialoffers
+    """
+
+    url = f"https://{SHOPER_STORE}/webapi/rest/specialoffers"
+    headers = {"Authorization": f"Bearer {TOKEN}"}
+    response = requests.get(url, headers=headers)
+    res = response.json()
+
+    return res
+
+
 # Get all ID numbers of products from SHOPER Api.
 def get_list_of_all_shoper_product_ids():
     """Get all product ids from SHOPER Api."""
@@ -205,9 +220,9 @@ def get_product_data_for_shopify(id):
 
 
 # == DEBUGING ==
-# print(get_single_product(222))
+print(get_single_product(222))
 # print(get_all_images())
 # print(get_number_of_product_pages())
 # print(get_number_of_image_pages())
 # print(get_list_of_all_shoper_image_ids())
-
+# print(get_all_promtions())

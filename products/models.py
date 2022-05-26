@@ -33,14 +33,8 @@ class Product(models.Model):
     shoper_promo_start = models.CharField(max_length=50, blank=True, null=True)
     shoper_promo_ends = models.CharField(max_length=50, blank=True, null=True)
     shoper_discount_value = models.CharField(max_length=50, blank=True, null=True)
-    # Titles all languages.
-    shoper_title_pl = models.CharField(max_length=200)
-    shoper_title_gb = models.CharField(max_length=200, blank=True)
-    shoper_title_eu = models.CharField(max_length=200, blank=True)
-    shoper_title_fr = models.CharField(max_length=200, blank=True)
-    shoper_title_de = models.CharField(max_length=200, blank=True)
-    shoper_title_us = models.CharField(max_length=200, blank=True)  #
     # PL SEO DATA
+    shoper_title_pl = models.CharField(max_length=200, blank=True)
     shoper_translation_is_active_pl = models.BooleanField(blank=True, null=True)  #
     shoper_short_description_pl = models.TextField(blank=True)  #
     shoper_description_pl = models.TextField(blank=True)
@@ -49,6 +43,7 @@ class Product(models.Model):
     shoper_permalink_pl = models.CharField(max_length=200, blank=True)
     shoper_seo_url_pl = models.CharField(max_length=200, blank=True)
     # GB SEO DATA
+    shoper_title_gb = models.CharField(max_length=200, blank=True)
     shoper_translation_is_active_gb = models.BooleanField(blank=True, null=True)  #
     shoper_short_description_gb = models.TextField(blank=True)  #
     shoper_description_gb = models.TextField(blank=True)
@@ -57,6 +52,7 @@ class Product(models.Model):
     shoper_permalink_gb = models.CharField(max_length=200, blank=True)
     shoper_seo_url_gb = models.CharField(max_length=200, blank=True)
     # EU SEO DATA
+    shoper_title_eu = models.CharField(max_length=200, blank=True)
     shoper_translation_is_active_eu = models.BooleanField(blank=True, null=True)  #
     shoper_short_description_eu = models.TextField(blank=True)  #
     shoper_description_eu = models.TextField(blank=True)
@@ -65,6 +61,7 @@ class Product(models.Model):
     shoper_permalink_eu = models.CharField(max_length=200, blank=True)
     shoper_seo_url_eu = models.CharField(max_length=200, blank=True)
     # FR SEO DATA
+    shoper_title_fr = models.CharField(max_length=200, blank=True)
     shoper_translation_is_active_fr = models.BooleanField(blank=True, null=True)  #
     shoper_short_description_fr = models.TextField(blank=True)  #
     shoper_description_fr = models.TextField(blank=True)
@@ -73,6 +70,7 @@ class Product(models.Model):
     shoper_permalink_fr = models.CharField(max_length=200, blank=True)
     shoper_seo_url_fr = models.CharField(max_length=200, blank=True)
     # DE SEO DATA
+    shoper_title_de = models.CharField(max_length=200, blank=True)
     shoper_translation_is_active_de = models.BooleanField(blank=True, null=True)  #
     shoper_short_description_de = models.TextField(blank=True)  #
     shoper_description_de = models.TextField(blank=True)
@@ -81,6 +79,7 @@ class Product(models.Model):
     shoper_permalink_de = models.CharField(max_length=200, blank=True)
     shoper_seo_url_de = models.CharField(max_length=200, blank=True)
     # US SEO DATA
+    shoper_title_us = models.CharField(max_length=200, blank=True)
     shoper_translation_is_active_us = models.BooleanField(blank=True, null=True)  #
     shoper_short_description_us = models.TextField(blank=True)  #
     shoper_description_us = models.TextField(blank=True)
@@ -147,10 +146,6 @@ class Product(models.Model):
             "shoper_translation_is_active": self.shoper_translation_is_active_pl,
             "shoper_short_description": self.shoper_short_description_pl,
             "shoper_description": self.shoper_description_pl,
-            "shoper_seo_title": self.shoper_seo_title_pl,
-            "shoper_meta_desc": self.shoper_meta_desc_pl,
-            "shoper_permalink": self.shoper_permalink_pl,
-            "shoper_seo_url": self.shoper_seo_url_pl,
         }
 
     def prepare_gb_copy_data(self):
@@ -159,10 +154,6 @@ class Product(models.Model):
             "shoper_translation_is_active": self.shoper_translation_is_active_gb,
             "shoper_short_description": self.shoper_short_description_gb,
             "shoper_description": self.shoper_description_gb,
-            "shoper_seo_title": self.shoper_seo_title_gb,
-            "shoper_meta_desc": self.shoper_meta_desc_gb,
-            "shoper_permalink": self.shoper_permalink_gb,
-            "shoper_seo_url": self.shoper_seo_url_gb,
         }
 
     def prepare_eu_copy_data(self):
@@ -171,10 +162,6 @@ class Product(models.Model):
             "shoper_translation_is_active": self.shoper_translation_is_active_eu,
             "shoper_short_description": self.shoper_short_description_eu,
             "shoper_description": self.shoper_description_eu,
-            "shoper_seo_title": self.shoper_seo_title_eu,
-            "shoper_meta_desc": self.shoper_meta_desc_eu,
-            "shoper_permalink": self.shoper_permalink_eu,
-            "shoper_seo_url": self.shoper_seo_url_eu,
         }
 
     def prepare_fr_copy_data(self):
@@ -183,10 +170,6 @@ class Product(models.Model):
             "shoper_translation_is_active": self.shoper_translation_is_active_fr,
             "shoper_short_description": self.shoper_short_description_fr,
             "shoper_description": self.shoper_description_fr,
-            "shoper_seo_title": self.shoper_seo_title_fr,
-            "shoper_meta_desc": self.shoper_meta_desc_fr,
-            "shoper_permalink": self.shoper_permalink_fr,
-            "shoper_seo_url": self.shoper_seo_url_fr,
         }
 
     def prepare_de_copy_data(self):
@@ -195,22 +178,14 @@ class Product(models.Model):
             "shoper_translation_is_active": self.shoper_translation_is_active_de,
             "shoper_short_description": self.shoper_short_description_de,
             "shoper_description": self.shoper_description_de,
-            "shoper_seo_title": self.shoper_seo_title_de,
-            "shoper_meta_desc": self.shoper_meta_desc_de,
-            "shoper_permalink": self.shoper_permalink_de,
-            "shoper_seo_url": self.shoper_seo_url_de,
         }
 
     def prepare_us_copy_data(self):
         return {
             "shoper_translation_name": self.shoper_title_us,
-            "shoper_translation_is_active_us": self.shoper_translation_is_active_us,
-            "shoper_short_description_us": self.shoper_short_description_us,
-            "shoper_description_us": self.shoper_description_us,
-            "shoper_seo_title_us": self.shoper_seo_title_us,
-            "shoper_meta_desc_us": self.shoper_meta_desc_us,
-            "shoper_permalink_us": self.shoper_permalink_us,
-            "shoper_seo_url_us": self.shoper_seo_url_us,
+            "shoper_translation_is_active": self.shoper_translation_is_active_us,
+            "shoper_short_description": self.shoper_short_description_us,
+            "shoper_description": self.shoper_description_us,
         }
 
     def get_absolute_url(self):

@@ -62,7 +62,7 @@ replace_dict = {
 }
 
 
-def create_seo_url(language_code, string, product_id):
+def create_seo_url(language_code, string, shoper_product_id):
     """Create a safe SEO relative URL for product."""
 
     new = ""
@@ -72,7 +72,7 @@ def create_seo_url(language_code, string, product_id):
         else:
             new += x
 
-    return f"{language_code[3:]}-{new.replace(' ', '-')}-{product_id}"
+    return f"{language_code[3:]}-{new.replace(' ', '-')}-{shoper_product_id}"
 
 
 def create_relative_url(original_url):

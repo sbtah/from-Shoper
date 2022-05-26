@@ -154,6 +154,7 @@ def get_single_product(id):
 
 
 def create_copy_of_product_at_shoper(
+    shoper_id,
     to_language_code,
     producer_id,
     category_id,
@@ -166,15 +167,13 @@ def create_copy_of_product_at_shoper(
     stock_availability_id,
     shoper_delivery_id,
     translations_name,
+    translations_active,
     translations_short_description,
     translations_description,
-    translations_active,
-    seo_title,
-    seo_description,
 ):
     """
     Sends a POST request with Product Data to Shoper's product endpoint.
-    Creates new Product and returns JSON response after.
+    Creates a NEW Product and returns JSON response after.
     """
 
     data = json.dumps(
@@ -197,17 +196,14 @@ def create_copy_of_product_at_shoper(
                     "short_description": translations_short_description,
                     "description": translations_description,
                     "active": translations_active,
-                    "seo_title": seo_title,
-                    "seo_description": seo_description,
-                    "seo_keywords": f"",
-                    "seo_url": create_seo_url(
-                        to_language_code, translations_name, code
-                    ),
+                    "seo_title": "",
+                    "seo_description": "",
+                    "seo_keywords": "",
+                    "seo_url": f"{create_seo_url(to_language_code, translations_name, shoper_id)}",
                 }
             },
         }
     )
-
     url = f"https://{SHOPER_STORE}/webapi/rest/products"
     headers = {"Authorization": f"Bearer {TOKEN}"}
     response = requests.post(url, headers=headers, data=data)

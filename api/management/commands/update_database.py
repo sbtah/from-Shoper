@@ -6,8 +6,10 @@ from dotenv import load_dotenv
 from django.core.management.base import BaseCommand
 from images.models import Image
 from products.models import Product
-from commands.import_products import copy_all_products_from_shoper_api
-from commands.import_images import copy_all_product_images_from_shoper_api
+from api.management.commands.import_products import copy_all_products_from_shoper_api
+from api.management.commands.import_images import (
+    copy_all_product_images_from_shoper_api,
+)
 
 
 # Get private data fron .env variable

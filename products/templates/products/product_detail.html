@@ -24,7 +24,12 @@
                     </div>
                     <div class="card-body">
                         <ul class="list-group">
-                            <li class="list-group-item">Price: {{ product.shoper_price }}</li>
+                            <li class="list-group-item">Shoper ID: {{ product.shoper_id }}</li>
+                            <li class="list-group-item">Shoper EAN: {{ product.shoper_ean }}</li>
+                            <li class="list-group-item">Shoper SKU: {{ product.shoper_sku }}</li>
+                            <li class="list-group-item">Shoper Stock Price: {{ product.shoper_stock_price }}</li>
+                            <li class="list-group-item">Shoper Other Price: {{ product.shoper_other_price }}</li>
+                            <li class="list-group-item">Shoper Stock Volume: {{ product.shoper_vol_weight }}</li>
                         </ul>
                     </div>
                 </div>
@@ -38,7 +43,10 @@
                     </div>
                     <div class="card-body">
                         <ul class="list-group">
-                            <li class="list-group-item">{{ product.is_active_shoper }}</li>
+                            <li class="list-group-item">Shoper Active: {{ product.is_active_shoper }}</li>
+                            <li class="list-group-item">Shoper Updated: {{ product.updated_shoper }}</li>
+                            <li class="list-group-item">Local Updated: {{ product.updated }}</li>
+                            <li class="list-group-item">Shoper Active: {{ product.is_active_shoper }}</li>
                         </ul>
                     </div>
                 </div>

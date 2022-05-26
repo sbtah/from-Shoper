@@ -126,7 +126,7 @@ def copy_all_products_from_shoper_api():
             try:
                 shoper_weight = i.get("stock").get("weight")
             except AttributeError:
-                shoper_weight = None
+                shoper_weight = ""
             try:
                 shoper_availability_id = i.get("shoper_availability_id")
             except AttributeError:

@@ -26,7 +26,7 @@ class Product(models.Model):
     shoper_new_product_tag = models.BooleanField(blank=True, null=True)
     shoper_unit_id = models.IntegerField(blank=True, null=True)  # None
     shoper_currency_id = models.IntegerField(blank=True, null=True)  # None
-    shoper_weight = models.IntegerField(blank=True, null=True)  # None
+    shoper_weight = models.CharField(max_length=5, blank=True, null=True)  # None
     shoper_availability_id = models.IntegerField(blank=True, null=True)  # None
     # Shoper Special Offer.
     shoper_promo_id = models.IntegerField(blank=True, null=True)

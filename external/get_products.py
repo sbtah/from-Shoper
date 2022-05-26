@@ -1,14 +1,11 @@
-import json
 import time
 import requests
-import logging
 from external.token import get_token
 from external.token import SHOPER_STORE, SHOPER_LOGIN, SHOPER_PASSWORD
 from external.create_url import create_seo_url
 
 
 TOKEN = get_token()
-logging.basicConfig(level=logging.INFO)
 
 
 # GET Requests

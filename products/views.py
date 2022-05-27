@@ -8,7 +8,9 @@ from django.urls import reverse, reverse_lazy
 from products.services import get_single_product
 from products.forms import PickLanguageToCopyForm
 from external.get_products import get_single_product
-from products.services import create_copy_of_product_at_shoper
+from external.post_product import create_copy_of_product_at_shoper
+from external.post_redirects import create_redirect
+from external.create_url import create_relative_url
 
 
 class ProductListView(LoginRequiredMixin, generic.ListView):
@@ -46,7 +48,6 @@ class ProductUpdateFromShoperView(LoginRequiredMixin, generic.DetailView):
         """
 
         product = self.get_object()
-        print(product)
         # Call get_single_product function from services.py
         response = get_single_product(product.shoper_id)
 
@@ -104,7 +105,9 @@ class CreateLanguageCopyOfProductAtShoper(
         Handle POST requests: instantiate a form instance with the passed
         POST variables and then check if it's valid.
         """
-
+        # TODO
+        # Implement a 3rd Form picker: Create Redirect from original? Y | N
+        # Implement a 4th Form picker: Copy pictures from original? Y | N
         from_product = Product.objects.get(pk=kwargs.get("pk"))
 
         form = self.get_form()
@@ -116,14 +119,14 @@ class CreateLanguageCopyOfProductAtShoper(
                 creatation_object = from_product.prepare_pl_copy_data()
                 # Calls a helper function that sends a POST request to SHOPER Api and creates a copy of Product.
                 response = create_copy_of_product_at_shoper(
-                    shoper_id=from_product.shoper_id,
+                    shoper_sku=from_product.shoper_sku,
                     to_language_code=to_language,
-                    producer_id=from_product.producer_id,
-                    category_id=from_product.category_id,
-                    other_price=from_product.other_price,
+                    producer_id=from_product.shoper_producer_id,
+                    category_id=from_product.shoper_category_id,
+                    other_price=from_product.shoper_other_price,
                     code=from_product.shoper_sku,
                     ean=from_product.shoper_ean,
-                    shoper_vol_weight=from_product.shoper_vol_weigh,
+                    shoper_vol_weight=from_product.shoper_vol_weight,
                     stock_price=from_product.shoper_stock_price,
                     stock_weight=from_product.shoper_weight,
                     stock_availability_id=from_product.shoper_availability_id,
@@ -133,29 +136,39 @@ class CreateLanguageCopyOfProductAtShoper(
                         "shoper_translation_is_active"
                     ],
                     translations_short_description=creatation_object[
-                        "translations_short_description"
+                        "shoper_short_description"
                     ],
-                    translations_description=creatation_object[
-                        "translations_description"
-                    ],
+                    translations_description=creatation_object["shoper_description"],
                 )
-                print(response)
+                # TODO
+                # Use this part only if form value for making redirects == Y. Otherwise skip.
+                if type(response[0]) == int:
+                    create_redirect(
+                        from_url=create_relative_url(
+                            creatation_object["shoper_permalink"]
+                        ),
+                        to_url=response[1],
+                    )
+                else:
+                    pass
+                # TODO
+                #
                 # TODO:
                 # Work with this response to create a local instance of new created product at Shoper.
             elif from_language == "en_GB":
                 creatation_object = from_product.prepare_gb_copy_data()
                 # Calls a Product object method that returns needed values for creation of copy for language
-                creatation_object = from_product.prepare_pl_copy_data()
+                print(creatation_object)
                 # Calls a helper function that sends a POST request to SHOPER Api and creates a copy of Product.
                 response = create_copy_of_product_at_shoper(
-                    shoper_id=from_product.shoper_id,
+                    shoper_sku=from_product.shoper_sku,
                     to_language_code=to_language,
-                    producer_id=from_product.producer_id,
-                    category_id=from_product.category_id,
-                    other_price=from_product.other_price,
+                    producer_id=from_product.shoper_producer_id,
+                    category_id=from_product.shoper_category_id,
+                    other_price=from_product.shoper_other_price,
                     code=from_product.shoper_sku,
                     ean=from_product.shoper_ean,
-                    shoper_vol_weight=from_product.shoper_vol_weigh,
+                    shoper_vol_weight=from_product.shoper_vol_weight,
                     stock_price=from_product.shoper_stock_price,
                     stock_weight=from_product.shoper_weight,
                     stock_availability_id=from_product.shoper_availability_id,
@@ -165,11 +178,9 @@ class CreateLanguageCopyOfProductAtShoper(
                         "shoper_translation_is_active"
                     ],
                     translations_short_description=creatation_object[
-                        "translations_short_description"
+                        "shoper_short_description"
                     ],
-                    translations_description=creatation_object[
-                        "translations_description"
-                    ],
+                    translations_description=creatation_object["shoper_description"],
                 )
                 print(response)
                 # TODO:

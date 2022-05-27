@@ -61,6 +61,42 @@ def get_number_of_product_pages():
     return pages
 
 
+def get_all_files():
+    """Return a paginated response with all files and number of pages."""
+
+    url = f"https://{SHOPER_STORE}/webapi/rest/product-files"
+    headers = {"Authorization": f"Bearer {TOKEN}"}
+    response = requests.get(url, headers=headers)
+    res = response.json()
+
+    return res
+
+
+def get_single_file(id):
+    """
+    https://shop.url/webapi/rest/product-files/<id>
+
+    """
+    url = f"https://{SHOPER_STORE}/webapi/rest/product-files/{id}"
+    headers = {"Authorization": f"Bearer {TOKEN}"}
+    response = requests.get(url, headers=headers)
+    res = response.json()
+
+    return res
+
+
+def get_number_of_files_pages():
+    """Get number of all product pages from SHOPER api"""
+
+    url = f"https://{SHOPER_STORE}/webapi/rest/product-files"
+    headers = {"Authorization": f"Bearer {TOKEN}"}
+    response = requests.get(url, headers=headers)
+    res = response.json()
+    pages = res.get("pages")
+
+    return pages
+
+
 def get_all_images():
     """
     Return a reponse with all images
@@ -220,9 +256,11 @@ def get_product_data_for_shopify(id):
 
 
 # == DEBUGING ==
-print(get_single_product(222))
+# print(get_single_product(222))
 # print(get_all_images())
 # print(get_number_of_product_pages())
 # print(get_number_of_image_pages())
 # print(get_list_of_all_shoper_image_ids())
 # print(get_all_promtions())
+# print(get_single_file(2002))
+print(get_all_files())

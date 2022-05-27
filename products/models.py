@@ -194,6 +194,18 @@ class Product(models.Model):
             "shoper_permalink": self.shoper_permalink_us,
         }
 
+    def return_images_urls(self):
+        return [
+            self.shoper_url_image_1,
+            self.shoper_url_image_2,
+            self.shoper_url_image_3,
+            self.shoper_url_image_4,
+            self.shoper_url_image_5,
+            self.shoper_url_image_6,
+            self.shoper_url_image_7,
+            self.shoper_url_image_8,
+        ]
+
     def get_absolute_url(self):
         return reverse("products:product-detail", kwargs={"pk": self.id})
 

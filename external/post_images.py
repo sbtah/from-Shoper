@@ -4,10 +4,9 @@ import time
 import logging
 import requests
 from external.token import get_token
-from external.token import SHOPER_STORE, SHOPER_LOGIN, SHOPER_PASSWORD
+from external.token import SHOPER_STORE
 
 
-logging.basicConfig(level=logging.INFO)
 TOKEN = get_token()
 
 

@@ -3,7 +3,7 @@ import time
 import requests
 import logging
 from external.token import get_token
-from external.token import SHOPER_STORE, SHOPER_LOGIN, SHOPER_PASSWORD
+from external.token import SHOPER_STORE
 
 
 TOKEN = get_token()

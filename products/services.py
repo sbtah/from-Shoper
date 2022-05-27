@@ -154,7 +154,7 @@ def get_single_product(id):
 
 
 def create_copy_of_product_at_shoper(
-    shoper_id,
+    shoper_sku,
     to_language_code,
     producer_id,
     category_id,
@@ -199,7 +199,7 @@ def create_copy_of_product_at_shoper(
                     "seo_title": "",
                     "seo_description": "",
                     "seo_keywords": "",
-                    "seo_url": f"{create_seo_url(to_language_code, translations_name, shoper_id)}",
+                    "seo_url": f"{create_seo_url(to_language_code, translations_name, shoper_sku)}",
                 }
             },
         }

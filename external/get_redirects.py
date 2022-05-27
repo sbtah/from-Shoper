@@ -2,7 +2,7 @@ import json
 import time
 import requests
 from external.token import get_token
-from external.token import SHOPER_STORE, SHOPER_LOGIN, SHOPER_PASSWORD
+from external.token import SHOPER_STORE
 
 
 TOKEN = get_token()

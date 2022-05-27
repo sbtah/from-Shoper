@@ -1,8 +1,7 @@
 import time
 import requests
 from external.token import get_token
-from external.token import SHOPER_STORE, SHOPER_LOGIN, SHOPER_PASSWORD
-from external.create_url import create_seo_url
+from external.token import SHOPER_STORE
 
 
 TOKEN = get_token()
@@ -81,6 +80,10 @@ def get_list_of_all_shoper_product_ids():
 
 def get_single_product_data_for_copy(product_id, language_code):
     """
+    NOT USED IN ANY DJANGO LOGIC.
+    Sends GET request to Shoper's product API endpoint that returns data for single product.
+    Properly selects and cleans data from reponse and store it the variables.
+    Variables are used in dictionary that is returned by this function.
     Used for generating copy data for duplication of product via Shoper API.
     """
 
@@ -100,9 +103,12 @@ def get_single_product_data_for_copy(product_id, language_code):
     stock_delivery_id = res.get("stock").get("delivery_id")
     stock_gfx_id = res.get("stock").get("gfx_id")
     translations_name = res.get("translations").get(language_code).get("name")
-    translations_short_description = (
-        res.get("translations").get(language_code).get("short_description")
-    )
+    try:
+        translations_short_description = (
+            res.get("translations").get(language_code).get("short_description")
+        )
+    except AttributeError:
+        translations_short_description = ""
     try:
         translations_description = (
             res.get("translations").get(language_code).get("description")

@@ -1,14 +1,11 @@
 import json
 import time
 import requests
-import logging
 from external.token import get_token
 from external.token import SHOPER_STORE, SHOPER_LOGIN, SHOPER_PASSWORD
-from external.get_products import get_single_product_data_for_copy
 
 
 TOKEN = get_token()
-logging.basicConfig(level=logging.INFO)
 
 
 def deacivate_translation_for_product(product_id, translation_code):
@@ -30,5 +27,33 @@ def deacivate_translation_for_product(product_id, translation_code):
     headers = {"Authorization": f"Bearer {TOKEN}"}
     response = requests.put(url, headers=headers, data=data)
     res = response.json()
+    time.sleep(0.5)
+
+    return res
+
+
+def set_new_seo_url_for_product(
+    product_id,
+    translation_code,
+):
+    """
+    PUT
+    Set new SEO URL for specified product and translation.
+    """
+
+    data = json.dumps(
+        {
+            "translations": {
+                f"{translation_code}": {
+                    "seo_url": f"",
+                }
+            },
+        }
+    )
+    url = f"https://{SHOPER_STORE}/webapi/rest/products/{product_id}"
+    headers = {"Authorization": f"Bearer {TOKEN}"}
+    response = requests.put(url, headers=headers, data=data)
+    res = response.json()
+    time.sleep(0.5)
 
     return res

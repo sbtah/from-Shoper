@@ -1,14 +1,11 @@
-import json
 import time
 import requests
-import logging
 from external.token import get_token
-from external.token import SHOPER_STORE, SHOPER_LOGIN, SHOPER_PASSWORD
+from external.token import SHOPER_STORE
 from external.get_products import get_list_of_all_shoper_product_ids
 
 
 TOKEN = get_token()
-logging.basicConfig(level=logging.INFO)
 
 
 def get_sku_and_current_url_for_language(id, language_code):
@@ -49,6 +46,7 @@ def get_sku_and_current_url_for_language(id, language_code):
 
 
 def generate_product_urls_for_language(language):
+    "This can be overriten in context to DJANO for a management command"
     "Generate CSV file with all urls for products for specified language code."
 
     with open("rapport.csv", "a") as file:

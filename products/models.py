@@ -146,6 +146,7 @@ class Product(models.Model):
             "shoper_translation_is_active": self.shoper_translation_is_active_pl,
             "shoper_short_description": self.shoper_short_description_pl,
             "shoper_description": self.shoper_description_pl,
+            "shoper_permalink": self.shoper_permalink_pl,
         }
 
     def prepare_gb_copy_data(self):
@@ -154,6 +155,7 @@ class Product(models.Model):
             "shoper_translation_is_active": self.shoper_translation_is_active_gb,
             "shoper_short_description": self.shoper_short_description_gb,
             "shoper_description": self.shoper_description_gb,
+            "shoper_permalink": self.shoper_permalink_gb,
         }
 
     def prepare_eu_copy_data(self):
@@ -162,6 +164,7 @@ class Product(models.Model):
             "shoper_translation_is_active": self.shoper_translation_is_active_eu,
             "shoper_short_description": self.shoper_short_description_eu,
             "shoper_description": self.shoper_description_eu,
+            "shoper_permalink": self.shoper_permalink_eu,
         }
 
     def prepare_fr_copy_data(self):
@@ -170,6 +173,7 @@ class Product(models.Model):
             "shoper_translation_is_active": self.shoper_translation_is_active_fr,
             "shoper_short_description": self.shoper_short_description_fr,
             "shoper_description": self.shoper_description_fr,
+            "shoper_permalink": self.shoper_permalink_fr,
         }
 
     def prepare_de_copy_data(self):
@@ -178,6 +182,7 @@ class Product(models.Model):
             "shoper_translation_is_active": self.shoper_translation_is_active_de,
             "shoper_short_description": self.shoper_short_description_de,
             "shoper_description": self.shoper_description_de,
+            "shoper_permalink": self.shoper_permalink_de,
         }
 
     def prepare_us_copy_data(self):
@@ -186,6 +191,7 @@ class Product(models.Model):
             "shoper_translation_is_active": self.shoper_translation_is_active_us,
             "shoper_short_description": self.shoper_short_description_us,
             "shoper_description": self.shoper_description_us,
+            "shoper_permalink": self.shoper_permalink_us,
         }
 
     def get_absolute_url(self):

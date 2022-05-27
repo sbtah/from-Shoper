@@ -62,17 +62,36 @@ replace_dict = {
 }
 
 
-def create_seo_url(language_code, string, shoper_product_id):
+def create_seo_url(language_code, product_name, shoper_sku):
     """Create a safe SEO relative URL for product."""
 
     new = ""
-    for x in string:
+    for x in product_name:
         if x in validate_string:
             new += replace_dict.get(x)
         else:
             new += x
+    # Cant use shoper_id because at this point it doesnt exist.
+    # ID is returned in response after this post.
+    # Implementation of current ID in permalink: create seperate/after PUT call to product by ID of POST response.
+    # Basically setting seo_url after the creation of Product.
+    return f"{shoper_sku}{language_code[3:]}-{new.replace(' ', '-')}"
 
-    return f"{language_code[3:]}-{new.replace(' ', '-')}-{shoper_product_id}"
+
+def create_seo_url_from_id(language_code, product_name, shoper_id):
+    """Create a safe SEO relative URL for product."""
+
+    new = ""
+    for x in product_name:
+        if x in validate_string:
+            new += replace_dict.get(x)
+        else:
+            new += x
+    # Cant use shoper_id because at this point it doesnt exist.
+    # ID is returned in response after this post.
+    # Implementation of current ID in permalink: create seperate/after PUT call to product by ID of POST response.
+    # Basically setting seo_url after the creation of Product.
+    return f"{language_code[3:]}-{new.replace(' ', '-')}-{shoper_id}"
 
 
 def create_relative_url(original_url):

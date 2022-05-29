@@ -3,8 +3,8 @@ import time
 from datetime import datetime
 from django.core.management.base import BaseCommand
 from products.models import Product
-from external.token import get_token
-from external.token import SHOPER_STORE
+from external.get_token import get_token
+from external.get_token import SHOPER_STORE
 
 
 TOKEN = get_token()
@@ -412,8 +412,10 @@ def copy_all_products_from_shoper_api():
             # == END of Variables ==
             try:
                 product = Product.objects.get(
-                    shoper_sku=shoper_sku,
+                    shoper_id=shoper_id,
                 )
+                print(f"DEBUG val:shoper_id from Product: {product.shoper_id}")
+                print(f"DEBUG val:shoper_id from GET : {shoper_id}")
                 if datetime.strptime(
                     updated_shoper, "%Y-%m-%d %H:%M:%S"
                 ) > datetime.strptime(product.updated_shoper, "%Y-%m-%d %H:%M:%S"):

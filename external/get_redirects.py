@@ -1,8 +1,8 @@
 import json
 import time
 import requests
-from external.token import get_token
-from external.token import SHOPER_STORE
+from external.get_token import get_token
+from external.get_token import SHOPER_STORE
 
 
 TOKEN = get_token()
@@ -52,3 +52,26 @@ def get_list_of_all_redirects_data():
         for i in items:
             print(i)
             time.sleep(0.5)
+
+
+# def get_list_of_all_shoper_redirect_ids():
+#     """Get all redirect ids from SHOPER Api."""
+
+#     redirect_list = []
+
+#     for x in range(1, get_number_of_redirects_pages()() + 1):
+#         data = {"page": f"{x}"}
+#         url = f"https://{SHOPER_STORE}/webapi/rest/products"
+#         headers = {"Authorization": f"Bearer {TOKEN}"}
+#         response = requests.get(url, headers=headers, params=data)
+#         res = response.json()
+#         items = res.get("list")
+#         for i in items:
+#             redirect_list.append(int(i.get("product_id")))
+#             print(f"ID:{i.get('product_id')} - Added to list")
+#             time.sleep(0.5)
+
+#     return redirect_list
+
+
+print(get_list_of_all_redirects_data())

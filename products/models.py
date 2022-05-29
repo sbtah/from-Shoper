@@ -110,6 +110,12 @@ class Product(models.Model):
     shoper_url_image_6 = models.CharField(max_length=255, blank=True)
     shoper_url_image_7 = models.CharField(max_length=255, blank=True)
     shoper_url_image_8 = models.CharField(max_length=255, blank=True)
+    shoper_url_image_9 = models.CharField(max_length=255, blank=True)
+    shoper_url_image_10 = models.CharField(max_length=255, blank=True)
+    shoper_url_image_11 = models.CharField(max_length=255, blank=True)
+    shoper_url_image_12 = models.CharField(max_length=255, blank=True)
+    shoper_url_image_13 = models.CharField(max_length=255, blank=True)
+    shoper_url_image_14 = models.CharField(max_length=255, blank=True)
     # Local Data
     vendor_brand = models.CharField(max_length=100, blank=True)
     created = models.DateTimeField(auto_now_add=True)
@@ -125,7 +131,7 @@ class Product(models.Model):
         return self.shoper_id
 
     def __str__(self):
-        return f"ID:{self.shoper_id} | {self.shoper_title_pl}"
+        return f"ID-Shoper:{self.shoper_id} | SKU-Shoper:{self.shoper_sku}"
 
     def save(self, *args, **kwargs):
         """Custom save method that add related images to Product."""
@@ -204,6 +210,12 @@ class Product(models.Model):
             self.shoper_url_image_6,
             self.shoper_url_image_7,
             self.shoper_url_image_8,
+            self.shoper_url_image_9,
+            self.shoper_url_image_10,
+            self.shoper_url_image_11,
+            self.shoper_url_image_12,
+            self.shoper_url_image_13,
+            self.shoper_url_image_14,
         ]
 
     def get_absolute_url(self):

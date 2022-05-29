@@ -1,15 +1,15 @@
 import json
 import base64
 import time
-import logging
 import requests
-from external.token import get_token
-from external.token import SHOPER_STORE
+from external.get_token import get_token
+from external.get_token import SHOPER_STORE
 
 
 TOKEN = get_token()
 
-
+# TODO
+# Specify order of image as an argument to function.
 def upload_image_for_product_from_file(product_id, alt_of_img, file_path, language):
     """Upload a new image from FILE for specified product."""
 
@@ -36,6 +36,8 @@ def upload_image_for_product_from_file(product_id, alt_of_img, file_path, langua
     return res
 
 
+# TODO
+# Specify order of image as an argument to function.
 def upload_image_for_product_from_url(product_id, alt_of_img, source_url, language):
     """Upload a new image from URL for specified product."""
 

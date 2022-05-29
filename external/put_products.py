@@ -1,11 +1,8 @@
 import json
 import time
 import requests
-from external.token import get_token
-from external.token import SHOPER_STORE, SHOPER_LOGIN, SHOPER_PASSWORD
-
-
-TOKEN = get_token()
+from get_token import SHOPER_STORE, TOKEN
+from create_url import create_seo_url_from_id, create_seo_url
 
 
 def deacivate_translation_for_product(product_id, translation_code):
@@ -32,10 +29,7 @@ def deacivate_translation_for_product(product_id, translation_code):
     return res
 
 
-def set_new_seo_url_for_product(
-    product_id,
-    translation_code,
-):
+def set_new_seo_url_for_product(product_id, to_language, product_name):
     """
     PUT
     Set new SEO URL for specified product and translation.
@@ -44,8 +38,8 @@ def set_new_seo_url_for_product(
     data = json.dumps(
         {
             "translations": {
-                f"{translation_code}": {
-                    "seo_url": f"",
+                f"{to_language}": {
+                    "seo_url": f"{create_seo_url_from_id(language_code=to_language, product_name=product_name, shoper_id=product_id)}",
                 }
             },
         }
@@ -57,3 +51,65 @@ def set_new_seo_url_for_product(
     time.sleep(0.5)
 
     return res
+
+
+def create_update_for_product_at_shoper(
+    shoper_id,
+    shoper_sku,
+    to_language_code,
+    producer_id,
+    category_id,
+    other_price,
+    code,
+    ean,
+    shoper_vol_weight,
+    stock_price,
+    stock_weight,
+    stock_availability_id,
+    shoper_delivery_id,
+    translations_name,
+    translations_active,
+    translations_short_description,
+    translations_description,
+):
+    """
+    USED IN DJANGO.
+    Sends a PUT request with Product Data to Shoper's product endpoint.
+    Updates existing product.
+    """
+    seo_url = create_seo_url(to_language_code, translations_name, shoper_sku)
+    data = json.dumps(
+        {
+            "producer_id": producer_id,
+            "category_id": category_id,
+            "other_price": other_price,
+            "code": f"{code}{to_language_code[3:]}",
+            "ean": ean,
+            "vol_weight": shoper_vol_weight,
+            "stock": {
+                "price": stock_price,
+                "weight": stock_weight,
+                "availability_id": stock_availability_id,
+                "delivery_id": shoper_delivery_id,
+            },
+            "translations": {
+                f"{to_language_code}": {
+                    "name": translations_name,
+                    "short_description": translations_short_description,
+                    "description": translations_description,
+                    "active": translations_active,
+                    "seo_title": "",
+                    "seo_description": "",
+                    "seo_keywords": "",
+                    "seo_url": seo_url,
+                }
+            },
+        }
+    )
+    url = f"https://{SHOPER_STORE}/webapi/rest/products/{shoper_id}"
+    headers = {"Authorization": f"Bearer {TOKEN}"}
+    response = requests.put(url, headers=headers, data=data)
+    res = response.json()
+    time.sleep(0.5)
+
+    return res, seo_url

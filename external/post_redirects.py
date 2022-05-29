@@ -2,8 +2,8 @@ import json
 import time
 import requests
 import logging
-from external.token import get_token
-from external.token import SHOPER_STORE
+from external.get_token import get_token
+from external.get_token import SHOPER_STORE
 
 
 TOKEN = get_token()

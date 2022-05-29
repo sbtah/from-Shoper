@@ -1,8 +1,8 @@
 import json
 import time
 import requests
-from external.token import get_token
-from external.token import SHOPER_STORE
+from external.get_token import get_token
+from external.get_token import SHOPER_STORE
 from external.get_products import get_single_product_data_for_copy
 from external.create_url import create_seo_url
 

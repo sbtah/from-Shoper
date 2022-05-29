@@ -19,3 +19,6 @@ def get_token():
     access_token = response.json().get("access_token")
 
     return access_token
+
+
+TOKEN = get_token()

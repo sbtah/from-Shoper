@@ -4,7 +4,7 @@ from get_token import SHOPER_STORE, TOKEN
 from external.get_products import get_list_of_all_shoper_product_ids
 
 
-def get_sku_and_current_url_for_language(id, language_code):
+def get_sku_and_current_url_for_language(id, language_code, file_name):
     """Return a response with data from single product endpoint."""
 
     url = f"https://{SHOPER_STORE}/webapi/rest/products/{id}"
@@ -33,9 +33,10 @@ def get_sku_and_current_url_for_language(id, language_code):
     except AttributeError:
         seo_link = ""
 
-    with open("rapport.csv", "a") as file:
+    with open(f"{file_name}.csv", "a") as file:
         file.write(f"\n{shoper_id};{sku};{name};{current_link};{seo_link}")
 
+    time.sleep(0.5)
     return shoper_id, sku, name, current_link, seo_link
 
 

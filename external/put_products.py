@@ -1,8 +1,8 @@
 import json
 import time
 import requests
-from get_token import SHOPER_STORE, TOKEN
-from create_url import create_seo_url_from_id, create_seo_url
+from external.get_token import SHOPER_STORE, TOKEN
+from external.create_url import create_seo_url_from_id, create_seo_url
 
 
 def deacivate_translation_for_product(product_id, translation_code):
@@ -29,7 +29,7 @@ def deacivate_translation_for_product(product_id, translation_code):
     return res
 
 
-def set_new_seo_url_for_product(product_id, to_language, product_name):
+def set_new_seo_url_for_products_translation(product_id, to_language, product_name):
     """
     PUT
     Set new SEO URL for specified product and translation.
@@ -55,7 +55,6 @@ def set_new_seo_url_for_product(product_id, to_language, product_name):
 
 def create_update_for_product_at_shoper(
     shoper_id,
-    shoper_sku,
     to_language_code,
     producer_id,
     category_id,
@@ -77,7 +76,7 @@ def create_update_for_product_at_shoper(
     Sends a PUT request with Product Data to Shoper's product endpoint.
     Updates existing product.
     """
-    seo_url = create_seo_url(to_language_code, translations_name, shoper_sku)
+    seo_url = create_seo_url_from_id(to_language_code, translations_name, shoper_id)
     data = json.dumps(
         {
             "producer_id": producer_id,

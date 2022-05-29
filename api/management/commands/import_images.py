@@ -1,12 +1,8 @@
 import requests
 import time
-from external.token import get_token
-from external.token import SHOPER_STORE
+from external.get_token import SHOPER_STORE, TOKEN
 from django.core.management.base import BaseCommand
 from images.models import Image
-
-
-TOKEN = get_token()
 
 
 # Get number of pages from image list API.
@@ -25,13 +21,17 @@ def get_number_of_image_pages():
 def copy_all_product_images_from_shoper_api():
     """Copy all images from SHOPER Api and saves them as Image objects in DB."""
 
-    for x in range(1, get_number_of_image_pages() + 1):
+    number_of_images_pages = get_number_of_image_pages()
+
+    for x in range(1, number_of_images_pages + 1):
         data = {"page": f"{x}"}
         url = f"https://{SHOPER_STORE}/webapi/rest/product-images"
         headers = {"Authorization": f"Bearer {TOKEN}"}
         response = requests.get(url, headers=headers, params=data)
         res = response.json()
         items = res.get("list")
+        # tags = (tag for tag in res.get("translations"))
+
         for i in items:
 
             shoper_gfx_id = i.get("gfx_id")

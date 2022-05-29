@@ -17,6 +17,8 @@ def create_copies_for_language(from_lang, to_lang, make_redirects, copy_images):
     # query_set = Product.objects.filter(
     #     shoper_sku__in=generate_missing_sku_to_copy(df=df, from_lang=to_lang)
     # )
+
+    # generate_missing_sku_to_copy(df=df, from_lang=to_lang)
     for sku in generate_missing_sku_to_copy(df=df, from_lang=to_lang):
         try:
             product = Product.objects.get(shoper_sku=sku)
@@ -69,6 +71,7 @@ def create_copies_for_language(from_lang, to_lang, make_redirects, copy_images):
                         )
                     else:
                         continue
+
             # TODO:
             # Work with this response to create a local instance of new created product at Shoper.
             elif from_lang == "en_GB":
@@ -95,6 +98,7 @@ def create_copies_for_language(from_lang, to_lang, make_redirects, copy_images):
                     ],
                     translations_description=creatation_object["shoper_description"],
                 )
+                print("RESPONSE FROM CREATE;", response)
                 if copy_images == True:
                     # Use this part only if function param for copying images == Y. Otherwise skip.
                     if type(response[0]) == int:
@@ -145,6 +149,7 @@ def create_copies_for_language(from_lang, to_lang, make_redirects, copy_images):
                     ],
                     translations_description=creatation_object["shoper_description"],
                 )
+                print("RESPONSE FROM CREATE;", response)
                 if copy_images == True:
                     # Use this part only if function param for copying images == Y. Otherwise skip.
                     if type(response[0]) == int:
@@ -195,6 +200,7 @@ def create_copies_for_language(from_lang, to_lang, make_redirects, copy_images):
                     ],
                     translations_description=creatation_object["shoper_description"],
                 )
+                print("RESPONSE FROM CREATE;", response)
                 if copy_images == True:
                     # Use this part only if function param for copying images == Y. Otherwise skip.
                     if type(response[0]) == int:
@@ -245,6 +251,7 @@ def create_copies_for_language(from_lang, to_lang, make_redirects, copy_images):
                     ],
                     translations_description=creatation_object["shoper_description"],
                 )
+                print("RESPONSE FROM CREATE;", response)
                 if copy_images == True:
                     # Use this part only if function param for copying images == Y. Otherwise skip.
                     if type(response[0]) == int:
@@ -295,6 +302,7 @@ def create_copies_for_language(from_lang, to_lang, make_redirects, copy_images):
                     ],
                     translations_description=creatation_object["shoper_description"],
                 )
+                print("RESPONSE FROM CREATE;", response)
                 if copy_images == True:
                     # Use this part only if function param for copying images == Y. Otherwise skip.
                     if type(response[0]) == int:

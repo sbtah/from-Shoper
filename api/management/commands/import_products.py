@@ -3,11 +3,7 @@ import time
 from datetime import datetime
 from django.core.management.base import BaseCommand
 from products.models import Product
-from external.get_token import get_token
-from external.get_token import SHOPER_STORE
-
-
-TOKEN = get_token()
+from external.get_token import SHOPER_STORE, TOKEN
 
 
 # Get number of pages from product list API.
@@ -27,13 +23,16 @@ def get_number_of_product_pages():
 def copy_all_products_from_shoper_api():
     """Copy all products from SHOPER Api and saves them as Product objects in DB."""
 
-    for x in range(1, get_number_of_product_pages() + 1):
+    number_of_product_pages = get_number_of_product_pages()
+
+    for x in range(1, number_of_product_pages + 1):
         data = {"page": f"{x}"}
         url = f"https://{SHOPER_STORE}/webapi/rest/products"
         headers = {"Authorization": f"Bearer {TOKEN}"}
         response = requests.get(url, headers=headers, params=data)
         res = response.json()
         items = res.get("list")
+        # tags = (tag for tag in res.get("translations"))
 
         for i in items:
             # Shoper Main Data

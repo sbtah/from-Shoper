@@ -1,8 +1,9 @@
 test = "MeowBaby® Soft Plastic Balls 7cm for the Ball Pit Certified – Set 500pcs: Violet/Light Pink/Lime Green Green/Turquoise"
-validate_string = """ÀàÁáĄąĆćŹźŻżÈèÉéĘęŁłŃńÒòÓóŚś,.<>~`/?'";:][}{)(*&^%$#@!®–+"""
+validate_string = """ÀàÁáäĄąĆćŹźŻżÈèÉéĘęüŁłŃńÒòÓóŚś,.<>~`/?'";:][}{)(*&^%$#@!®–+Øß"""
 replace_dict = {
     "À": "A",
     "à": "a",
+    "ä": "a",
     "Á": "A",
     "á": "a",
     "Ą": "A",
@@ -19,6 +20,7 @@ replace_dict = {
     "é": "e",
     "Ę": "E",
     "ę": "e",
+    "ü": "u",
     "Ł": "L",
     "ł": "l",
     "Ń": "N",
@@ -62,6 +64,8 @@ replace_dict = {
     "®": "",
     "–": "",
     "+": "",
+    "Ø": "",
+    "ß": "ss",
 }
 
 

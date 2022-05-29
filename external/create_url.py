@@ -1,4 +1,5 @@
-validate_string = """ÀàÁáĄąĆćŹźŻżÈèÉéĘęŁłŃńÒòÓóŚś,.<>~`/?'";:][}{)(*&^%$#@!®"""
+test = "MeowBaby® Soft Plastic Balls 7cm for the Ball Pit Certified – Set 500pcs: Violet/Light Pink/Lime Green Green/Turquoise"
+validate_string = """ÀàÁáĄąĆćŹźŻżÈèÉéĘęŁłŃńÒòÓóŚś,.<>~`/?'";:][}{)(*&^%$#@!®–+"""
 replace_dict = {
     "À": "A",
     "à": "a",
@@ -38,7 +39,7 @@ replace_dict = {
     ">": "",
     "~": "",
     "`": "",
-    "/": "",
+    "/": "-",
     "?": "",
     "'": "",
     '"': "",
@@ -59,6 +60,8 @@ replace_dict = {
     "@": "",
     "!": "",
     "®": "",
+    "–": "",
+    "+": "",
 }
 
 
@@ -105,3 +108,6 @@ def create_relative_url(original_url):
     """
 
     return original_url.split("https://meowbaby.eu")[1]
+
+
+# print(create_seo_url(language_code="en_GB", product_name=test, shoper_sku="ZPZ005"))

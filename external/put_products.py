@@ -8,14 +8,39 @@ from external.create_url import create_seo_url_from_id, create_seo_url
 def deacivate_translation_for_product(product_id, translation_code):
     """
     PUT
-    Turns off specified translation for specified produt.
+    Turns off specified translation for specified product.
     """
 
     data = json.dumps(
         {
             "translations": {
                 f"{translation_code}": {
+                    "name": "",
                     "active": 0,
+                }
+            },
+        }
+    )
+    url = f"https://{SHOPER_STORE}/webapi/rest/products/{product_id}"
+    headers = {"Authorization": f"Bearer {TOKEN}"}
+    response = requests.put(url, headers=headers, data=data)
+    res = response.json()
+    time.sleep(0.5)
+
+    return res
+
+
+def set_new_title_for_products_translation(product_id, translation_code, name):
+    """
+    PUT
+    Sets new title for translation for specified product.
+    """
+
+    data = json.dumps(
+        {
+            "translations": {
+                f"{translation_code}": {
+                    "name": f"{name}",
                 }
             },
         }
@@ -55,6 +80,7 @@ def set_new_seo_url_for_products_translation(product_id, to_language, product_na
 
 def create_update_for_product_at_shoper(
     shoper_id,
+    shoper_sku,
     to_language_code,
     producer_id,
     category_id,
@@ -76,7 +102,7 @@ def create_update_for_product_at_shoper(
     Sends a PUT request with Product Data to Shoper's product endpoint.
     Updates existing product.
     """
-    seo_url = create_seo_url_from_id(to_language_code, translations_name, shoper_id)
+    seo_url = create_seo_url(to_language_code, translations_name, shoper_sku)
     data = json.dumps(
         {
             "producer_id": producer_id,

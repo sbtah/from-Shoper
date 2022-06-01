@@ -153,6 +153,7 @@ class Product(models.Model):
             "shoper_short_description": self.shoper_short_description_pl,
             "shoper_description": self.shoper_description_pl,
             "shoper_permalink": self.shoper_permalink_pl,
+            "shoper_seo_url": self.shoper_seo_url_pl,
         }
 
     def prepare_gb_copy_data(self):
@@ -162,6 +163,7 @@ class Product(models.Model):
             "shoper_short_description": self.shoper_short_description_gb,
             "shoper_description": self.shoper_description_gb,
             "shoper_permalink": self.shoper_permalink_gb,
+            "shoper_seo_url": self.shoper_seo_url_gb,
         }
 
     def prepare_eu_copy_data(self):
@@ -171,6 +173,7 @@ class Product(models.Model):
             "shoper_short_description": self.shoper_short_description_eu,
             "shoper_description": self.shoper_description_eu,
             "shoper_permalink": self.shoper_permalink_eu,
+            "shoper_seo_url": self.shoper_seo_url_eu,
         }
 
     def prepare_fr_copy_data(self):
@@ -180,6 +183,7 @@ class Product(models.Model):
             "shoper_short_description": self.shoper_short_description_fr,
             "shoper_description": self.shoper_description_fr,
             "shoper_permalink": self.shoper_permalink_fr,
+            "shoper_seo_url": self.shoper_seo_url_fr,
         }
 
     def prepare_de_copy_data(self):
@@ -189,6 +193,7 @@ class Product(models.Model):
             "shoper_short_description": self.shoper_short_description_de,
             "shoper_description": self.shoper_description_de,
             "shoper_permalink": self.shoper_permalink_de,
+            "shoper_seo_url": self.shoper_seo_url_de,
         }
 
     def prepare_us_copy_data(self):
@@ -197,7 +202,8 @@ class Product(models.Model):
             "shoper_translation_is_active": self.shoper_translation_is_active_us,
             "shoper_short_description": self.shoper_short_description_us,
             "shoper_description": self.shoper_description_us,
-            "shoper_permalink": self.shoper_permalink_us,
+            "shoper_permalink": self.shoper_seo_url_us,
+            "shoper_seo_url": self.shoper_seo_url_us,
         }
 
     def return_images_urls(self):

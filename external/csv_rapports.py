@@ -40,14 +40,37 @@ def get_sku_and_current_url_for_language(id, language_code, file_name):
     return shoper_id, sku, name, current_link, seo_link
 
 
-def generate_product_urls_for_language(language):
-    "This can be overriten in context to DJANO for a management command"
-    "Generate CSV file with all urls for products for specified language code."
+def get_sku_and_name_for_language(id, language_code, file_name):
 
-    with open("rapport.csv", "a") as file:
-        file.write(f"Shoper ID;SKU;NAME;LINK;SEO-LINK")
+    url = f"https://{SHOPER_STORE}/webapi/rest/products/{id}"
+    headers = {"Authorization": f"Bearer {TOKEN}"}
+    response = requests.get(url, headers=headers)
+    res = response.json()
 
-    for id in get_list_of_all_shoper_product_ids():
+    try:
+        sku = res.get("code")
+    except AttributeError:
+        sku = ""
+    try:
+        name = res.get("translations").get(f"{language_code}").get("name")
+    except AttributeError:
+        name = ""
 
-        get_sku_and_current_url_for_language(id, language)
-        time.sleep(0.5)
+    with open(f"{file_name}.csv", "a") as file:
+        file.write(f"\n{sku};{name}")
+
+    time.sleep(0.5)
+    return sku, name
+
+
+# def generate_product_urls_for_language(language):
+#     "This can be overriten in context to DJANO for a management command"
+#     "Generate CSV file with all urls for products for specified language code."
+
+#     with open("rapport.csv", "a") as file:
+#         file.write(f"Shoper ID;SKU;NAME;LINK;SEO-LINK")
+
+#     for id in get_list_of_all_shoper_product_ids():
+
+#         get_sku_and_current_url_for_language(id, language)
+#         time.sleep(0.5)

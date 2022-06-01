@@ -25,6 +25,7 @@ def create_update_for_product_for_language(to_lang, make_redirects):
                 creatation_object = product.prepare_pl_copy_data()
                 response = create_update_for_product_at_shoper(
                     shoper_id=product.shoper_id,
+                    shoper_sku=product.shoper_sku,
                     to_language_code=to_lang,
                     producer_id=product.shoper_producer_id,
                     category_id=product.shoper_category_id,
@@ -45,9 +46,10 @@ def create_update_for_product_for_language(to_lang, make_redirects):
                     ],
                     translations_description=creatation_object["shoper_description"],
                 )
+            print("RESPONSE FROM UPDATE;", response)
             if make_redirects == True:
                 # Use this part only if function param for making redirects == Y. Otherwise skip.
-                if type(response[0]) == "true":
+                if response[0] == 1:
                     create_redirect(
                         from_url=create_relative_url(
                             creatation_object["shoper_permalink"]

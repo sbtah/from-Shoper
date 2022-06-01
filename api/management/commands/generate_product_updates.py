@@ -2,7 +2,7 @@ import pandas as pd
 from django.core.management.base import BaseCommand
 from products.models import Product
 from external.put_products import create_update_for_product_at_shoper
-from external.create_url import create_relative_url
+from external.create_url import create_relative_url, create_seo_url_from_id
 from external.post_redirects import create_redirect
 
 
@@ -18,43 +18,49 @@ def create_update_for_product_for_language(to_lang, make_redirects):
     After successful POST request creates redirect to newly generated SEO URL, if make_redirects is set to True.
     """
 
-    sku_codes_to_update = [f"{row.product_code}" for row in df.itertuples()]
-    query_set = Product.objects.filter(shoper_sku__in=sku_codes_to_update)
-
-    for product in query_set:
-        if to_lang == "pl_PL":
-            creatation_object = product.prepare_pl_copy_data()
-            response = create_update_for_product_at_shoper(
-                shoper_id=product.shoper_id,
-                shoper_sku=product.shoper_sku,
-                to_language_code=to_lang,
-                producer_id=product.shoper_producer_id,
-                category_id=product.shoper_category_id,
-                other_price=product.shoper_other_price,
-                code=product.shoper_sku,
-                ean=product.shoper_ean,
-                shoper_vol_weight=product.shoper_vol_weight,
-                stock_price=product.shoper_stock_price,
-                stock_weight=product.shoper_weight,
-                stock_availability_id=product.shoper_availability_id,
-                shoper_delivery_id=product.shoper_delivery_id,
-                translations_name=creatation_object["shoper_translation_name"],
-                translations_active=creatation_object["shoper_translation_is_active"],
-                translations_short_description=creatation_object[
-                    "shoper_short_description"
-                ],
-                translations_description=creatation_object["shoper_description"],
-            )
-        if make_redirects == True:
-            # Use this part only if function param for making redirects == Y. Otherwise skip.
-            if type(response[0]) == "true":
-                create_redirect(
-                    from_url=create_relative_url(creatation_object["shoper_permalink"]),
-                    to_url=response[1],
+    for sku in (f"{row.product_code}" for row in df.itertuples()):
+        try:
+            product = Product.objects.get(shoper_sku=sku)
+            if to_lang == "pl_PL":
+                creatation_object = product.prepare_pl_copy_data()
+                response = create_update_for_product_at_shoper(
+                    shoper_id=product.shoper_id,
+                    shoper_sku=product.shoper_sku,
+                    to_language_code=to_lang,
+                    producer_id=product.shoper_producer_id,
+                    category_id=product.shoper_category_id,
+                    other_price=product.shoper_other_price,
+                    code=product.shoper_sku,
+                    ean=product.shoper_ean,
+                    shoper_vol_weight=product.shoper_vol_weight,
+                    stock_price=product.shoper_stock_price,
+                    stock_weight=product.shoper_weight,
+                    stock_availability_id=product.shoper_availability_id,
+                    shoper_delivery_id=product.shoper_delivery_id,
+                    translations_name=creatation_object["shoper_translation_name"],
+                    translations_active=creatation_object[
+                        "shoper_translation_is_active"
+                    ],
+                    translations_short_description=creatation_object[
+                        "shoper_short_description"
+                    ],
+                    translations_description=creatation_object["shoper_description"],
                 )
+            print("RESPONSE FROM UPDATE;", response)
+            if make_redirects == True:
+                # Use this part only if function param for making redirects == Y. Otherwise skip.
+                if response[0] == 1:
+                    create_redirect(
+                        from_url=create_relative_url(
+                            creatation_object["shoper_permalink"]
+                        ),
+                        to_url=response[1],
+                    )
             else:
                 continue
-        # TODO:
+            # TODO:
+        except Product.DoesNotExist:
+            continue
 
 
 class Command(BaseCommand):

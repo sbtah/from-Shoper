@@ -1,20 +1,20 @@
 from django.core.management.base import BaseCommand
 from images.models import Image
 from products.models import Product
-from api.management.commands.import_products import copy_all_products_from_shoper_api
-from api.management.commands.import_images import (
+from api.management.commands.fetch_products import copy_all_products_from_shoper_api
+from api.management.commands.fetch_images import (
     copy_all_product_images_from_shoper_api,
 )
 
 
-def clear_database():
-    """
-    Clears Images and Products from DB.
-    Used for testing.
-    """
+# def clear_database():
+#     """
+#     Clears Images and Products from DB.
+#     Used for testing.
+#     """
 
-    Image.objects.all().delete()
-    Product.objects.all().delete()
+#     Image.objects.all().delete()
+#     Product.objects.all().delete()
 
 
 class Command(BaseCommand):
@@ -32,8 +32,10 @@ class Command(BaseCommand):
                 """
             )
         )
+        # COPY ALL TRANSLATIONS!
         copy_all_product_images_from_shoper_api()
         copy_all_products_from_shoper_api()
+
         self.stdout.write(
             self.style.SUCCESS(
                 f"""

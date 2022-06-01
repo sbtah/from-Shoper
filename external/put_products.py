@@ -1,20 +1,21 @@
 import json
 import time
 import requests
-from get_token import SHOPER_STORE, TOKEN
-from create_url import create_seo_url_from_id, create_seo_url
+from external.get_token import SHOPER_STORE, TOKEN
+from external.create_url import create_seo_url_from_id, create_seo_url
 
 
 def deacivate_translation_for_product(product_id, translation_code):
     """
     PUT
-    Turns off specified translation for specified produt.
+    Turns off specified translation for specified product.
     """
 
     data = json.dumps(
         {
             "translations": {
                 f"{translation_code}": {
+                    "name": "",
                     "active": 0,
                 }
             },
@@ -29,7 +30,31 @@ def deacivate_translation_for_product(product_id, translation_code):
     return res
 
 
-def set_new_seo_url_for_product(product_id, to_language, product_name):
+def set_new_title_for_products_translation(product_id, translation_code, name):
+    """
+    PUT
+    Sets new title for translation for specified product.
+    """
+
+    data = json.dumps(
+        {
+            "translations": {
+                f"{translation_code}": {
+                    "name": f"{name}",
+                }
+            },
+        }
+    )
+    url = f"https://{SHOPER_STORE}/webapi/rest/products/{product_id}"
+    headers = {"Authorization": f"Bearer {TOKEN}"}
+    response = requests.put(url, headers=headers, data=data)
+    res = response.json()
+    time.sleep(0.5)
+
+    return res
+
+
+def set_new_seo_url_for_products_translation(product_id, to_language, product_name):
     """
     PUT
     Set new SEO URL for specified product and translation.

@@ -15,17 +15,6 @@ def get_single_product(id):
     return product
 
 
-def get_single_product_translation_data(id, language_code):
-    """Return a response with translation data for single product by language code."""
-
-    url = f"https://{SHOPER_STORE}/webapi/rest/products/{id}"
-    headers = {"Authorization": f"Bearer {TOKEN}"}
-    response = requests.get(url, headers=headers)
-    translation = response.json().get("translations").get(language_code)
-
-    return translation
-
-
 def get_all_products():
     """Return a paginated response with all products and number of pages."""
 
@@ -58,40 +47,68 @@ def get_list_of_all_shoper_product_ids():
     """Get all product ids from SHOPER Api."""
 
     product_list = []
+    number_of_product_pages = get_number_of_product_pages()
 
-    for x in range(1, get_number_of_product_pages() + 1):
+    for x in range(1, number_of_product_pages + 1):
         data = {"page": f"{x}"}
         url = f"https://{SHOPER_STORE}/webapi/rest/products"
         headers = {"Authorization": f"Bearer {TOKEN}"}
         response = requests.get(url, headers=headers, params=data)
         res = response.json()
         items = res.get("list")
+        time.sleep(0.5)
         for i in items:
             product_list.append(int(i.get("product_id")))
             print(f"ID:{i.get('product_id')} - Added to list")
-            time.sleep(0.5)
+
+    return product_list
+
+
+def get_list_of_all_shoper_product_ids_for_lang(lang_code):
+    """Get all product ids from SHOPER Api."""
+
+    product_list = []
+    number_of_product_pages = get_number_of_product_pages()
+
+    for x in range(1, number_of_product_pages + 1):
+        data = {"page": f"{x}"}
+        url = f"https://{SHOPER_STORE}/webapi/rest/products"
+        headers = {"Authorization": f"Bearer {TOKEN}"}
+        response = requests.get(url, headers=headers, params=data)
+        res = response.json()
+        items = res.get("list")
+        time.sleep(0.5)
+        for i in items:
+            if lang_code in i.get("code"):
+                product_list.append(int(i.get("product_id")))
+                print(f"ID:{i.get('product_id')} - Added to list")
+            else:
+                print(f"{i.get('code')}: Passed")
 
     return product_list
 
 
 # Get all SKU values of products from SHOPER Api.
 def get_list_of_all_shoper_product_sku(lang_code):
-    """Get all product SKU from SHOPER Api."""
+    """Get all product SKU for picked language, from SHOPER Api."""
 
     product_list = []
+    number_of_product_pages = get_number_of_product_pages()
 
-    for x in range(1, get_number_of_product_pages() + 1):
+    for x in range(1, number_of_product_pages + 1):
         data = {"page": f"{x}"}
         url = f"https://{SHOPER_STORE}/webapi/rest/products"
         headers = {"Authorization": f"Bearer {TOKEN}"}
         response = requests.get(url, headers=headers, params=data)
         res = response.json()
         items = res.get("list")
+        time.sleep(0.5)
         for i in items:
             if lang_code in i.get("code"):
+                print(i.get("code"))
                 product_list.append(i.get("code"))
                 print(f"SKU:{i.get('code')} - Added to list")
-                time.sleep(0.5)
+
             else:
                 print(f"{i.get('code')}: Passed")
 
@@ -163,7 +180,3 @@ def get_single_product_data_for_copy(product_id, language_code):
 
 def create_seo_url_and_create_redirect_to_it():
     pass
-
-
-# DEBUG
-# print(get_list_of_all_shoper_product_sku("GB"))

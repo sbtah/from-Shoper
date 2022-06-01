@@ -1,6 +1,9 @@
 import pandas as pd
 from django.core.management.base import BaseCommand
-from external.get_products import get_list_of_all_shoper_product_sku
+from external.get_products import (
+    get_list_of_all_shoper_product_sku,
+)
+from products.models import Product
 
 
 CSV_PATH = "Images.csv"
@@ -8,34 +11,34 @@ df = pd.read_csv(CSV_PATH, sep=";")
 
 
 def generate_missing_sku_to_copy(df, from_lang):
-
+    """
+    Compares Shoper's DB for number of SKU code with language_tag extension.
+    SKU123PL
+    """
     # outcome_list = []
     # This creates a list of all SKU that we should have in Shoper's DB with desired language tag at the end of SKU Code.
     sku_parrents = [f"{row.product_code}{from_lang[3:]}" for row in df.itertuples()]
     # This creates a list of all SKU codes with specified language tag that we have on Shoper's DB.
-    sku_api_response = [
-        sku for sku in get_list_of_all_shoper_product_sku(from_lang[3:])
-    ]
-    outcome_list = [sku[:-2] for sku in sku_parrents if sku not in sku_api_response]
-    # for sku in sku_parrents:
-    #     if sku not in sku_api_response:
-    #         outcome_list.append(sku[:-2])
-
-    return outcome_list
+    # This method actually returns list, Do I double loop here to create same output?
+    sku_api_response = get_list_of_all_shoper_product_sku(from_lang[3:])
+    # outcome_list = [sku[:-2] for sku in sku_parrents if sku not in sku_api_response]
+    return (sku[:-2] for sku in sku_parrents if sku not in sku_api_response)
 
 
-def validate_databases(df, from_lang):
+def validate_databases(from_lang):
     """
     Validates that products number in SHOPER DB for specified language tag is equal to product number from CSV file.
     CSV serves here as a indicator of state of DB before dupliaction process.
     With this method I want to check if copying process happend for all products from file.
     """
 
-    sku_parrents = [f"{row.product_code}{from_lang[3:]}" for row in df.itertuples()]
-    sku_api_response = [
-        sku for sku in get_list_of_all_shoper_product_sku(from_lang[3:])
+    sku_parrents = [
+        row.shoper_sku
+        for row in Product.objects.filter(shoper_sku__endswith=f"{from_lang[3:]}")
     ]
+    sku_api_response = get_list_of_all_shoper_product_sku(from_lang[3:])
     outcome_list = [sku[:-2] for sku in sku_parrents if sku not in sku_api_response]
+
     if len(sku_parrents) == len(sku_api_response):
         print("Databases are equal")
         print(f"PARENT:{len(sku_parrents)} | FROM API:{len(sku_api_response)}")
@@ -66,4 +69,4 @@ class Command(BaseCommand):
 
         from_lang = kwargs["from_language"]
 
-        print(validate_databases(df, from_lang))
+        print(validate_databases(from_lang))

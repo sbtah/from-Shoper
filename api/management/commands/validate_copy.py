@@ -2,8 +2,8 @@ import pandas as pd
 from django.core.management.base import BaseCommand
 from external.get_products import (
     get_list_of_all_shoper_product_sku,
-    get_all_translations_tags_for_product,
 )
+from products.models import Product
 
 
 CSV_PATH = "Images.csv"
@@ -25,14 +25,17 @@ def generate_missing_sku_to_copy(df, from_lang):
     return (sku[:-2] for sku in sku_parrents if sku not in sku_api_response)
 
 
-def validate_databases(df, from_lang):
+def validate_databases(from_lang):
     """
     Validates that products number in SHOPER DB for specified language tag is equal to product number from CSV file.
     CSV serves here as a indicator of state of DB before dupliaction process.
     With this method I want to check if copying process happend for all products from file.
     """
 
-    sku_parrents = [f"{row.product_code}{from_lang[3:]}" for row in df.itertuples()]
+    sku_parrents = [
+        row.shoper_sku
+        for row in Product.objects.filter(shoper_sku__endswith=f"{from_lang[3:]}")
+    ]
     sku_api_response = get_list_of_all_shoper_product_sku(from_lang[3:])
     outcome_list = [sku[:-2] for sku in sku_parrents if sku not in sku_api_response]
 
@@ -66,7 +69,4 @@ class Command(BaseCommand):
 
         from_lang = kwargs["from_language"]
 
-        # print(validate_databases(df, from_lang))
-        # for x in get_all_translations_tags_for_product(102):
-        #     print(x)
-        # TEST for getting lang tags at updating db from API
+        print(validate_databases(from_lang))

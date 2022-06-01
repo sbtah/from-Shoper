@@ -17,8 +17,6 @@ def create_copies_for_language(from_lang, to_lang, make_redirects, copy_images):
     # query_set = Product.objects.filter(
     #     shoper_sku__in=generate_missing_sku_to_copy(df=df, from_lang=to_lang)
     # )
-
-    # generate_missing_sku_to_copy(df=df, from_lang=to_lang)
     for sku in generate_missing_sku_to_copy(df=df, from_lang=to_lang):
         try:
             product = Product.objects.get(shoper_sku=sku)

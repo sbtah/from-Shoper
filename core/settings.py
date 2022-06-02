@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     "images",
     "users",
     "panel",
+    "translations",
 ]
 
 MIDDLEWARE = [

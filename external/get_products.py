@@ -48,6 +48,7 @@ def get_list_of_all_shoper_product_ids():
 
     product_list = []
     number_of_product_pages = get_number_of_product_pages()
+    print(f"Response pages to get: {number_of_product_pages}")
 
     for x in range(1, number_of_product_pages + 1):
         data = {"page": f"{x}"}
@@ -69,6 +70,7 @@ def get_list_of_all_shoper_product_ids_for_lang(lang_code):
 
     product_list = []
     number_of_product_pages = get_number_of_product_pages()
+    print(f"Response pages to get: {number_of_product_pages}")
 
     for x in range(1, number_of_product_pages + 1):
         data = {"page": f"{x}"}
@@ -94,6 +96,7 @@ def get_list_of_all_shoper_product_sku(lang_code):
 
     product_list = []
     number_of_product_pages = get_number_of_product_pages()
+    print(f"Response pages to get: {number_of_product_pages}")
 
     for x in range(1, number_of_product_pages + 1):
         data = {"page": f"{x}"}
@@ -178,5 +181,12 @@ def get_single_product_data_for_copy(product_id, language_code):
     }
 
 
-def create_seo_url_and_create_redirect_to_it():
-    pass
+# CSV Output
+def get_vol_weight_data_of_product(product_id):
+
+    url = f"https://{SHOPER_STORE}/webapi/rest/products/{id}"
+    headers = {"Authorization": f"Bearer {TOKEN}"}
+    response = requests.get(url, headers=headers)
+    product = response.json()
+
+    return f'{product["code"]};{product["product_id"]};{product["vol_weight"]}'

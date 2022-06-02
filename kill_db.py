@@ -7,6 +7,7 @@ apps = [
     "products",
     "images",
     "users",
+    "translations",
 ]
 
 

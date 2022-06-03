@@ -4,22 +4,8 @@ from datetime import datetime
 from django.core.management.base import BaseCommand
 from products.models import Product
 from translations.models import ProductTranslation
-from django.db.models import Q
 from external.get_token import SHOPER_STORE, TOKEN
 from external.get_products import get_number_of_product_pages
-
-
-# Get number of pages from product list API.
-def get_number_of_product_pages():
-    """Get number of all product pages from SHOPER api"""
-
-    url = f"https://{SHOPER_STORE}/webapi/rest/products"
-    headers = {"Authorization": f"Bearer {TOKEN}"}
-    response = requests.get(url, headers=headers)
-    res = response.json()
-    pages = res.get("pages")
-
-    return pages
 
 
 # Get all ID numbers of products from SHOPER Api.
@@ -28,7 +14,7 @@ def copy_all_products_from_shoper_api():
 
     number_of_product_pages = get_number_of_product_pages()
 
-    for x in range(1, get_number_of_product_pages() + 1):
+    for x in range(1, number_of_product_pages + 1):
         data = {"page": f"{x}"}
         url = f"https://{SHOPER_STORE}/webapi/rest/products"
         headers = {"Authorization": f"Bearer {TOKEN}"}
@@ -38,37 +24,42 @@ def copy_all_products_from_shoper_api():
         for i in items:
             shoper_product_id = i.get("product_id")
             print(shoper_product_id)
-            for tag in i.get("translations"):
+            try:
+                for tag in i.get("translations"):
 
-                translation = ProductTranslation.objects.update_or_create(
-                    locale=tag,
-                    shoper_translation_id=i.get("translations")
-                    .get(tag)
-                    .get("translation_id"),
-                    related_product_id=i.get("translations").get(tag).get("product_id"),
-                    name=i.get("translations").get(tag).get("name"),
-                    short_description=i.get("translations")
-                    .get(tag)
-                    .get("short_description"),
-                    description=i.get("translations").get(tag).get("description"),
-                    active=i.get("translations").get(tag).get("active"),
-                    is_default=i.get("translations").get(tag).get("isdefault"),
-                    lang_id=i.get("translations").get(tag).get("lang_id"),
-                    seo_title=i.get("translations").get(tag).get("seo_title"),
-                    seo_description=i.get("translations")
-                    .get(tag)
-                    .get("seo_description"),
-                    seo_keywords=i.get("translations").get(tag).get("seo_keywords"),
-                    seo_url=i.get("translations").get(tag).get("seo_url"),
-                    permalink=i.get("translations").get(tag).get("permalink"),
-                    order=i.get("translations").get(tag).get("order"),
-                    main_page=i.get("translations").get(tag).get("main_page"),
-                    main_page_order=i.get("translations")
-                    .get(tag)
-                    .get("main_page_order"),
-                )
-                print(f"Translation:{translation[0]}")
-                print(f"Created:{translation[1]}")
+                    translation = ProductTranslation.objects.update_or_create(
+                        locale=tag,
+                        shoper_translation_id=i.get("translations")
+                        .get(tag)
+                        .get("translation_id"),
+                        related_product_id=i.get("translations")
+                        .get(tag)
+                        .get("product_id"),
+                        name=i.get("translations").get(tag).get("name"),
+                        short_description=i.get("translations")
+                        .get(tag)
+                        .get("short_description"),
+                        description=i.get("translations").get(tag).get("description"),
+                        active=i.get("translations").get(tag).get("active"),
+                        is_default=i.get("translations").get(tag).get("isdefault"),
+                        lang_id=i.get("translations").get(tag).get("lang_id"),
+                        seo_title=i.get("translations").get(tag).get("seo_title"),
+                        seo_description=i.get("translations")
+                        .get(tag)
+                        .get("seo_description"),
+                        seo_keywords=i.get("translations").get(tag).get("seo_keywords"),
+                        seo_url=i.get("translations").get(tag).get("seo_url"),
+                        permalink=i.get("translations").get(tag).get("permalink"),
+                        order=i.get("translations").get(tag).get("order"),
+                        main_page=i.get("translations").get(tag).get("main_page"),
+                        main_page_order=i.get("translations")
+                        .get(tag)
+                        .get("main_page_order"),
+                    )
+                    print(f"Translation:{translation[0]}")
+                    print(f"Created:{translation[1]}")
+            except TypeError:
+                continue
 
             # Shoper Main Data
             try:

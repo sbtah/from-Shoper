@@ -1,0 +1,29 @@
+version: '3.8'
+services:
+  shoper-api:
+    build: .
+    container_name: shoper-api
+    command: python3 manage.py runserver 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    environment:
+      - DB_HOST=pgdb
+      - DB_NAME=app
+      - DB_USER=postgres
+      - DB_PASS=supersecretpassword
+    depends_on:
+      - pgdb
+  pgdb:
+    image: postgres:14-alpine
+    container_name: pgdb
+    environment:
+      - POSTGRES_DB=app
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=supersecretpassword
+    volumes:
+      - pgdata:/var/lib/postgresql/data/
+volumes:
+  pgdata:
+ 

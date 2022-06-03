@@ -1,5 +1,7 @@
 from django.db import models
 from images.models import Image
+from translations.models import ProductTranslation
+from stocks.models import Stock
 from django.db.models.signals import post_save, m2m_changed
 from django.dispatch import receiver
 from django.urls import reverse
@@ -10,24 +12,37 @@ class Product(models.Model):
 
     # Shoper Main Data
     shoper_id = models.IntegerField(unique=True, blank=True, null=True)
-    shoper_ean = models.CharField(max_length=13, blank=True)
-    shoper_sku = models.CharField(max_length=25, unique=True, blank=True)
-    shoper_vol_weight = models.CharField(max_length=100, blank=True)
-    is_active_shoper = models.BooleanField(blank=True, null=True)  # proper field?
+    shoper_type = models.IntegerField(blank=True, null=True)  # Implement in GET
+    shoper_producer_id = models.IntegerField(blank=True, null=True)
+    shoper_group_id = models.IntegerField(blank=True, null=True)  # Implement in GET
+    shoper_tax_id = models.IntegerField(blank=True, null=True)  # Implement in GET
+    shoper_category_id = models.IntegerField(blank=True, null=True)
+    shoper_unit_id = models.IntegerField(blank=True, null=True)
     created_shoper = models.CharField(max_length=50, blank=True, null=True)
     updated_shoper = models.CharField(max_length=50, blank=True, null=True)
-    shoper_stock_price = models.CharField(max_length=40, blank=True)
-    shoper_producer_id = models.IntegerField(blank=True, null=True)  # None ?
-    shoper_category_id = models.IntegerField(blank=True, null=True)  # None ?
-    shoper_delivery_id = models.IntegerField(blank=True, null=True)  # None ?
-    shoper_other_price = models.CharField(max_length=40, blank=True)  #
-    shoper_gauge_id = models.IntegerField(blank=True, null=True)
+    shoper_other_price = models.CharField(max_length=40, blank=True)
+    shoper_promo_price = models.CharField(max_length=40, blank=True)  # Implement in GET
+    shoper_sku = models.CharField(max_length=25, unique=True, blank=True)
+    shoper_ean = models.CharField(max_length=13, blank=True)
+    shoper_pkwiu = models.CharField(max_length=100, blank=True)  # Implement in GET
+    shoper_is_product_of_day = models.IntegerField(
+        blank=True, null=True
+    )  # Implement in GET
+    shoper_is_product_of_day = models.IntegerField(
+        blank=True, null=True
+    )  # Implement in GET
     shoper_bestseller_tag = models.BooleanField(blank=True, null=True)
     shoper_new_product_tag = models.BooleanField(blank=True, null=True)
-    shoper_unit_id = models.IntegerField(blank=True, null=True)  # None
-    shoper_currency_id = models.IntegerField(blank=True, null=True)  # None
-    shoper_weight = models.CharField(max_length=5, blank=True, null=True)  # None
-    shoper_availability_id = models.IntegerField(blank=True, null=True)  # None
+    shoper_vol_weight = models.CharField(max_length=100, blank=True)
+    shoper_gauge_id = models.IntegerField(blank=True, null=True)
+    shoper_currency_id = models.IntegerField(blank=True, null=True)
+    is_active_shoper = models.BooleanField(blank=True, null=True)
+    # Stock
+    shoper_product_stock = models.ManyToManyField(Stock, blank=True)
+    # Images
+    shoper_images = models.ManyToManyField(Image, blank=True)
+    # Translations
+    shoper_product_translation = models.ManyToManyField(ProductTranslation, blank=True)
     # Shoper Special Offer.
     shoper_promo_id = models.IntegerField(blank=True, null=True)
     shoper_promo_start = models.CharField(max_length=50, blank=True, null=True)
@@ -87,20 +102,6 @@ class Product(models.Model):
     shoper_meta_desc_us = models.TextField(blank=True)
     shoper_permalink_us = models.CharField(max_length=200, blank=True)
     shoper_seo_url_us = models.CharField(max_length=200, blank=True)
-    # Shopify Data - Not used yet!
-    shopify_id = models.IntegerField(unique=True, blank=True, null=True)
-    shopify_ean = models.CharField(max_length=13, blank=True)
-    shopify_sku = models.CharField(max_length=25, blank=True)
-    shopify_title = models.CharField(max_length=200, blank=True, null=True)
-    shopify_description = models.TextField(blank=True, null=True)
-    shopify_position = models.CharField(max_length=20, blank=True)
-    is_active_shopify = models.CharField(max_length=1, blank=True)
-    shopify_tags = models.CharField(max_length=200, blank=True)
-    created_shopify = models.DateTimeField(blank=True, null=True)
-    updated_shopify = models.DateTimeField(blank=True, null=True)
-    shopify_price = models.CharField(max_length=40, blank=True)
-    shopify_seo_title = models.CharField(max_length=200, blank=True)
-    shopify_seo_description = models.TextField(blank=True)
     # Images Links from CSV
     shoper_url_image_1 = models.CharField(max_length=255, blank=True)
     shoper_url_image_2 = models.CharField(max_length=255, blank=True)
@@ -120,7 +121,6 @@ class Product(models.Model):
     vendor_brand = models.CharField(max_length=100, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    shoper_images = models.ManyToManyField(Image, blank=True)
     shoper_promo_price_calculated = models.DecimalField(
         max_digits=6, decimal_places=2, null=True, blank=True
     )

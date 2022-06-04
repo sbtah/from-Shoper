@@ -50,3 +50,13 @@ class Image(models.Model):
     def __str__(self):
 
         return f"ImageID:{self.shoper_gfx_id} | ProductID:{self.shoper_product_id}"
+
+
+class CSVImage(models.Model):
+    """Model for CSVImage object that stores links to images."""
+
+    image_hard_link = models.CharField(max_length=255, blank=True)
+    image_position = models.IntegerField(blank=True, null=True)
+
+    def __str__(self):
+        return f"CSVImage ID:{self.id}"

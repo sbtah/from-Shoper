@@ -3,9 +3,12 @@ import time
 from datetime import datetime
 from django.core.management.base import BaseCommand
 from products.models import Product
+from stocks.models import Stock
 from translations.models import ProductTranslation
 from external.get_token import SHOPER_STORE, TOKEN
-from external.get_products import get_number_of_product_pages
+from external.get_products import (
+    get_number_of_product_pages,
+)
 
 
 # Get all ID numbers of products from SHOPER Api.
@@ -21,45 +24,9 @@ def copy_all_products_from_shoper_api():
         response = requests.get(url, headers=headers, params=data)
         res = response.json()
         items = res.get("list")
-        for i in items:
-            shoper_product_id = i.get("product_id")
-            print(shoper_product_id)
-            try:
-                for tag in i.get("translations"):
 
-                    translation = ProductTranslation.objects.update_or_create(
-                        locale=tag,
-                        shoper_translation_id=i.get("translations")
-                        .get(tag)
-                        .get("translation_id"),
-                        related_product_id=i.get("translations")
-                        .get(tag)
-                        .get("product_id"),
-                        name=i.get("translations").get(tag).get("name"),
-                        short_description=i.get("translations")
-                        .get(tag)
-                        .get("short_description"),
-                        description=i.get("translations").get(tag).get("description"),
-                        active=i.get("translations").get(tag).get("active"),
-                        is_default=i.get("translations").get(tag).get("isdefault"),
-                        lang_id=i.get("translations").get(tag).get("lang_id"),
-                        seo_title=i.get("translations").get(tag).get("seo_title"),
-                        seo_description=i.get("translations")
-                        .get(tag)
-                        .get("seo_description"),
-                        seo_keywords=i.get("translations").get(tag).get("seo_keywords"),
-                        seo_url=i.get("translations").get(tag).get("seo_url"),
-                        permalink=i.get("translations").get(tag).get("permalink"),
-                        order=i.get("translations").get(tag).get("order"),
-                        main_page=i.get("translations").get(tag).get("main_page"),
-                        main_page_order=i.get("translations")
-                        .get(tag)
-                        .get("main_page_order"),
-                    )
-                    print(f"Translation:{translation[0]}")
-                    print(f"Created:{translation[1]}")
-            except TypeError:
-                continue
+        for i in items:
+            """Loops over part of response with all products."""
 
             # Shoper Main Data
             try:
@@ -67,21 +34,29 @@ def copy_all_products_from_shoper_api():
             except AttributeError:
                 shoper_id = ""
             try:
-                shoper_ean = i.get("ean")
+                shoper_type = i.get("type")
             except AttributeError:
-                shoper_ean = ""
+                shoper_type = None
             try:
-                shoper_sku = i.get("code")
+                shoper_producer_id = i.get("producer_id")
             except AttributeError:
-                shoper_sku = ""
+                shoper_producer_id = None
             try:
-                shoper_vol_weight = i.get("vol_weight")
+                shoper_group_id = i.get("group_id")
             except AttributeError:
-                shoper_vol_weight = ""
+                shoper_group_id = None
             try:
-                is_active_shoper = i.get("stock").get("active")  # Test it!
+                shoper_tax_id = i.get("tax_id")
             except AttributeError:
-                is_active_shoper = ""
+                shoper_tax_id = None
+            try:
+                shoper_category_id = i.get("category_id")
+            except AttributeError:
+                shoper_category_id = None
+            try:
+                shoper_unit_id = i.get("unit_id")
+            except AttributeError:
+                shoper_unit_id = None
             try:
                 created_shoper = i.get("add_date")
             except AttributeError:
@@ -91,29 +66,29 @@ def copy_all_products_from_shoper_api():
             except AttributeError:
                 updated_shoper = ""
             try:
-                shoper_stock_price = i.get("stock").get("price")
-            except AttributeError:
-                shoper_stock_price = ""
-            try:
-                shoper_producer_id = i.get("producer_id")
-            except AttributeError:
-                shoper_producer_id = None
-            try:
-                shoper_category_id = i.get("category_id")
-            except AttributeError:
-                shoper_category_id = None
-            try:
-                shoper_delivery_id = i.get("stock").get("delivery_id")
-            except AttributeError:
-                shoper_delivery_id = None
-            try:
                 shoper_other_price = i.get("other_price")
             except AttributeError:
-                shoper_other_price = None
+                shoper_other_price = ""
             try:
-                shoper_gauge_id = i.get("gauge_id")
+                shoper_promo_price = i.get("promo_price")
             except AttributeError:
-                shoper_gauge_id = None
+                shoper_promo_price = ""
+            try:
+                shoper_sku = i.get("code")
+            except AttributeError:
+                shoper_sku = ""
+            try:
+                shoper_ean = i.get("ean")
+            except AttributeError:
+                shoper_ean = ""
+            try:
+                shoper_pkwiu = i.get("pkwiu")
+            except AttributeError:
+                shoper_pkwiu = ""
+            try:
+                shoper_is_product_of_day = i.get("is_product_of_day")
+            except AttributeError:
+                shoper_is_product_of_day = ""
             try:
                 shoper_bestseller_tag = i.get("bestseller")
             except AttributeError:
@@ -123,21 +98,17 @@ def copy_all_products_from_shoper_api():
             except AttributeError:
                 shoper_new_product_tag = ""
             try:
-                shoper_unit_id = i.get("unit_id")
+                shoper_vol_weight = i.get("vol_weight")
             except AttributeError:
-                shoper_unit_id = None
+                shoper_vol_weight = ""
+            try:
+                shoper_gauge_id = i.get("gauge_id")
+            except AttributeError:
+                shoper_gauge_id = None
             try:
                 shoper_currency_id = i.get("currency_id")
             except AttributeError:
                 shoper_currency_id = None
-            try:
-                shoper_weight = i.get("stock").get("weight")
-            except AttributeError:
-                shoper_weight = ""
-            try:
-                shoper_availability_id = i.get("shoper_availability_id")
-            except AttributeError:
-                shoper_availability_id = None
             # Shoper Special Offer.
             try:
                 shoper_promo_id = i.get("special_offer").get("promo_id")
@@ -155,480 +126,392 @@ def copy_all_products_from_shoper_api():
                 shoper_discount_value = i.get("special_offer").get("discount")
             except AttributeError:
                 shoper_discount_value = ""
-            # PL SEO DATA
-            try:
-                shoper_title_pl = i.get("translations").get("pl_PL").get("name")
-            except AttributeError:
-                shoper_title_pl = ""
-            try:
-                shoper_translation_is_active_pl = (
-                    i.get("translations").get("pl_PL").get("active")
-                )
-            except AttributeError:
-                shoper_translation_is_active_pl = ""
-            try:
-                shoper_short_description_pl = (
-                    i.get("translations").get("pl_PL").get("short_description")
-                )
-            except AttributeError:
-                shoper_short_description_pl = ""
-            try:
-                shoper_description_pl = (
-                    i.get("translations").get("pl_PL").get("description")
-                )
-            except AttributeError:
-                shoper_description_pl = ""
-            try:
-                shoper_seo_title_pl = (
-                    i.get("translations").get("pl_PL").get("seo_title")
-                )
-            except AttributeError:
-                shoper_seo_title_pl = ""
-            try:
-                shoper_meta_desc_pl = (
-                    i.get("translations").get("pl_PL").get("seo_description")
-                )
-            except AttributeError:
-                shoper_meta_desc_pl = ""
-            try:
-                shoper_permalink_pl = (
-                    i.get("translations").get("pl_PL").get("permalink")
-                )
-            except AttributeError:
-                shoper_permalink_pl = ""
-            try:
-                shoper_seo_url_pl = i.get("translations").get("pl_PL").get("seo_url")
-            except AttributeError:
-                shoper_seo_url_pl = ""
-            # GB SEO DATA
-            try:
-                shoper_title_gb = i.get("translations").get("en_GB").get("name")
-            except AttributeError:
-                shoper_title_gb = ""
-            try:
-                shoper_translation_is_active_gb = (
-                    i.get("translations").get("en_GB").get("active")
-                )
-            except AttributeError:
-                shoper_translation_is_active_gb = ""
-            try:
-                shoper_short_description_gb = (
-                    i.get("translations").get("en_GB").get("short_description")
-                )
-            except AttributeError:
-                shoper_short_description_gb = ""
-            try:
-                shoper_description_gb = (
-                    i.get("translations").get("en_GB").get("description")
-                )
-            except AttributeError:
-                shoper_description_gb = ""
-            try:
-                shoper_seo_title_gb = (
-                    i.get("translations").get("en_GB").get("seo_title")
-                )
-            except AttributeError:
-                shoper_seo_title_gb = ""
-            try:
-                shoper_meta_desc_gb = (
-                    i.get("translations").get("en_GB").get("seo_description")
-                )
-            except AttributeError:
-                shoper_meta_desc_gb = ""
-            try:
-                shoper_permalink_gb = (
-                    i.get("translations").get("en_GB").get("permalink")
-                )
-            except AttributeError:
-                shoper_permalink_gb = ""
-            try:
-                shoper_seo_url_gb = i.get("translations").get("en_GB").get("seo_url")
-            except AttributeError:
-                shoper_seo_url_gb = ""
-            # EU SEO DATA
-            try:
-                shoper_title_eu = i.get("translations").get("en_EU").get("name")
-            except AttributeError:
-                shoper_title_eu = ""
-            try:
-                shoper_translation_is_active_eu = (
-                    i.get("translations").get("en_IE").get("active")
-                )
-            except AttributeError:
-                shoper_translation_is_active_eu = ""
-            try:
-                shoper_short_description_eu = (
-                    i.get("translations").get("en_IE").get("short_description")
-                )
-            except AttributeError:
-                shoper_short_description_eu = ""
-            try:
-                shoper_description_eu = (
-                    i.get("translations").get("en_IE").get("description")
-                )
-            except AttributeError:
-                shoper_description_eu = ""
-            try:
-                shoper_seo_title_eu = (
-                    i.get("translations").get("en_IE").get("seo_title")
-                )
-            except AttributeError:
-                shoper_seo_title_eu = ""
-            try:
-                shoper_meta_desc_eu = (
-                    i.get("translations").get("en_IE").get("seo_description")
-                )
-            except AttributeError:
-                shoper_meta_desc_eu = ""
-            try:
-                shoper_permalink_eu = (
-                    i.get("translations").get("en_IE").get("permalink")
-                )
-            except AttributeError:
-                shoper_permalink_eu = ""
-            try:
-                shoper_seo_url_eu = i.get("translations").get("en_IE").get("seo_url")
-            except AttributeError:
-                shoper_seo_url_eu = ""
-            # FR SEO DATA
-            try:
-                shoper_title_fr = i.get("translations").get("fr_FR").get("name")
-            except AttributeError:
-                shoper_title_fr = ""
-            try:
-                shoper_translation_is_active_fr = (
-                    i.get("translations").get("fr_FR").get("active")
-                )
-            except AttributeError:
-                shoper_translation_is_active_fr = ""
-            try:
-                shoper_short_description_fr = (
-                    i.get("translations").get("fr_FR").get("short_description")
-                )
-            except AttributeError:
-                shoper_short_description_fr = ""
-            try:
-                shoper_description_fr = (
-                    i.get("translations").get("fr_FR").get("description")
-                )
-            except AttributeError:
-                shoper_description_fr = ""
-            try:
-                shoper_seo_title_fr = (
-                    i.get("translations").get("fr_FR").get("seo_title")
-                )
-            except AttributeError:
-                shoper_seo_title_fr = ""
-            try:
-                shoper_meta_desc_fr = (
-                    i.get("translations").get("fr_FR").get("seo_description")
-                )
-            except AttributeError:
-                shoper_meta_desc_fr = ""
-            try:
-                shoper_permalink_fr = (
-                    i.get("translations").get("fr_FR").get("permalink")
-                )
-            except AttributeError:
-                shoper_permalink_fr = ""
-            try:
-                shoper_seo_url_fr = i.get("translations").get("fr_FR").get("seo_url")
-            except AttributeError:
-                shoper_seo_url_fr = ""
-            # DE SEO DATA
-            try:
-                shoper_title_de = i.get("translations").get("de_DE").get("name")
-            except AttributeError:
-                shoper_title_de = ""
-            try:
-                shoper_translation_is_active_de = (
-                    i.get("translations").get("de_DE").get("active")
-                )
-            except AttributeError:
-                shoper_translation_is_active_de = ""
-
-            try:
-                shoper_short_description_de = (
-                    i.get("translations").get("de_DE").get("short_description")
-                )
-            except AttributeError:
-                shoper_short_description_de = ""
-
-            try:
-                shoper_description_de = (
-                    i.get("translations").get("de_DE").get("description")
-                )
-            except AttributeError:
-                shoper_description_de = ""
-            try:
-                shoper_seo_title_de = (
-                    i.get("translations").get("de_DE").get("seo_title")
-                )
-            except AttributeError:
-                shoper_seo_title_de = ""
-            try:
-                shoper_meta_desc_de = (
-                    i.get("translations").get("de_DE").get("seo_description")
-                )
-            except AttributeError:
-                shoper_meta_desc_de = ""
-            try:
-                shoper_permalink_de = (
-                    i.get("translations").get("de_DE").get("permalink")
-                )
-            except AttributeError:
-                shoper_permalink_de = ""
-            try:
-                shoper_seo_url_de = i.get("translations").get("de_DE").get("seo_url")
-            except AttributeError:
-                shoper_seo_url_de = ""
-            # US SEO DATA
-            try:
-                shoper_title_us = i.get("translations").get("en_US").get("name")
-            except AttributeError:
-                shoper_title_us = ""
-            try:
-                shoper_translation_is_active_us = (
-                    i.get("translations").get("en_US").get("active")
-                )
-            except AttributeError:
-                shoper_translation_is_active_us = ""
-
-            try:
-                shoper_short_description_us = (
-                    i.get("translations").get("en_US").get("short_description")
-                )
-            except AttributeError:
-                shoper_short_description_us = ""
-
-            try:
-                shoper_description_us = (
-                    i.get("translations").get("en_US").get("description")
-                )
-            except AttributeError:
-                shoper_description_us = ""
-            try:
-                shoper_seo_title_us = (
-                    i.get("translations").get("en_US").get("seo_title")
-                )
-            except AttributeError:
-                shoper_seo_title_us = ""
-            try:
-                shoper_meta_desc_us = (
-                    i.get("translations").get("en_US").get("seo_description")
-                )
-            except AttributeError:
-                shoper_meta_desc_us = ""
-            try:
-                shoper_permalink_us = (
-                    i.get("translations").get("en_US").get("permalink")
-                )
-            except AttributeError:
-                shoper_permalink_us = ""
-            try:
-                shoper_seo_url_us = i.get("translations").get("en_US").get("seo_url")
-            except AttributeError:
-                shoper_seo_url_us = ""
-            # Local Data
-            try:
-                vendor_brand = SHOPER_STORE[0:-3].capitalize()
-            except AttributeError:
-                vendor_brand = ""
             # == END of Variables ==
             try:
                 product = Product.objects.get(
                     shoper_id=shoper_id,
                 )
-                print(f"DEBUG val:shoper_id from Product: {product.shoper_id}")
-                print(f"DEBUG val:shoper_id from GET : {shoper_id}")
                 if datetime.strptime(
                     updated_shoper, "%Y-%m-%d %H:%M:%S"
                 ) > datetime.strptime(product.updated_shoper, "%Y-%m-%d %H:%M:%S"):
                     # Shoper Main Data
                     product.shoper_id = shoper_id
-                    product.shoper_ean = shoper_ean
-                    product.shoper_sku = shoper_sku
-                    product.shoper_vol_weight = shoper_vol_weight
-                    product.is_active_shoper = is_active_shoper
+                    product.shoper_type = shoper_type
+                    product.shoper_producer_id = shoper_producer_id
+                    product.shoper_group_id = shoper_group_id
+                    product.shoper_tax_id = shoper_tax_id
+                    product.shoper_category_id = shoper_category_id
+                    product.shoper_unit_id = shoper_unit_id
                     product.created_shoper = created_shoper
                     product.updated_shoper = updated_shoper
-                    product.shoper_stock_price = shoper_stock_price
-                    product.shoper_producer_id = shoper_producer_id
-                    product.shoper_category_id = shoper_category_id
-                    product.shoper_delivery_id = shoper_delivery_id
                     product.shoper_other_price = shoper_other_price
-                    product.shoper_gauge_id = shoper_gauge_id
+                    product.shoper_promo_price = shoper_promo_price
+                    product.shoper_sku = shoper_sku
+                    product.shoper_ean = shoper_ean
+                    product.shoper_pkwiu = shoper_pkwiu
+                    product.shoper_is_product_of_day = shoper_is_product_of_day
                     product.shoper_bestseller_tag = shoper_bestseller_tag
                     product.shoper_new_product_tag = shoper_new_product_tag
-                    product.shoper_unit_id = shoper_unit_id
+                    product.shoper_vol_weight = shoper_vol_weight
+                    product.shoper_gauge_id = shoper_gauge_id
                     product.shoper_currency_id = shoper_currency_id
-                    product.shoper_weight = shoper_weight
-                    product.shoper_availability_id = shoper_availability_id
                     # Shoper Special Offer.
                     product.shoper_promo_id = shoper_promo_id
                     product.shoper_promo_start = shoper_promo_start
                     product.shoper_promo_ends = shoper_promo_ends
                     product.shoper_discount_value = shoper_discount_value
-                    # PL SEO DATA
-                    product.shoper_title_pl = shoper_title_pl
-                    product.shoper_translation_is_active_pl = (
-                        shoper_translation_is_active_pl
-                    )
-                    product.shoper_short_description_pl = shoper_short_description_pl
-                    product.shoper_description_pl = shoper_description_pl
-                    product.shoper_seo_title_pl = shoper_seo_title_pl
-                    product.shoper_meta_desc_pl = shoper_meta_desc_pl
-                    product.shoper_permalink_pl = shoper_permalink_pl
-                    product.shoper_seo_url_pl = shoper_seo_url_pl
-                    # GB SEO DATA
-                    product.shoper_title_gb = shoper_title_gb
-                    product.shoper_translation_is_active_gb = (
-                        shoper_translation_is_active_gb
-                    )
-                    product.shoper_short_description_gb = shoper_short_description_gb
-                    product.shoper_description_gb = shoper_description_gb
-                    product.shoper_seo_title_gb = shoper_seo_title_gb
-                    product.shoper_meta_desc_gb = shoper_meta_desc_gb
-                    product.shoper_permalink_gb = shoper_permalink_gb
-                    product.shoper_seo_url_gb = shoper_seo_url_gb
-                    # EU SEO DATA
-                    product.shoper_title_eu = shoper_title_eu
-                    product.shoper_translation_is_active_eu = (
-                        shoper_translation_is_active_eu
-                    )
-                    product.shoper_short_description_eu = shoper_short_description_eu
-                    product.shoper_description_eu = shoper_description_eu
-                    product.shoper_seo_title_eu = shoper_seo_title_eu
-                    product.shoper_meta_desc_eu = shoper_meta_desc_eu
-                    product.shoper_permalink_eu = shoper_permalink_eu
-                    product.shoper_seo_url_eu = shoper_seo_url_eu
-                    # FR SEO DATA
-                    product.shoper_title_fr = shoper_title_fr
-                    product.shoper_translation_is_active_fr = (
-                        shoper_translation_is_active_fr
-                    )
-                    product.shoper_short_description_fr = shoper_short_description_fr
-                    product.shoper_description_fr = shoper_description_fr
-                    product.shoper_seo_title_fr = shoper_seo_title_fr
-                    product.shoper_meta_desc_fr = shoper_meta_desc_fr
-                    product.shoper_permalink_fr = shoper_permalink_fr
-                    product.shoper_seo_url_fr = shoper_seo_url_fr
-                    # DE SEO DATA
-                    product.shoper_title_de = shoper_title_de
-                    product.shoper_translation_is_active_de = (
-                        shoper_translation_is_active_de
-                    )
-                    product.shoper_short_description_de = shoper_short_description_de
-                    product.shoper_description_de = shoper_description_de
-                    product.shoper_seo_title_de = shoper_seo_title_de
-                    product.shoper_meta_desc_de = shoper_meta_desc_de
-                    product.shoper_permalink_de = shoper_permalink_de
-                    product.shoper_seo_url_de = shoper_seo_url_de
-                    # US SEO DATA
-                    product.shoper_title_us = shoper_title_us
-                    product.shoper_translation_is_active_us = (
-                        shoper_translation_is_active_us
-                    )
-                    product.shoper_short_description_us = shoper_short_description_us
-                    product.shoper_description_us = shoper_description_us
-                    product.shoper_seo_title_us = shoper_seo_title_us
-                    product.shoper_meta_desc_us = shoper_meta_desc_us
-                    product.shoper_permalink_us = shoper_permalink_us
-                    product.shoper_seo_url_us = shoper_seo_url_us
-
-                    # Local Data
-                    product.vendor_brand = vendor_brand
                     product.save()
                     print(f"UPDATED: {product}")
                 else:
                     print(f"No update detected for: {product}")
-                    continue
+
             except Product.DoesNotExist:
                 Product.objects.create(
-                    # Shoper Main Data
                     shoper_id=shoper_id,
-                    shoper_ean=shoper_ean,
-                    shoper_sku=shoper_sku,
-                    shoper_vol_weight=shoper_vol_weight,
-                    is_active_shoper=is_active_shoper,
+                    shoper_type=shoper_type,
+                    shoper_producer_id=shoper_producer_id,
+                    shoper_group_id=shoper_group_id,
+                    shoper_tax_id=shoper_tax_id,
+                    shoper_category_id=shoper_category_id,
+                    shoper_unit_id=shoper_unit_id,
                     created_shoper=created_shoper,
                     updated_shoper=updated_shoper,
-                    shoper_stock_price=shoper_stock_price,
-                    shoper_producer_id=shoper_producer_id,
-                    shoper_category_id=shoper_category_id,
-                    shoper_delivery_id=shoper_delivery_id,
                     shoper_other_price=shoper_other_price,
-                    shoper_gauge_id=shoper_gauge_id,
+                    shoper_promo_price=shoper_promo_price,
+                    shoper_sku=shoper_sku,
+                    shoper_ean=shoper_ean,
+                    shoper_pkwiu=shoper_pkwiu,
+                    shoper_is_product_of_day=shoper_is_product_of_day,
                     shoper_bestseller_tag=shoper_bestseller_tag,
                     shoper_new_product_tag=shoper_new_product_tag,
-                    shoper_unit_id=shoper_unit_id,
+                    shoper_vol_weight=shoper_vol_weight,
+                    shoper_gauge_id=shoper_gauge_id,
                     shoper_currency_id=shoper_currency_id,
-                    shoper_weight=shoper_weight,
-                    shoper_availability_id=shoper_availability_id,
                     # Shoper Special Offer.
                     shoper_promo_id=shoper_promo_id,
                     shoper_promo_start=shoper_promo_start,
                     shoper_promo_ends=shoper_promo_ends,
                     shoper_discount_value=shoper_discount_value,
-                    # PL SEO DATA
-                    shoper_title_pl=shoper_title_pl,
-                    shoper_translation_is_active_pl=shoper_translation_is_active_pl,
-                    shoper_short_description_pl=shoper_short_description_pl,
-                    shoper_description_pl=shoper_description_pl,
-                    shoper_seo_title_pl=shoper_seo_title_pl,
-                    shoper_meta_desc_pl=shoper_meta_desc_pl,
-                    shoper_permalink_pl=shoper_permalink_pl,
-                    shoper_seo_url_pl=shoper_seo_url_pl,
-                    # GB SEO DATA
-                    shoper_title_gb=shoper_title_gb,
-                    shoper_translation_is_active_gb=shoper_translation_is_active_gb,
-                    shoper_short_description_gb=shoper_short_description_gb,
-                    shoper_description_gb=shoper_description_gb,
-                    shoper_seo_title_gb=shoper_seo_title_gb,
-                    shoper_meta_desc_gb=shoper_meta_desc_gb,
-                    shoper_permalink_gb=shoper_permalink_gb,
-                    shoper_seo_url_gb=shoper_seo_url_gb,
-                    # EU SEO DATA
-                    shoper_title_eu=shoper_title_eu,
-                    shoper_translation_is_active_eu=shoper_translation_is_active_eu,
-                    shoper_short_description_eu=shoper_short_description_eu,
-                    shoper_description_eu=shoper_description_eu,
-                    shoper_seo_title_eu=shoper_seo_title_eu,
-                    shoper_meta_desc_eu=shoper_meta_desc_eu,
-                    shoper_permalink_eu=shoper_permalink_eu,
-                    shoper_seo_url_eu=shoper_seo_url_eu,
-                    # FR SEO DATA
-                    shoper_title_fr=shoper_title_fr,
-                    shoper_translation_is_active_fr=shoper_translation_is_active_fr,
-                    shoper_short_description_fr=shoper_short_description_fr,
-                    shoper_description_fr=shoper_description_fr,
-                    shoper_seo_title_fr=shoper_seo_title_fr,
-                    shoper_meta_desc_fr=shoper_meta_desc_fr,
-                    shoper_permalink_fr=shoper_permalink_fr,
-                    shoper_seo_url_fr=shoper_seo_url_fr,
-                    # DE SEO DATA
-                    shoper_title_de=shoper_title_de,
-                    shoper_translation_is_active_de=shoper_translation_is_active_de,
-                    shoper_short_description_de=shoper_short_description_de,
-                    shoper_description_de=shoper_description_de,
-                    shoper_seo_title_de=shoper_seo_title_de,
-                    shoper_meta_desc_de=shoper_meta_desc_de,
-                    shoper_permalink_de=shoper_permalink_de,
-                    shoper_seo_url_de=shoper_seo_url_de,
-                    # US SEO DATA
-                    shoper_title_us=shoper_title_us,
-                    shoper_translation_is_active_us=shoper_translation_is_active_us,
-                    shoper_short_description_us=shoper_short_description_us,
-                    shoper_description_us=shoper_description_us,
-                    shoper_seo_title_us=shoper_seo_title_us,
-                    shoper_meta_desc_us=shoper_meta_desc_us,
-                    shoper_permalink_us=shoper_permalink_us,
-                    shoper_seo_url_us=shoper_seo_url_us,
-                    # Local
-                    vendor_brand=vendor_brand,
                 )
                 print(f"CREATED: {Product}")
-            time.sleep(1)
+            """
+            Loops over part of response with all products.
+            """
+            print("===STOCK===")
+            # Stock data from response.
+            try:
+                shoper_stock_id = i.get("stock").get("stock_id")
+                shoper_stock_product_id = i.get("stock").get("product_id")
+                shoper_stock_extended = i.get("stock").get("extended")
+                shoper_stock_price = i.get("stock").get("price")
+                shoper_stock_active = i.get("stock").get("active")
+                shoper_stock_default = i.get("stock").get("default")
+                shoper_stock_value = i.get("stock").get("stock")
+                shoper_stock_warn_level = i.get("stock").get("warn_level")
+                shoper_stock_sold = i.get("stock").get("sold")
+                shoper_stock_code = i.get("stock").get("code")
+                shoper_stock_ean = i.get("stock").get("ean")
+                shoper_stock_weight = i.get("stock").get("weight")
+                shoper_stock_weight_type = i.get("stock").get("weight_type")
+                shoper_stock_availability_id = i.get("stock").get("availability_id")
+                shoper_stock_delivery_id = i.get("stock").get("delivery_id")
+                shoper_stock_gfx_id = i.get("stock").get("gfx_id")
+                shoper_stock_package = i.get("stock").get("package")
+                shoper_stock_price_wholesale = i.get("stock").get("price_wholesale")
+                shoper_stock_price_special = i.get("stock").get("price_special")
+                shoper_stock_calculation_unit_id = i.get("stock").get(
+                    "calculation_unit_id"
+                )
+                shoper_stock_calculation_unit_ratio = i.get("stock").get(
+                    "calculation_unit_ratio"
+                )
+                """===STOCK==="""
+                """
+                Tries to fetch Product's Stock object from DB and update it.
+                Creates new object if fails.
+                """
+                try:
+                    stock = Stock.objects.get(shoper_stock_id=shoper_stock_id)
+                    if (
+                        (str(stock.shoper_stock_id) != str(shoper_stock_id))
+                        or (
+                            str(stock.shoper_stock_product_id)
+                            != str(shoper_stock_product_id)
+                        )
+                        or (
+                            str(stock.shoper_stock_extended)
+                            != str(shoper_stock_extended)
+                        )
+                        or (str(stock.shoper_stock_price) != str(shoper_stock_price))
+                        or (str(stock.shoper_stock_active) != str(shoper_stock_active))
+                        or (
+                            str(stock.shoper_stock_default) != str(shoper_stock_default)
+                        )
+                        or (str(stock.shoper_stock_value) != str(shoper_stock_value))
+                        or (
+                            str(stock.shoper_stock_warn_level)
+                            != str(shoper_stock_warn_level)
+                        )
+                        or (str(stock.shoper_stock_sold) != str(shoper_stock_sold))
+                        or (str(stock.shoper_stock_code) != str(shoper_stock_code))
+                        or (str(stock.shoper_stock_ean) != str(shoper_stock_ean))
+                        or (str(stock.shoper_stock_weight) != str(shoper_stock_weight))
+                        or (
+                            str(stock.shoper_stock_weight_type)
+                            != str(shoper_stock_weight_type)
+                        )
+                        or (
+                            str(stock.shoper_stock_availability_id)
+                            != str(shoper_stock_availability_id)
+                        )
+                        or (
+                            str(stock.shoper_stock_delivery_id)
+                            != str(shoper_stock_delivery_id)
+                        )
+                        or (str(stock.shoper_stock_gfx_id) != str(shoper_stock_gfx_id))
+                        or (
+                            str(stock.shoper_stock_package) != str(shoper_stock_package)
+                        )
+                        or (
+                            str(stock.shoper_stock_price_wholesale)
+                            != str(shoper_stock_price_wholesale)
+                        )
+                        or (
+                            str(stock.shoper_stock_price_special)
+                            != str(shoper_stock_price_special)
+                        )
+                        or (
+                            str(stock.shoper_stock_calculation_unit_id)
+                            != str(shoper_stock_calculation_unit_id)
+                        )
+                        or (
+                            str(stock.shoper_stock_calculation_unit_ratio)
+                            != str(shoper_stock_calculation_unit_ratio)
+                        )
+                    ):
+                        stock.shoper_stock_id = shoper_stock_id
+                        stock.shoper_stock_product_id = shoper_stock_product_id
+                        stock.shoper_stock_extended = shoper_stock_extended
+                        stock.shoper_stock_price = shoper_stock_price
+                        stock.shoper_stock_active = shoper_stock_active
+                        stock.shoper_stock_default = shoper_stock_default
+                        stock.shoper_stock_value = shoper_stock_value
+                        stock.shoper_stock_warn_level = shoper_stock_warn_level
+                        stock.shoper_stock_sold = shoper_stock_sold
+                        stock.shoper_stock_code = shoper_stock_code
+                        stock.shoper_stock_ean = shoper_stock_ean
+                        stock.shoper_stock_weight = shoper_stock_weight
+                        stock.shoper_stock_weight_type = shoper_stock_weight_type
+                        stock.shoper_stock_availability_id = (
+                            shoper_stock_availability_id
+                        )
+                        stock.shoper_stock_delivery_id = shoper_stock_delivery_id
+                        stock.shoper_stock_gfx_id = shoper_stock_gfx_id
+                        stock.shoper_stock_package = shoper_stock_package
+                        stock.shoper_stock_price_wholesale = (
+                            shoper_stock_price_wholesale
+                        )
+                        stock.shoper_stock_price_special = shoper_stock_price_special
+                        stock.shoper_stock_calculation_unit_id = (
+                            shoper_stock_calculation_unit_id
+                        )
+                        stock.shoper_stock_calculation_unit_ratio = (
+                            shoper_stock_calculation_unit_ratio
+                        )
+                        parrent_product = Product.objects.get(
+                            shoper_id=stock.shoper_stock_product_id
+                        )
+                        parrent_product.stock_set.add(stock)
+                        stock.save()
+                        print(f"Stock: {stock.shoper_stock_id} Updated")
+                    else:
+                        parrent_product = Product.objects.get(
+                            shoper_id=stock.shoper_stock_product_id
+                        )
+                        parrent_product.stock_set.add(stock)
+                        print(f"No updates Stock: {stock.shoper_stock_id}")
+                except Stock.DoesNotExist:
+                    stock = Stock.objects.create(
+                        shoper_stock_id=shoper_stock_id,
+                        shoper_stock_product_id=shoper_stock_product_id,
+                        shoper_stock_extended=shoper_stock_extended,
+                        shoper_stock_price=shoper_stock_price,
+                        shoper_stock_active=shoper_stock_active,
+                        shoper_stock_default=shoper_stock_default,
+                        shoper_stock_value=shoper_stock_value,
+                        shoper_stock_warn_level=shoper_stock_warn_level,
+                        shoper_stock_sold=shoper_stock_sold,
+                        shoper_stock_code=shoper_stock_code,
+                        shoper_stock_ean=shoper_stock_ean,
+                        shoper_stock_weight=shoper_stock_weight,
+                        shoper_stock_weight_type=shoper_stock_weight_type,
+                        shoper_stock_availability_id=shoper_stock_availability_id,
+                        shoper_stock_delivery_id=shoper_stock_delivery_id,
+                        shoper_stock_gfx_id=shoper_stock_gfx_id,
+                        shoper_stock_package=shoper_stock_package,
+                        shoper_stock_price_wholesale=shoper_stock_price_wholesale,
+                        shoper_stock_price_special=shoper_stock_price_special,
+                        shoper_stock_calculation_unit_id=shoper_stock_calculation_unit_id,
+                        shoper_stock_calculation_unit_ratio=shoper_stock_calculation_unit_ratio,
+                    )
+                    parrent_product = Product.objects.get(
+                        shoper_id=stock.shoper_stock_product_id
+                    )
+                    parrent_product.stock_set.add(stock)
+                    print(f"Stock : {stock.shoper_stock_id} Created")
+            except TypeError:
+                print("Type Error from Stock - no stock values")
+
+            """PRODUCT'S TRANSLATIONS"""
+            try:
+                for tag in i.get("translations"):
+
+                    """Create Products Translation for each language Tag on current product."""
+
+                    # Get Variables from each of translations that Product currently have.
+                    locale = tag
+                    shoper_translation_id = (
+                        i.get("translations").get(f"{locale}").get("translation_id")
+                    )
+                    related_product_id = (
+                        i.get("translations").get(f"{locale}").get("product_id")
+                    )
+                    name = i.get("translations").get(f"{locale}").get("name")
+                    short_description = (
+                        i.get("translations").get(f"{locale}").get("short_description")
+                    )
+                    description = (
+                        i.get("translations").get(f"{locale}").get("description")
+                    )
+                    active = i.get("translations").get(f"{locale}").get("active")
+                    is_default = i.get("translations").get(f"{locale}").get("isdefault")
+                    lang_id = i.get("translations").get(f"{locale}").get("lang_id")
+                    seo_title = i.get("translations").get(f"{locale}").get("seo_title")
+                    seo_description = (
+                        i.get("translations").get(f"{locale}").get("seo_description")
+                    )
+                    seo_keywords = (
+                        i.get("translations").get(f"{locale}").get("seo_keywords")
+                    )
+                    seo_url = i.get("translations").get(f"{locale}").get("seo_url")
+                    permalink = i.get("translations").get(f"{locale}").get("permalink")
+                    order = i.get("translations").get(f"{locale}").get("order")
+                    main_page = i.get("translations").get(f"{locale}").get("main_page")
+                    main_page_order = (
+                        i.get("translations").get(f"{locale}").get("main_page_order")
+                    )
+                    """
+                    Tries to fetch existing Product Translation from DB and update it.
+                    Creates new object if fails.
+                    """
+                    print(locale)
+                    print(shoper_translation_id)
+                    try:
+                        translation = ProductTranslation.objects.get(
+                            shoper_translation_id=shoper_translation_id
+                        )
+                        """
+                        Checks is data translation data in DB is not different from response.
+                        If there is a difference on one of the fields, model is updated.
+                        """
+                        if (
+                            (str(translation.locale) != str(locale))
+                            or (
+                                str(translation.shoper_translation_id)
+                                != str(shoper_translation_id)
+                            )
+                            or (
+                                str(translation.related_product_id)
+                                != str(related_product_id)
+                            )
+                            or (str(translation.name) != str(name))
+                            or (
+                                str(translation.short_description)
+                                != str(short_description)
+                            )
+                            or (str(translation.description) != str(description))
+                            or (str(translation.active) != str(active))
+                            or (str(translation.is_default) != str(is_default))
+                            or (str(translation.lang_id) != str(lang_id))
+                            or (str(translation.seo_title) != str(seo_title))
+                            or (
+                                str(translation.seo_description) != str(seo_description)
+                            )
+                            or (str(translation.seo_keywords) != str(seo_keywords))
+                            or (str(translation.seo_url) != str(seo_url))
+                            or (str(translation.permalink) != str(permalink))
+                            or (str(translation.order) != str(order))
+                            or (str(translation.main_page) != str(main_page))
+                            or (
+                                str(translation.main_page_order) != str(main_page_order)
+                            )
+                        ):
+                            translation.locale = locale
+                            translation.shoper_translation_id = shoper_translation_id
+                            translation.related_product_id = related_product_id
+                            translation.name = name
+                            translation.short_description = short_description
+                            translation.description = description
+                            translation.active = active
+                            translation.is_default = is_default
+                            translation.lang_id = lang_id
+                            translation.seo_title = seo_title
+                            translation.seo_description = seo_description
+                            translation.seo_keywords = seo_keywords
+                            translation.seo_url = seo_url
+                            translation.permalink = permalink
+                            translation.order = order
+                            translation.main_page = main_page
+                            translation.description = description
+                            translation.main_page_order = main_page_order
+
+                            parrent_product = Product.objects.get(
+                                shoper_id=translation.related_product_id
+                            )
+                            parrent_product.producttranslation_set.add(translation)
+                            translation.save()
+                            print(
+                                f"Translation: {translation.related_product_id} Updated"
+                            )
+                        else:
+                            parrent_product = Product.objects.get(
+                                shoper_id=translation.related_product_id
+                            )
+                            parrent_product.producttranslation_set.add(translation)
+                            print(
+                                f"No updates for Translation: {translation.related_product_id}"
+                            )
+                    except ProductTranslation.DoesNotExist:
+                        print()
+                        translation = ProductTranslation.objects.create(
+                            locale=locale,
+                            shoper_translation_id=shoper_translation_id,
+                            related_product_id=related_product_id,
+                            name=name,
+                            short_description=short_description,
+                            description=description,
+                            active=active,
+                            is_default=is_default,
+                            lang_id=lang_id,
+                            seo_title=seo_title,
+                            seo_description=seo_description,
+                            seo_keywords=seo_keywords,
+                            seo_url=seo_url,
+                            permalink=permalink,
+                            order=order,
+                            main_page=main_page,
+                            main_page_order=main_page_order,
+                        )
+                        parrent_product = Product.objects.get(
+                            shoper_id=translation.related_product_id
+                        )
+                        parrent_product.producttranslation_set.add(translation)
+                        print(
+                            f"Translation created {translation.shoper_translation_id}"
+                        )
+            except TypeError:
+                print("Type Error from ProductTranslation - No values in loop")
+        time.sleep(1)
     return
 
 

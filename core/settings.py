@@ -34,6 +34,8 @@ INSTALLED_APPS = [
     "users",
     "panel",
     "translations",
+    "stocks",
+    "tags",
 ]
 
 MIDDLEWARE = [

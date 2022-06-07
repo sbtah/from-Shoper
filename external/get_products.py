@@ -4,6 +4,22 @@ from external.get_token import SHOPER_STORE, TOKEN
 
 
 # GET Requests
+def get_number_of_product_pages():
+    """Return number of product pages from Shoper Api."""
+
+    url = f"https://{SHOPER_STORE}/webapi/rest/products"
+    headers = {"Authorization": f"Bearer {TOKEN}"}
+
+    try:
+        response = requests.get(url, headers=headers)
+        res = response.json()
+        pages = res.get("pages")
+    except Exception as e:
+        print(e)
+
+    return pages
+
+
 def get_single_product(id):
     """Return a response with data from single product endpoint."""
 
@@ -26,20 +42,21 @@ def get_all_products():
     return res
 
 
-def get_number_of_product_pages():
-    """Return number of product pages from Shoper Api."""
+def get_list_of_all_products_data():
+    """Get all Products for all pages from Shoper Api."""
 
-    url = f"https://{SHOPER_STORE}/webapi/rest/products"
-    headers = {"Authorization": f"Bearer {TOKEN}"}
+    number_of_product_pages = get_number_of_product_pages()
 
-    try:
-        response = requests.get(url, headers=headers)
+    for x in range(1, number_of_product_pages + 1):
+        data = {"page": f"{x}"}
+        url = f"https://{SHOPER_STORE}/webapi/rest/products"
+        headers = {"Authorization": f"Bearer {TOKEN}"}
+        response = requests.get(url, headers=headers, params=data)
+        time.sleep(0.5)
         res = response.json()
-        pages = res.get("pages")
-    except Exception as e:
-        print(e)
+        items = res.get("list")
 
-    return pages
+        yield items[0]
 
 
 # Get all ID numbers of products from SHOPER Api.

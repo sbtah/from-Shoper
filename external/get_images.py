@@ -3,11 +3,7 @@ import base64
 import time
 import logging
 import requests
-from external.get_token import get_token
-from external.get_token import SHOPER_STORE
-
-
-TOKEN = get_token()
+from external.get_token import SHOPER_STORE, TOKEN
 
 
 # Get number of pages from image list API.
@@ -39,6 +35,23 @@ def get_single_gfx_image(id):
     image = response.json()
 
     return image
+
+
+def get_list_of_all_images_data():
+    """Get all Product Images for all pages from Shoper Api."""
+
+    number_of_images_pages = get_number_of_image_pages()
+
+    for x in range(1, number_of_images_pages + 1):
+        data = {"page": f"{x}"}
+        url = f"https://{SHOPER_STORE}/webapi/rest/product-images"
+        headers = {"Authorization": f"Bearer {TOKEN}"}
+        response = requests.get(url, headers=headers, params=data)
+        time.sleep(0.5)
+        res = response.json()
+        items = res.get("list")
+
+        yield items[0]
 
 
 def get_all_images_for_product(product_id):

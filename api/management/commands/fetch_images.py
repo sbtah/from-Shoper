@@ -1,6 +1,7 @@
 import requests
 import time
 from images.models import Image
+from products.models import Product
 from translations.models import ImageTranslation
 from django.core.management.base import BaseCommand
 from external.get_token import SHOPER_STORE, TOKEN
@@ -13,6 +14,7 @@ def copy_all_product_images_from_shoper_api():
     number_of_images_pages = get_number_of_image_pages()
 
     for x in range(1, number_of_images_pages + 1):
+
         data = {"page": f"{x}"}
         url = f"https://{SHOPER_STORE}/webapi/rest/product-images"
         headers = {"Authorization": f"Bearer {TOKEN}"}
@@ -21,25 +23,10 @@ def copy_all_product_images_from_shoper_api():
         items = res.get("list")
 
         for i in items:
+            """Loops over part of response with all Images."""
+
             shoper_gfx_id = i.get("gfx_id")
             print(shoper_gfx_id)
-            try:
-                for tag in i.get("translations"):
-                    print(tag)
-
-                    translation = ImageTranslation.objects.update_or_create(
-                        locale=tag,
-                        shoper_translation_id=i.get("translations")
-                        .get(tag)
-                        .get("translation_id"),
-                        related_gfx_id=i.get("translations").get(tag).get("gfx_id"),
-                        name=i.get("translations").get(tag).get("name"),
-                        lang_id=i.get("translations").get(tag).get("lang_id"),
-                    )
-                    print(f"Translation:{translation[0]}")
-                    print(f"Created:{translation[1]}")
-            except TypeError:
-                continue
 
             try:
                 shoper_product_id = i.get("product_id")
@@ -68,7 +55,6 @@ def copy_all_product_images_from_shoper_api():
 
             try:
                 shoper_hidden = i.get("hidden")
-                # i.get("hidden")
             except AttributeError:
                 shoper_hidden = ""
 
@@ -99,9 +85,20 @@ def copy_all_product_images_from_shoper_api():
                     image.shoper_unic = shoper_unic
                     image.shoper_hidden = shoper_hidden
                     image.shoper_extension = shoper_extension
+                    parrent_product = Product.objects.get(
+                        shoper_id=image.shoper_product_id
+                    )
+                    print(parrent_product)
+                    parrent_product.image_set.add(image)
                     image.save()
                     print(f"UPDATED: {image}")
                 else:
+                    parrent_product = Product.objects.get(
+                        shoper_id=image.shoper_product_id
+                    )
+                    print(parrent_product)
+                    parrent_product.image_set.add(image)
+                    image.save()
                     print(f"No update detected for: {image}")
             except Image.DoesNotExist:
                 Image.objects.create(
@@ -114,8 +111,65 @@ def copy_all_product_images_from_shoper_api():
                     shoper_hidden=shoper_hidden,
                     shoper_extension=shoper_extension,
                 )
+                parrent_product = Product.objects.get(shoper_id=image.shoper_product_id)
+                print(parrent_product)
+                parrent_product.image_set.add(image)
                 print(f"CREATED: {Image}")
-            time.sleep(1)
+
+            for tag in i.get("translations"):
+                print(tag)
+                """Create ImageTranslation for each language Tag on current Image."""
+
+                locale = tag
+                shoper_translation_id = (
+                    i.get("translations").get(locale).get("translation_id")
+                )
+                related_gfx_id = i.get("translations").get(locale).get("gfx_id")
+                name = i.get("translations").get(locale).get("name")
+                lang_id = i.get("translations").get(locale).get("lang_id")
+
+                try:
+                    translation = ImageTranslation.objects.get(
+                        shoper_translation_id=shoper_translation_id
+                    )
+                    if (
+                        (
+                            str(translation.shoper_translation_id)
+                            != str(shoper_translation_id)
+                        )
+                        or (str(related_gfx_id) != str(related_gfx_id))
+                        or (str(name) != str(name))
+                        or (str(lang_id) != str(lang_id))
+                    ):
+                        translation.shoper_translation_id = shoper_translation_id
+                        translation.related_gfx_id = related_gfx_id
+                        translation.name = name
+                        translation.lang_id = lang_id
+
+                        parrent_image = Image.objects.get(
+                            shoper_gfx_id=translation.related_gfx_id
+                        )
+                        parrent_image.imagetranslation_set.add(translation)
+                        translation.save()
+
+                        print(f"Updated: {translation}")
+                    else:
+                        print(f"No update for: {translation}")
+                except ImageTranslation.DoesNotExist:
+                    translation = ImageTranslation.objects.create(
+                        locale=locale,
+                        shoper_translation_id=shoper_translation_id,
+                        related_gfx_id=related_gfx_id,
+                        name=name,
+                        lang_id=lang_id,
+                    )
+                    parrent_image = Image.objects.get(
+                        shoper_gfx_id=translation.related_gfx_id
+                    )
+                    parrent_image.imagetranslation_set.add(translation)
+                    print(f"Created: {translation}")
+        print("=====")
+        time.sleep(1)
     return
 
 

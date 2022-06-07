@@ -1,13 +1,15 @@
 import os
 import shutil
 
-
+# Add installed apps that you want to kill.
 apps = [
     "api",
     "products",
     "images",
     "users",
     "translations",
+    "stocks",
+    "tags",
 ]
 
 

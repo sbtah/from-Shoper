@@ -1,8 +1,10 @@
 from django.db import models
+from products.models import Product
+from images.models import Image
 
 
 class Translation(models.Model):
-    """"""
+    """Abstract model for all Translations."""
 
     locale = models.CharField(max_length=20)
     shoper_translation_id = models.IntegerField(unique=True)
@@ -12,9 +14,12 @@ class Translation(models.Model):
 
 
 class ProductTranslation(Translation):
-    """"""
+    """Model for ProductTranslation object."""
 
-    related_product_id = models.IntegerField()
+    related_product_id = models.IntegerField(blank=True, null=True)
+    shoper_related_product = models.ForeignKey(
+        Product, on_delete=models.SET_NULL, blank=True, null=True
+    )
     name = models.CharField(max_length=255, blank=True)
     short_description = models.TextField(blank=True)
     description = models.TextField(blank=True)
@@ -24,7 +29,7 @@ class ProductTranslation(Translation):
     seo_title = models.CharField(max_length=255, blank=True)
     seo_description = models.TextField(blank=True)
     seo_keywords = models.TextField(blank=True)
-    seo_url = models.CharField(max_length=255, unique=True, blank=True)
+    seo_url = models.CharField(max_length=255, blank=True)
     permalink = models.CharField(max_length=255, unique=True)
     order = models.IntegerField(blank=True, null=True)
     main_page = models.IntegerField(blank=True, null=True)
@@ -38,9 +43,12 @@ class ProductTranslation(Translation):
 
 
 class ImageTranslation(Translation):
-    """"""
+    """Model for ImageTranslation object."""
 
-    related_gfx_id = models.IntegerField()
+    related_gfx_id = models.IntegerField(blank=True, null=True)
+    shoper_related_gfx = models.ForeignKey(
+        Image, on_delete=models.SET_NULL, blank=True, null=True
+    )
     name = models.CharField(max_length=255, blank=True)
     lang_id = models.IntegerField(blank=True, null=True)
     # Local

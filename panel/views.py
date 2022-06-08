@@ -2,9 +2,9 @@ from django.views import generic
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.contrib.auth import get_user_model
 from django.urls import reverse_lazy
 from users import forms
+from translations.models import ProductTranslation, ImageTranslation
 from images.models import Image
 from products.models import Product
 
@@ -30,13 +30,22 @@ class PanelView(LoginRequiredMixin, generic.TemplateView):
     template_name = "panel/panel_home.html"
 
     def get_context_data(self, **kwargs):
-        """Get data about Images and Products to context."""
+        """Get data about Images, Products, ProductTranslations and ImageTranslations to context."""
 
         context = super().get_context_data(**kwargs)
         context["images_updated"] = Image.objects.all().order_by("-updated")[:11]
         context["products_updated"] = Product.objects.all().order_by("-updated")[:11]
+        context[
+            "producttranslations_updated"
+        ] = ProductTranslation.objects.all().order_by("-updated")[:11]
+        context["imagetranslations_updated"] = ImageTranslation.objects.all().order_by(
+            "-updated"
+        )[:11]
         context["images_number"] = Image.objects.all().count()
         context["products_number"] = Product.objects.all().count()
+        context["producttranslations_number"] = ProductTranslation.objects.all().count()
+        context["imagetranslations_number"] = ImageTranslation.objects.all().count()
+
         return context
 
 

@@ -11,6 +11,7 @@ from external.get_products import get_single_product
 from external.post_product import create_copy_of_product_at_shoper
 from external.post_redirects import create_redirect
 from external.create_url import create_relative_url
+from images.models import Image
 
 
 class ProductListView(LoginRequiredMixin, generic.ListView):
@@ -27,6 +28,20 @@ class ProductDetailView(LoginRequiredMixin, generic.DetailView):
     model = Product
     template_name = "products/product_detail.html"
     context_object_name = "product"
+
+    def get_context_data(self, **kwargs):
+        """Get data about Images, Stocks and Translations related to this object."""
+
+        context = super().get_context_data(**kwargs)
+        
+        product = kwargs.get("object")
+        context["related_images"] = product.image_set.all()
+        context["related_stock"] = product.stock_set.get(
+            shoper_stock_product_id=product.shoper_id
+        )
+        context["related_translations"] = product.producttranslation_set.all()
+
+        return context
 
 
 class ProductUpdateView(LoginRequiredMixin, generic.UpdateView):

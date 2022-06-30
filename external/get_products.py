@@ -56,7 +56,7 @@ def get_list_of_all_products_data():
         res = response.json()
         items = res.get("list")
 
-        yield items[0]
+        yield items
 
 
 # Get all ID numbers of products from SHOPER Api.
@@ -201,9 +201,12 @@ def get_single_product_data_for_copy(product_id, language_code):
 # CSV Output
 def get_vol_weight_data_of_product(product_id):
 
-    url = f"https://{SHOPER_STORE}/webapi/rest/products/{id}"
+    url = f"https://{SHOPER_STORE}/webapi/rest/products/{product_id}"
     headers = {"Authorization": f"Bearer {TOKEN}"}
     response = requests.get(url, headers=headers)
+    time.sleep(0.5)
     product = response.json()
 
-    return f'{product["code"]};{product["product_id"]};{product["vol_weight"]}'
+    return (
+        f'{product.get("code")};{product.get("product_id")};{product.get("vol_weight")}'
+    )

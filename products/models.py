@@ -1,6 +1,7 @@
 from django.db import models
 from tags.models import Tag
 from django.urls import reverse
+from categories.models import Category
 
 
 class Product(models.Model):
@@ -13,6 +14,9 @@ class Product(models.Model):
     shoper_group_id = models.IntegerField(blank=True, null=True)
     shoper_tax_id = models.IntegerField(blank=True, null=True)
     shoper_category_id = models.IntegerField(blank=True, null=True)
+    shoper_related_category = models.ForeignKey(
+        Category, on_delete=models.SET_NULL, blank=True, null=True
+    )
     shoper_unit_id = models.IntegerField(blank=True, null=True)
     created_shoper = models.CharField(max_length=50, blank=True, null=True)
     updated_shoper = models.CharField(max_length=50, blank=True, null=True)

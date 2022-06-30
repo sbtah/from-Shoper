@@ -69,9 +69,9 @@
                         <h5 class="card-title p-2">Images:</h5>
                     </div>
                     <div class="card-body">
-                        <ul class="list-group">
+                        <ul class="list-group ">
                             {% for x in related_images %}
-                            <li class="list-group-item">{{ x }}</li>
+                            <li class="list-group-item list-group-item-action">{{ x }}</li>
                             {% endfor %}
                         </ul>
                     </div>
@@ -106,6 +106,7 @@
                             </li>
                             <li class="list-group-item">Delivery ID: {{ related_stock.shoper_stock_delivery_id }}</li>
                         </ul>
+
                     </div>
                 </div>
             </div>
@@ -138,10 +139,15 @@
                             {% for x in related_translations %}
                             {% if x.active == 1 %}
 
-                            <li class="list-group-item" style="background-color: rgb(103, 233, 233);">{{ x.locale }}
+                            <li class="list-group-item list-group-item-action"
+                                style="background-color: rgb(103, 233, 233);">{{ x.locale }}
+                                {% if x.seo_url == "" %}<span class="badge rounded-pill text-bg-success"
+                                    style="color: black;">SEO!</span>
+                                {% endif %}
                             </li>
                             {% else %}
-                            <li class="list-group-item" style="background-color: rgb(231, 105, 117);">{{ x.locale }}
+                            <li class="list-group-item list-group-item-action"
+                                style="background-color: rgb(231, 105, 117);">{{ x.locale }}
                                 {% if x.seo_url == "" %}<span class="badge rounded-pill text-bg-success">SEO!</span>
                                 {% endif %}
                             </li>

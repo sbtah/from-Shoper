@@ -54,7 +54,30 @@ def set_new_title_for_products_translation(product_id, translation_code, name):
     return res
 
 
-def set_new_seo_url_for_products_translation(product_id, to_language, product_name):
+def set_new_vol_weight_for_product(product_id, vol_veight):
+    """
+    PUT
+    Sets new vol_weight for specified product.
+    """
+
+    data = json.dumps(
+        {
+            "vol_weight": vol_veight,
+        }
+    )
+    url = f"https://{SHOPER_STORE}/webapi/rest/products/{product_id}"
+    headers = {"Authorization": f"Bearer {TOKEN}"}
+    response = requests.put(url, headers=headers, data=data)
+    res = response.json()
+    time.sleep(0.5)
+
+    return res
+
+
+def set_new_seo_url_for_products_translation(
+    product_id, to_language, product_name, product_sku
+    
+):
     """
     PUT
     Set new SEO URL for specified product and translation.
@@ -64,7 +87,7 @@ def set_new_seo_url_for_products_translation(product_id, to_language, product_na
         {
             "translations": {
                 f"{to_language}": {
-                    "seo_url": f"{create_seo_url_from_id(language_code=to_language, product_name=product_name, shoper_id=product_id)}",
+                    "seo_url": f"{create_seo_url(language_code=to_language, product_name=product_name, shoper_sku=product_sku)}",
                 }
             },
         }
@@ -108,7 +131,7 @@ def create_update_for_product_at_shoper(
             "producer_id": producer_id,
             "category_id": category_id,
             "other_price": other_price,
-            "code": f"{code}{to_language_code[3:]}",
+            "code": f"{code}",
             "ean": ean,
             "vol_weight": shoper_vol_weight,
             "stock": {

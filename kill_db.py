@@ -10,6 +10,7 @@ apps = [
     "translations",
     "stocks",
     "tags",
+    "categories",
 ]
 
 

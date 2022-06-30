@@ -16,7 +16,9 @@ def copy_all_products_from_shoper_api():
     """Copy all products from SHOPER Api and saves them as Product objects in DB."""
 
     number_of_product_pages = get_number_of_product_pages()
-
+    updated_products = []
+    created_products = []
+    
     for x in range(1, number_of_product_pages + 1):
         data = {"page": f"{x}"}
         url = f"https://{SHOPER_STORE}/webapi/rest/products"
@@ -161,12 +163,13 @@ def copy_all_products_from_shoper_api():
                     product.shoper_promo_ends = shoper_promo_ends
                     product.shoper_discount_value = shoper_discount_value
                     product.save()
+                    updated_products.append(product.shoper_id)
                     print(f"UPDATED: {product}")
                 else:
                     print(f"No update detected for: {product}")
 
             except Product.DoesNotExist:
-                Product.objects.create(
+                product = Product.objects.create(
                     shoper_id=shoper_id,
                     shoper_type=shoper_type,
                     shoper_producer_id=shoper_producer_id,
@@ -193,7 +196,8 @@ def copy_all_products_from_shoper_api():
                     shoper_promo_ends=shoper_promo_ends,
                     shoper_discount_value=shoper_discount_value,
                 )
-                print(f"CREATED: {Product}")
+                created_products.append(product.shoper_id)
+                print(f"CREATED: {product}")
             """
             Loops over part of response with all products.
             """
@@ -511,7 +515,9 @@ def copy_all_products_from_shoper_api():
                         )
             except TypeError:
                 print("Type Error from ProductTranslation - No values in loop")
-        time.sleep(1)
+        time.sleep(0.5)
+        print(f"Updated Products: {updated_products}")
+        print(f"Created Products: {created_products}")
     return
 
 

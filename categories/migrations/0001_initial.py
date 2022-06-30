@@ -12,12 +12,18 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Tag',
+            name='Category',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=100)),
+                ('shoper_id', models.IntegerField(blank=True, null=True, unique=True)),
+                ('shoper_category_is_root', models.IntegerField(blank=True, null=True)),
+                ('shoper_order', models.IntegerField(blank=True, null=True)),
+                ('shoper_current_name', models.CharField(blank=True, max_length=255, null=True)),
                 ('created', models.DateTimeField(auto_now_add=True)),
                 ('updated', models.DateTimeField(auto_now=True)),
             ],
+            options={
+                'verbose_name_plural': 'Categories',
+            },
         ),
     ]

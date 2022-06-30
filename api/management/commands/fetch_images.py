@@ -101,7 +101,7 @@ def copy_all_product_images_from_shoper_api():
                     image.save()
                     print(f"No update detected for: {image}")
             except Image.DoesNotExist:
-                Image.objects.create(
+                image = Image.objects.create(
                     shoper_gfx_id=shoper_gfx_id,
                     shoper_product_id=shoper_product_id,
                     shoper_main=shoper_main,
@@ -169,7 +169,7 @@ def copy_all_product_images_from_shoper_api():
                     parrent_image.imagetranslation_set.add(translation)
                     print(f"Created: {translation}")
         print("=====")
-        time.sleep(1)
+        time.sleep(0.5)
     return
 
 

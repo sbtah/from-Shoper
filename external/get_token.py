@@ -21,4 +21,7 @@ def get_token():
     return access_token
 
 
-TOKEN = get_token()
+try:
+    TOKEN = get_token()
+except ConnectionError:
+    print("You are not online")

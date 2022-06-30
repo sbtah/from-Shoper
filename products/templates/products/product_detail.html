@@ -5,13 +5,15 @@
 <div class="container">
     <h1>{{ product.shoper_title_pl }}</h1>
     <div class="card">
-        <div class="card-body">
+        <div class="card-body shadow">
             <a href="#" class="btn btn-primary">Update</a>
             <a href="{% url 'products:product-from-shoper-update' product.id %}" class="btn btn-primary">Update from
                 Shoper</a>
             <a href="{% url 'products:product-create-language-copy' product.id %}" class="btn btn-primary">Create
                 Language
                 Copy at Shoper</a>
+            <a href="#" class="btn btn-info">Add to Collection</a>
+            <a href="#" class="btn btn-info">Parrent Category</a>
         </div>
     </div>
     <!--  -->
@@ -20,16 +22,19 @@
             <div class="cold-md">
                 <div class="card text-center mb-3 shadow">
                     <div class="card-header">
-                        <h5 class="card-title p-2">Product Important:</h5>
+                        <h5 class="card-title p-2">Product Data:</h5>
                     </div>
                     <div class="card-body">
                         <ul class="list-group">
                             <li class="list-group-item">Shoper ID: {{ product.shoper_id }}</li>
                             <li class="list-group-item">Shoper EAN: {{ product.shoper_ean }}</li>
                             <li class="list-group-item">Shoper SKU: {{ product.shoper_sku }}</li>
-                            <li class="list-group-item">Shoper Stock Price: {{ product.shoper_stock_price }}</li>
+                            <li class="list-group-item">Shoper Promo Price: <span class="link-danger">
+                                    {{ product.shoper_promo_price }}</span></li>
+                            <li class="list-group-item">Shoper Tax ID: {{ product.shoper_tax_id }}</li>
                             <li class="list-group-item">Shoper Other Price: {{ product.shoper_other_price }}</li>
-                            <li class="list-group-item">Shoper Stock Volume: {{ product.shoper_vol_weight }}</li>
+                            <li class="list-group-item">Shoper Updated: {{ product.updated_shoper }}</li>
+                            <li class="list-group-item">Main Category ID: {{ product.shoper_category_id }}</li>
                         </ul>
                     </div>
                 </div>
@@ -39,7 +44,78 @@
             <div class="col-md">
                 <div class="card text-center mb-3 shadow">
                     <div class="card-header">
-                        <h5 class="card-title p-2">Product Minor:</h5>
+                        <h5 class="card-title p-2">Product Marketing:</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                            <li class="list-group-item">Shoper Bestseller: {{ product.shoper_bestseller_tag }}</li>
+                            <li class="list-group-item">Shoper New Product: {{ product.shoper_new_product_tag }}</li>
+                            <li class="list-group-item">Current Promo ID: {{ product.shoper_promo_id }}</li>
+                            <li class="list-group-item">Promo Starts: {{ product.shoper_promo_start }}</li>
+                            <li class="list-group-item">Promo Ends: {{ product.shoper_promo_ends }}</li>
+                            <li class="list-group-item">Discount value:
+                                <span class="link-danger" style="font-weight: 900;">
+                                    {{ product.shoper_discount_value }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="col-md">
+                <div class="card text-center mb-3 shadow">
+                    <div class="card-header">
+                        <h5 class="card-title p-2">Images:</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group ">
+                            {% for x in related_images %}
+                            <li class="list-group-item list-group-item-action">{{ x }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col">
+            <div class="cold-md">
+                <div class="card text-center mb-3 shadow">
+                    <div class="card-header">
+                        <h5 class="card-title p-2">Product's Stock:</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                            <li class="list-group-item">Stock ID: {{ related_stock.shoper_stock_id }}</li>
+                            <li class="list-group-item">Related Product ID: {{ related_stock.shoper_stock_product_id }}
+                            </li>
+                            <li class="list-group-item">Stock Price:
+                                <span class="link-primary">{{ related_stock.shoper_stock_price }}</span>
+                            </li>
+                            <li class="list-group-item">Active:{% if related_stock.shoper_stock_active == 1 %}
+                                <span class="link-success">Yes</span>
+                                {% else %} <span class="link-danger">No</span>{% endif %}
+                            </li>
+                            <li class="list-group-item">Default: {{ related_stock.shoper_stock_default }}</li>
+                            <li class="list-group-item">Number of items: {{ related_stock.shoper_stock_value }}</li>
+                            <li class="list-group-item">Warn level: {{ related_stock.shoper_stock_warn_level }}</li>
+                            <li class="list-group-item">Availability ID:
+                                {{ related_stock.shoper_stock_availability_id }}
+                            </li>
+                            <li class="list-group-item">Delivery ID: {{ related_stock.shoper_stock_delivery_id }}</li>
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="col-md">
+                <div class="card text-center mb-3 shadow">
+                    <div class="card-header">
+                        <h5 class="card-title p-2">Collections Data:</h5>
                     </div>
                     <div class="card-body">
                         <ul class="list-group">
@@ -56,37 +132,33 @@
             <div class="col-md">
                 <div class="card text-center mb-3 shadow">
                     <div class="card-header">
-                        <h5 class="card-title p-2">Statistics:</h5>
+                        <h5 class="card-title p-2">Translations:</h5>
                     </div>
                     <div class="card-body">
-                        <h3 class="card-title">{{ product.shoper_weight }}</h3>
+                        <ul class="list-group">
+                            {% for x in related_translations %}
+                            {% if x.active == 1 %}
+
+                            <li class="list-group-item list-group-item-action"
+                                style="background-color: rgb(103, 233, 233);">{{ x.locale }}
+                                {% if x.seo_url == "" %}<span class="badge rounded-pill text-bg-success"
+                                    style="color: black;">SEO!</span>
+                                {% endif %}
+                            </li>
+                            {% else %}
+                            <li class="list-group-item list-group-item-action"
+                                style="background-color: rgb(231, 105, 117);">{{ x.locale }}
+                                {% if x.seo_url == "" %}<span class="badge rounded-pill text-bg-success">SEO!</span>
+                                {% endif %}
+                            </li>
+                            {% endif %}
+                            {% endfor %}
+                        </ul>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!--  -->
-    <div class="card">
-        <h2>Product Descriptions:</h2>
-        <div class="card-body">
-            <p>{{ product.shoper_description_pl|safe }}</p>
-        </div>
-    </div>
-    <div class="row row-cols-1 row-cols-md-3 g-4">
-        {% for image in product.images.all %}
-        <div class="col">
-            <div class="card">
-                <img src="{{ image.shoper_link_pl }}" alt="...">
-                <div class="card-body">
-                    <p class="card-title">Shoper Image ID: {{ image.shoper_gfx_id }}</p>
-                    <p class="card-text">Shoper Order: {{ image.order }}</p>
-                    <p class="card-text">This is a longer card with supporting text below as a natural lead-in to
-                        additional
-                        content. This content is a little bit longer.</p>
-                </div>
-            </div>
-        </div>
-        {% endfor %}
-    </div>
 </div>
+<!--  -->
 {% endblock content %}

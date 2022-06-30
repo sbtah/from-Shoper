@@ -33,8 +33,8 @@ class Command(BaseCommand):
             )
         )
         # COPY ALL TRANSLATIONS!
-        copy_all_product_images_from_shoper_api()
         copy_all_products_from_shoper_api()
+        copy_all_product_images_from_shoper_api()
 
         self.stdout.write(
             self.style.SUCCESS(

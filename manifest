@@ -1,0 +1,6 @@
+TDL:
+- Filtering of products.
+- Categories app; stores data about categories on Shoper store.
+- Adding product's querysets to specified categories.
+- Logger Mechanic; stores data about changes on objects coming from API.
+- 

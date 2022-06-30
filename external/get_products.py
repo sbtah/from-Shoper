@@ -4,6 +4,22 @@ from external.get_token import SHOPER_STORE, TOKEN
 
 
 # GET Requests
+def get_number_of_product_pages():
+    """Return number of product pages from Shoper Api."""
+
+    url = f"https://{SHOPER_STORE}/webapi/rest/products"
+    headers = {"Authorization": f"Bearer {TOKEN}"}
+
+    try:
+        response = requests.get(url, headers=headers)
+        res = response.json()
+        pages = res.get("pages")
+    except Exception as e:
+        print(e)
+
+    return pages
+
+
 def get_single_product(id):
     """Return a response with data from single product endpoint."""
 
@@ -26,20 +42,21 @@ def get_all_products():
     return res
 
 
-def get_number_of_product_pages():
-    """Return number of product pages from Shoper Api."""
+def get_list_of_all_products_data():
+    """Get all Products for all pages from Shoper Api."""
 
-    url = f"https://{SHOPER_STORE}/webapi/rest/products"
-    headers = {"Authorization": f"Bearer {TOKEN}"}
+    number_of_product_pages = get_number_of_product_pages()
 
-    try:
-        response = requests.get(url, headers=headers)
+    for x in range(1, number_of_product_pages + 1):
+        data = {"page": f"{x}"}
+        url = f"https://{SHOPER_STORE}/webapi/rest/products"
+        headers = {"Authorization": f"Bearer {TOKEN}"}
+        response = requests.get(url, headers=headers, params=data)
+        time.sleep(0.5)
         res = response.json()
-        pages = res.get("pages")
-    except Exception as e:
-        print(e)
+        items = res.get("list")
 
-    return pages
+        yield items
 
 
 # Get all ID numbers of products from SHOPER Api.
@@ -48,6 +65,7 @@ def get_list_of_all_shoper_product_ids():
 
     product_list = []
     number_of_product_pages = get_number_of_product_pages()
+    print(f"Response pages to get: {number_of_product_pages}")
 
     for x in range(1, number_of_product_pages + 1):
         data = {"page": f"{x}"}
@@ -69,6 +87,7 @@ def get_list_of_all_shoper_product_ids_for_lang(lang_code):
 
     product_list = []
     number_of_product_pages = get_number_of_product_pages()
+    print(f"Response pages to get: {number_of_product_pages}")
 
     for x in range(1, number_of_product_pages + 1):
         data = {"page": f"{x}"}
@@ -94,6 +113,7 @@ def get_list_of_all_shoper_product_sku(lang_code):
 
     product_list = []
     number_of_product_pages = get_number_of_product_pages()
+    print(f"Response pages to get: {number_of_product_pages}")
 
     for x in range(1, number_of_product_pages + 1):
         data = {"page": f"{x}"}
@@ -178,5 +198,15 @@ def get_single_product_data_for_copy(product_id, language_code):
     }
 
 
-def create_seo_url_and_create_redirect_to_it():
-    pass
+# CSV Output
+def get_vol_weight_data_of_product(product_id):
+
+    url = f"https://{SHOPER_STORE}/webapi/rest/products/{product_id}"
+    headers = {"Authorization": f"Bearer {TOKEN}"}
+    response = requests.get(url, headers=headers)
+    time.sleep(0.5)
+    product = response.json()
+
+    return (
+        f'{product.get("code")};{product.get("product_id")};{product.get("vol_weight")}'
+    )

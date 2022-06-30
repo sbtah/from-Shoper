@@ -1,13 +1,7 @@
 import json
 import time
 import requests
-import logging
-from external.get_token import get_token
-from external.get_token import SHOPER_STORE
-
-
-TOKEN = get_token()
-logging.basicConfig(level=logging.INFO)
+from external.get_token import SHOPER_STORE, TOKEN
 
 
 def create_redirect(from_url, to_url):

@@ -117,6 +117,9 @@ def create_seo_url_from_id(language_code, product_name, shoper_id):
     return f"{language_code[3:]}-{new.replace(' ', '-')}-{shoper_id}"
 
 
+
+
+
 def create_relative_url(original_url):
     """
     Creates a relative URL from absolute.

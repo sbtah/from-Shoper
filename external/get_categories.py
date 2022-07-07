@@ -37,28 +37,4 @@ def get_all_categories_data():
         time.sleep(0.5)
         for i in items:
 
-            yield {
-                "category_id": i.get("category_id"),
-                "root": i.get("root"),
-                "order": i.get("order"),
-            }
-            for tag in i.get("translations"):
-                yield {
-                    "locale": tag,
-                    "name": i.get("translations").get(tag).get("name"),
-                    "description": i.get("translations").get(tag).get("description"),
-                    "description_bottom": i.get("translations")
-                    .get(tag)
-                    .get("description_bottom"),
-                    "seo_title": i.get("translations").get(tag).get("seo_title"),
-                    "seo_description": i.get("translations")
-                    .get(tag)
-                    .get("seo_description"),
-                    "seo_keywords": i.get("translations").get(tag).get("seo_keywords"),
-                    "seo_url": i.get("translations").get(tag).get("seo_url"),
-                    "permalink": i.get("translations").get(tag).get("permalink"),
-                    "dactive": i.get("translations").get(tag).get("active"),
-                    "is_default": i.get("translations").get(tag).get("is_default"),
-                    "lang_id": i.get("translations").get(tag).get("lang_id"),
-                    "items": i.get("translations").get(tag).get("items"),
-                }
+            yield i

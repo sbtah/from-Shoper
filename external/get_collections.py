@@ -65,5 +65,3 @@ def get_all_collections():
 #                 logging.info(f"Image added to list")
 
 #     return image_list
-
-print(get_all_collections())

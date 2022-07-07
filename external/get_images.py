@@ -37,7 +37,7 @@ def get_single_gfx_image(id):
     return image
 
 
-def get_list_of_all_images_data():
+def get_all_images_data():
     """Get all Product Images for all pages from Shoper Api."""
 
     number_of_images_pages = get_number_of_image_pages()
@@ -51,7 +51,8 @@ def get_list_of_all_images_data():
         res = response.json()
         items = res.get("list")
 
-        yield items[0]
+        for i in items:
+            yield i
 
 
 def get_all_images_for_product(product_id):

@@ -1,7 +1,7 @@
 from django.db import models
 from tags.models import Tag
 from django.urls import reverse
-from categories.models import Category
+from django.contrib.postgres.fields import ArrayField
 
 
 class Product(models.Model):
@@ -13,10 +13,9 @@ class Product(models.Model):
     shoper_producer_id = models.IntegerField(blank=True, null=True)
     shoper_group_id = models.IntegerField(blank=True, null=True)
     shoper_tax_id = models.IntegerField(blank=True, null=True)
-    shoper_category_id = models.IntegerField(blank=True, null=True)
-    shoper_related_category = models.ForeignKey(
-        Category, on_delete=models.SET_NULL, blank=True, null=True
-    )
+    shoper_main_category_id = models.IntegerField(blank=True, null=True)
+    shoper_all_categories_ids = ArrayField(models.IntegerField(blank=True, null=True))
+    # This will have to be changed to M2M to work with many categories.
     shoper_unit_id = models.IntegerField(blank=True, null=True)
     created_shoper = models.CharField(max_length=50, blank=True, null=True)
     updated_shoper = models.CharField(max_length=50, blank=True, null=True)
@@ -35,6 +34,8 @@ class Product(models.Model):
     shoper_promo_start = models.CharField(max_length=50, blank=True, null=True)
     shoper_promo_ends = models.CharField(max_length=50, blank=True, null=True)
     shoper_discount_value = models.CharField(max_length=50, blank=True, null=True)
+    # TODO
+    # Implement this field to work with array of categories that comes from API Response.
     tags = models.ManyToManyField(Tag, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)

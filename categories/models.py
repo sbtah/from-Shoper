@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from products.models import Product
 
 
 class Category(models.Model):
@@ -12,6 +13,7 @@ class Category(models.Model):
     shoper_current_name = models.CharField(max_length=255, blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    shoper_products = models.ManyToManyField(Product)
 
     class Meta:
         verbose_name_plural = "Categories"

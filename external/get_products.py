@@ -42,7 +42,7 @@ def get_all_products():
     return res
 
 
-def get_list_of_all_products_data():
+def get_all_products_data():
     """Get all Products for all pages from Shoper Api."""
 
     number_of_product_pages = get_number_of_product_pages()
@@ -55,8 +55,8 @@ def get_list_of_all_products_data():
         time.sleep(0.5)
         res = response.json()
         items = res.get("list")
-
-        yield items
+        for i in items:
+            yield i
 
 
 # Get all ID numbers of products from SHOPER Api.
@@ -139,7 +139,7 @@ def get_single_product_data_for_copy(product_id, language_code):
     """
     NOT USED IN ANY DJANGO LOGIC.
     Sends GET request to Shoper's product API endpoint that returns data for single product.
-    Properly selects and cleans data from reponse and store it the variables.
+    Properly selects and cleans data from reponse and stores it the variables.
     Variables are used in dictionary that is returned by this function.
     Used for generating copy data for duplication of product via Shoper API.
     """

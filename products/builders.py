@@ -72,9 +72,9 @@ def update_or_create_product(
             )
             for category in parrent_categories:
                 category.shoper_products.add(product)
-            print(f"UPDATED: {product}")
+            print(f"!! Product updated: {product}")
         else:
-            print(f"No update detected for: {product}")
+            print(f"No update for Product: {product}")
             parrent_categories = Category.objects.filter(
                 shoper_id__in=shoper_all_categories_ids
             )
@@ -113,5 +113,5 @@ def update_or_create_product(
         )
         for category in parrent_categories:
             category.shoper_products.add(product)
-        print(f"CREATED: {product}")
+        print(f"!! Product created: {product}")
     return product

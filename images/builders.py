@@ -38,12 +38,12 @@ def update_or_create_image(
             parrent_product = Product.objects.get(shoper_id=image.shoper_product_id)
             parrent_product.image_set.add(image)
             image.save()
-            print(f"UPDATED: {image}")
+            print(f"!! Image updated: {image}")
         else:
             parrent_product = Product.objects.get(shoper_id=image.shoper_product_id)
             parrent_product.image_set.add(image)
             image.save()
-            print(f"No update detected for: {image}")
+            print(f"No update for Image: {image}")
     except Image.DoesNotExist:
         image = Image.objects.create(
             shoper_gfx_id=shoper_gfx_id,
@@ -57,5 +57,5 @@ def update_or_create_image(
         )
         parrent_product = Product.objects.get(shoper_id=image.shoper_product_id)
         parrent_product.image_set.add(image)
-        print(f"CREATED: {Image}")
+        print(f"!! Image created: {Image}")
     return image

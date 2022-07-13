@@ -68,13 +68,13 @@ def update_or_create_category_translation(
             parrent_category = Category.objects.get(shoper_id=related_category_id)
             parrent_category.categorytranslation_set.add(category_translation)
             print(
-                f"!! Category Translation Updated: {category_translation.related_category_id}"
+                f"!! CategoryTranslation updated: {category_translation.related_category_id}"
             )
         else:
             parrent_category = Category.objects.get(shoper_id=related_category_id)
             parrent_category.categorytranslation_set.add(category_translation)
             print(
-                f"No updates for Category Translation: {category_translation.related_category_id}"
+                f"No updates for CategoryTranslation: {category_translation.related_category_id}"
             )
     except CategoryTranslation.DoesNotExist:
         category_translation = CategoryTranslation.objects.create(
@@ -97,7 +97,7 @@ def update_or_create_category_translation(
         parrent_category = Category.objects.get(shoper_id=related_category_id)
         parrent_category.categorytranslation_set.add(category_translation)
         print(
-            f"Category Translation created: {category_translation.related_category_id}"
+            f"!! CategoryTranslation created: {category_translation.related_category_id}"
         )
     return category_translation
 
@@ -173,14 +173,18 @@ def update_or_create_product_translation(
             )
             parrent_product.producttranslation_set.add(translation)
             translation.save()
-            print(f"Translation: {translation.related_product_id} Updated")
+            print(
+                f"!! ProductTranslation updated: {translation.related_product_id} Updated"
+            )
         else:
             parrent_product = Product.objects.get(
                 shoper_id=translation.related_product_id
             )
             parrent_product.producttranslation_set.add(translation)
 
-            print(f"No updates for Translation: {translation.related_product_id}")
+            print(
+                f"No updates for ProductTranslation: {translation.related_product_id}"
+            )
     except ProductTranslation.DoesNotExist:
         translation = ProductTranslation.objects.create(
             locale=locale,
@@ -203,7 +207,7 @@ def update_or_create_product_translation(
         )
         parrent_product = Product.objects.get(shoper_id=translation.related_product_id)
         parrent_product.producttranslation_set.add(translation)
-        print(f"Translation created {translation.shoper_translation_id}")
+        print(f"!! ProductTranslation created {translation.shoper_translation_id}")
     return translation
 
 
@@ -234,12 +238,11 @@ def update_or_create_image_translation(
             parrent_image.imagetranslation_set.add(translation)
             translation.save()
 
-            print(f"Updated: {translation}")
+            print(f"!! ImageTranslation updated: {translation}")
         else:
-            print(f"No update for: {translation}")
+            print(f"No updates for ImageTranslation: {translation}")
             parrent_image = Image.objects.get(shoper_gfx_id=translation.related_gfx_id)
             parrent_image.imagetranslation_set.add(translation)
-            translation.save()
     except ImageTranslation.DoesNotExist:
         translation = ImageTranslation.objects.create(
             locale=locale,
@@ -250,5 +253,5 @@ def update_or_create_image_translation(
         )
         parrent_image = Image.objects.get(shoper_gfx_id=translation.related_gfx_id)
         parrent_image.imagetranslation_set.add(translation)
-        print(f"Created: {translation}")
+        print(f"!! ImageTranslation created: {translation}")
     return translation

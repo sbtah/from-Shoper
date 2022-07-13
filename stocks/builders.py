@@ -93,13 +93,13 @@ def update_or_create_category_stock(
             )
             parrent_product.stock_set.add(stock)
             stock.save()
-            print(f"Stock: {stock.shoper_stock_id} Updated")
+            print(f"!! Stock updated: {stock.shoper_stock_id} Updated")
         else:
             parrent_product = Product.objects.get(
                 shoper_id=stock.shoper_stock_product_id
             )
             parrent_product.stock_set.add(stock)
-            print(f"No updates Stock: {stock.shoper_stock_id}")
+            print(f"No updates for Stock: {stock.shoper_stock_id}")
     except Stock.DoesNotExist:
         stock = Stock.objects.create(
             shoper_stock_id=shoper_stock_id,
@@ -126,5 +126,5 @@ def update_or_create_category_stock(
         )
         parrent_product = Product.objects.get(shoper_id=stock.shoper_stock_product_id)
         parrent_product.stock_set.add(stock)
-        print(f"Stock : {stock.shoper_stock_id} Created")
+        print(f"!! Stock created: {stock.shoper_stock_id} Created")
     return stock

@@ -5,10 +5,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from products.models import Product
 from django.contrib import messages
 from django.urls import reverse, reverse_lazy
-from products.services import get_single_product
 from products.forms import PickLanguageToCopyForm
 from external.get_products import get_single_product
-from external.post_product import create_copy_of_product_at_shoper
 from external.post_redirects import create_redirect
 from external.create_url import create_relative_url
 from images.models import Image
@@ -33,7 +31,7 @@ class ProductDetailView(LoginRequiredMixin, generic.DetailView):
         """Get data about Images, Stocks and Translations related to this object."""
 
         context = super().get_context_data(**kwargs)
-        
+
         product = kwargs.get("object")
         context["related_images"] = product.image_set.all()
         context["related_stock"] = product.stock_set.get(
@@ -51,7 +49,7 @@ class ProductUpdateView(LoginRequiredMixin, generic.UpdateView):
 
 
 class ProductUpdateFromShoperView(LoginRequiredMixin, generic.DetailView):
-    """Update data for Product from API."""
+    """Update data for Product and related Images, Stocks and Translations from Shoper's API."""
 
     model = Product
     template_name = "products/product_detail.html"
@@ -69,25 +67,31 @@ class ProductUpdateFromShoperView(LoginRequiredMixin, generic.DetailView):
         if datetime.strptime(
             response["updated_shoper"], "%Y-%m-%d %H:%M:%S"
         ) > datetime.strptime(product.updated_shoper, "%Y-%m-%d %H:%M:%S"):
-            product.shoper_title_pl = response["shoper_title_pl"]
-            product.shoper_title_en = response["shoper_title_en"]
-            product.shoper_title_de = response["shoper_title_de"]
-            product.shoper_title_fr = response["shoper_title_fr"]
-            product.shoper_description_pl = response["shoper_description_pl"]
-            product.shoper_description_en = response["shoper_description_en"]
-            product.shoper_description_fr = response["shoper_description_fr"]
-            product.shoper_description_de = response["shoper_description_de"]
-            product.vendor_brand = response["vendor_brand"]
-            product.shoper_id = response["shoper_id"]
-            product.shoper_ean = response["shoper_ean"]
-            product.shoper_sku = response["shoper_sku"]
-            product.shoper_weight = response["shoper_weight"]
-            product.is_active_shoper = response["is_active_shoper"]
-            product.created_shoper = response["created_shoper"]
-            product.updated_shoper = response["updated_shoper"]
-            product.shoper_price = response["shoper_price"]
-            product.shoper_gauge_id = response["shoper_gauge_id"]
-            product.is_on_shoper = response["is_on_shoper"]
+            product.product.shoper_type = response[""]
+            product.shoper_producer_id = response[""]
+            product.shoper_group_id = response[""]
+            product.shoper_tax_id = response[""]
+            product.shoper_main_category_id = response[""]
+            product.shoper_all_categories_ids = response[""]
+            product.shoper_unit_id = response[""]
+            product.created_shoper = response[""]
+            product.updated_shoper = response[""]
+            product.shoper_other_price = response[""]
+            product.shoper_promo_price = response[""]
+            product.shoper_sku = response[""]
+            product.shoper_ean = response[""]
+            product.shoper_pkwiu = response[""]
+            product.shoper_is_product_of_day = response[""]
+            product.shoper_bestseller_tag = response[""]
+            product.shoper_new_product_tag = response[""]
+            product.shoper_vol_weight = response[""]
+            product.shoper_gauge_id = response[""]
+            product.shoper_currency_id = response[""]
+            product.shoper_promo_id = response[""]
+            product.shoper_promo_start = response[""]
+            product.shoper_promo_ends = response[""]
+            product.shoper_discount_value = response[""]
+            # Todo add stock, translations , images and categories
             product.save()
             messages.success(request, ("Product Updated."))
         else:

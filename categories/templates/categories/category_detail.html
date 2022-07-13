@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{ category.id }}{% endblock title %}
+{% block content %}
+<div class="container">
+    <div class="card">
+        <div class="card-body shadow">
+            <a href="#" class="btn btn-primary">Update</a>
+            <a href="#" class="btn btn-primary">Update from
+                Shoper</a>
+            <a href="#" class="btn btn-info">Add to Collection</a>
+            <a href="#" class="btn btn-info">Parrent Category</a>
+        </div>
+    </div>
+    <!--  -->
+    <div class="row mt-5">
+        <div class="col">
+            <div class="cold-md">
+                <div class="card text-center mb-3 shadow">
+                    <div class="card-header">
+                        <h5 class="card-title p-2">Category Data:</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group">
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="col-md">
+                <div class="card text-center mb-3 shadow">
+                    <div class="card-header">
+                        <h5 class="card-title p-2">Category Translations:</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="col-md">
+                <div class="card text-center mb-3 shadow">
+                    <div class="card-header">
+                        <h5 class="card-title p-2">Category Products:</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group ">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col">
+            <div class="cold-md">
+                <div class="card text-center mb-3 shadow">
+                    <div class="card-header">
+                        <h5 class="card-title p-2">Category Some:</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="col-md">
+                <div class="card text-center mb-3 shadow">
+                    <div class="card-header">
+                        <h5 class="card-title p-2">Category Some 2:</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--  -->
+{% endblock content %}

@@ -1,15 +1,16 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}{{ category.id }}{% endblock title %}
+{% block title %}{{ category.shoper_id }}{% endblock title %}
 {% block content %}
 <div class="container">
     <div class="card">
         <div class="card-body shadow">
-            <a href="#" class="btn btn-primary">Update</a>
-            <a href="#" class="btn btn-primary">Update from
+            <a href="#" class="btn btn-primary">Update Locally</a>
+            <a href="#" class="btn btn-primary">Pull Update from
                 Shoper</a>
-            <a href="#" class="btn btn-info">Add to Collection</a>
-            <a href="#" class="btn btn-info">Parrent Category</a>
+                <a href="#" class="btn btn-primary">Send Update to
+                    Shoper
+                </a>
         </div>
     </div>
     <!--  -->
@@ -22,7 +23,12 @@
                     </div>
                     <div class="card-body">
                         <ul class="list-group">
-
+                            <li class="list-group-item">Category ID: {{ category.shoper_id }}</li>
+                            <li class="list-group-item">Is Parrent ?: {{ category.shoper_category_is_root }}</li>
+                            <li class="list-group-item">Order: {{ category.shoper_order }}</li>
+                            <li class="list-group-item">Category Name: {{ category.shoper_current_name }}</li>
+                            <li class="list-group-item">Created Locally: {{ category.created }}</li>
+                            <li class="list-group-item">Updated Locally: {{ category.updated }}</li>           
                         </ul>
                     </div>
                 </div>
@@ -36,6 +42,19 @@
                     </div>
                     <div class="card-body">
                         <ul class="list-group">
+                            {% for translation in related_translations %}
+                            <li class="list-group-item">
+                                {% if translation.active == 1 %}
+                                <a href="#" class="list-group-item list-group-item-action link-success" aria-current="true">
+                                    {{ translation.name }}
+                                </a>
+                                {% else %}
+                                <a href="#" class="list-group-item list-group-item-action link-danger" aria-current="true">
+                                    {{ translation.name }}
+                                </a>
+                                {% endif %}
+                            </li>
+                            {% endfor %}
                         </ul>
                     </div>
                 </div>
@@ -47,8 +66,15 @@
                     <div class="card-header">
                         <h5 class="card-title p-2">Category Products:</h5>
                     </div>
-                    <div class="card-body">
-                        <ul class="list-group ">
+                    <div style="max-height: 300px;" class="card-body overflow-auto">
+                        <ul class="list-group">
+                            {% for product in related_products %}
+                            <li class="list-group-item">
+                                <a href="{{ product.get_absolute_url }}" class="list-group-item list-group-item-action" aria-current="true">
+                                    {{ product.shoper_sku }}
+                                </a>
+                            </li>
+                            {% endfor %}
                         </ul>
                     </div>
                 </div>
@@ -60,10 +86,10 @@
             <div class="cold-md">
                 <div class="card text-center mb-3 shadow">
                     <div class="card-header">
-                        <h5 class="card-title p-2">Category Some:</h5>
+                        <h5 class="card-title p-2">Number of Products:</h5>
                     </div>
                     <div class="card-body">
-                        <ul class="list-group">
+                        <h5>{{ related_products_number }}</h5>
                     </div>
                 </div>
             </div>

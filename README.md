@@ -1,24 +1,27 @@
-# Simple Django app that loads all products from SHOPER Api and then creates products on SHOPIFY platform.
-
-
+# Django Shoper-API Client. This app was created for an Ecommerce store with huge database of products.
+-
 Project was started some time ago for my former employer. They had the idea of starting a branch store in USA. Also, they had a running store at Shoper platform on European market. For US market they decided to go with Shopify.
 -
 Although, I could import all our products via csv file, I decided to create an API import program, that will do some cleaning on the data.
+-
+To use this client you have to create .env file with:
+- SHOPER_STORE='your.domain'
+- SHOPER_LOGIN='yourshoperlogin'
+- SHOPER_PASSWORD='yourshoperpassword'
+- After that you can simply use 'docker compose up' to build images.
+- You will need to run migrations.
+- After images were built you can use management command 'python manage.py fetch_database_update' to pull categories, products, images, translations and stocks.
 
-
+What was developed:
 - Management command that pulls Images from Shoper is implemented!
+- Management command that pulls Categories from Shoper is implemented!
 - Second management command that downloads Products from Shoper is working.
-- Adding Images to parrent Product on creation of Product object is working.
+- Implemented fetch_database_update command that download Categories, Products, Images, Stocks and related Translations for all objects. It also joins all objects in proper relationships.
 - Added kill_db.py script in root of the project to find and delete migration files and data base files.
-- Added ProductUpdateFromShoperView that pulls Data for product in view from Shoper Api.
-- Added CreateLanguageCopyOfProductAtShoper view that will create a copy of product from specified product's translation, locally and on your Shoper store.
-- Refactored update_database, import_images, import_product commands.
 - Added an 'external' app, that serves scripts for calling SHOPER's API.
-- Adeed management commands: generate_product_copies, generate_product_updates, load_images, load_names, validate_copy
-- Working on: testing...
+- Panel View that works as an admin site.
+- Category Detail View, Product Detail View.
+- 
 
-# Todo
-- Overall sliming of models.
-- Product model have to be refactored again. Each translation have to be a seperate object. Current implementation is just silly. Translations are stored as fields on model.
-- Images links from CSV upload should also be stored as objects on model.
-- Implement Categories and Collections objects that will in parrent relation (M2M) with Products
+Stuff to implement:
+- Search funcionality for Products. 

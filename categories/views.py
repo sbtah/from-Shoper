@@ -21,9 +21,10 @@ class CategoryDetailView(LoginRequiredMixin, generic.DetailView):
         """Get data about Products and CategoryTranslations related to this object."""
 
         context = super().get_context_data(**kwargs)
-
         category = kwargs.get("object")
-        context["related_products"] = category.shoper_products.all()
-        context["related_translations"] = category.categorytranslation_set.all()
 
+        context["related_products"] = category.shoper_products.all()
+        context["related_products_number"] = category.shoper_products.all().count()
+        context["related_translations"] = category.categorytranslation_set.all()
+        
         return context

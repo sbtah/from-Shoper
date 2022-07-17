@@ -20,7 +20,7 @@ class Category(models.Model):
 
     def __str__(self):
         return (
-            f"Category ID:{self.shoper_id} ; Category Name:{self.shoper_current_name}"
+            f"Category ID:{self.shoper_id}"
         )
 
     def get_absolute_url(self):

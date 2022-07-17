@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{ producttranslation.id }}{% endblock title %}
+{% block content %}
+<div class="container">
+    <div class="card">
+        <div class="card-body shadow">
+            <a href="#" class="btn btn-primary">Update</a>
+            <a href="#" class="btn btn-primary">Pull Update from Shoper</a>
+            <a href="#" class="btn btn-info">Send Update to Shoper</a>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col">
+            <div class="cold-md">
+                <div class="card text-center mb-3 shadow">
+                    <div class="card-header">
+                        <h5 class="card-title pt-2">Translation Data:</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="col-md">
+                <div class="card text-center mb-3 shadow">
+                    <div class="card-header">
+                        <h5 class="card-title pt-2">Translation SEO:</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="col-md">
+                <div class="card text-center mb-3 shadow">
+                    <div class="card-header">
+                        <h5 class="card-title pt-2">Secondary:</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group ">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

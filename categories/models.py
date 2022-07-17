@@ -19,7 +19,9 @@ class Category(models.Model):
         verbose_name_plural = "Categories"
 
     def __str__(self):
-        return f"Category ID:{self.shoper_id}"
+        return (
+            f"Category ID:{self.shoper_id} ; Category Name:{self.shoper_current_name}"
+        )
 
-    # def get_absolute_url(self):
-    #     return reverse("products:product-detail", kwargs={"pk": self.id})
+    def get_absolute_url(self):
+        return reverse("categories:category-detail", kwargs={"pk": self.id})

@@ -17,9 +17,4 @@ urlpatterns = [
         ProductUpdateFromShoperView.as_view(),
         name="product-from-shoper-update",
     ),
-    # path(
-    #     "create-language-copy/<int:pk>/",
-    #     CreateLanguageCopyOfProductAtShoper.as_view(),
-    #     name="product-create-language-copy",
-    # ),
 ]

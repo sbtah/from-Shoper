@@ -21,19 +21,25 @@
             <div class="cold-md">
                 <div class="card text-center mb-3 shadow">
                     <div class="card-header">
-                        <h5 class="card-title p-2">Product Data:</h5>
+                        <h5 class="card-title pt-2">Product Data:</h5>
                     </div>
                     <div class="card-body">
                         <ul class="list-group">
                             <li class="list-group-item">Shoper ID: {{ product.shoper_id }}</li>
                             <li class="list-group-item">Shoper EAN: {{ product.shoper_ean }}</li>
-                            <li class="list-group-item">Shoper SKU: {{ product.shoper_sku }}</li>
-                            <li class="list-group-item">Shoper Promo Price: <span class="link-danger">
+                            <li class="list-group-item">Shoper SKU: <span class="link-success fw-bold">{{ product.shoper_sku }}</span></li>
+                            <li class="list-group-item">Shoper Promo Price: <span class="link-info">
                                     {{ product.shoper_promo_price }}</span></li>
                             <li class="list-group-item">Shoper Tax ID: {{ product.shoper_tax_id }}</li>
                             <li class="list-group-item">Shoper Other Price: {{ product.shoper_other_price }}</li>
                             <li class="list-group-item">Shoper Updated: {{ product.updated_shoper }}</li>
-                            <li class="list-group-item">Main Category ID: {{ product.shoper_category_id }}</li>
+                            <li class="list-group-item">Main Category ID: {{ product.shoper_main_category_id }}</li>
+                            <h6 class="card-title pt-2 fw-bold">All Categories IDs:</h5>
+                            <ul class="list-group">
+                                {% for category in product.shoper_all_categories_ids %}
+                                <li class="list-group-item">ID: {{ category }}</li>
+                                {% endfor %}
+                            </ul>
                         </ul>
                     </div>
                 </div>
@@ -43,7 +49,7 @@
             <div class="col-md">
                 <div class="card text-center mb-3 shadow">
                     <div class="card-header">
-                        <h5 class="card-title p-2">Product Marketing:</h5>
+                        <h5 class="card-title pt-2">Product Marketing:</h5>
                     </div>
                     <div class="card-body">
                         <ul class="list-group">
@@ -65,7 +71,7 @@
             <div class="col-md">
                 <div class="card text-center mb-3 shadow">
                     <div class="card-header">
-                        <h5 class="card-title p-2">Images:</h5>
+                        <h5 class="card-title pt-2">Images:</h5>
                     </div>
                     <div class="card-body">
                         <ul class="list-group ">
@@ -83,7 +89,7 @@
             <div class="cold-md">
                 <div class="card text-center mb-3 shadow">
                     <div class="card-header">
-                        <h5 class="card-title p-2">Product's Stock:</h5>
+                        <h5 class="card-title pt-2">Product's Stock:</h5>
                     </div>
                     <div class="card-body">
                         <ul class="list-group">
@@ -114,14 +120,13 @@
             <div class="col-md">
                 <div class="card text-center mb-3 shadow">
                     <div class="card-header">
-                        <h5 class="card-title p-2">Collections Data:</h5>
+                        <h5 class="card-title pt-2">Secondary Data:</h5>
                     </div>
                     <div class="card-body">
                         <ul class="list-group">
                             <li class="list-group-item">Shoper Active: {{ product.is_active_shoper }}</li>
                             <li class="list-group-item">Shoper Updated: {{ product.updated_shoper }}</li>
                             <li class="list-group-item">Local Updated: {{ product.updated }}</li>
-                            <li class="list-group-item">Shoper Active: {{ product.is_active_shoper }}</li>
                         </ul>
                     </div>
                 </div>
@@ -131,7 +136,7 @@
             <div class="col-md">
                 <div class="card text-center mb-3 shadow">
                     <div class="card-header">
-                        <h5 class="card-title p-2">Translations:</h5>
+                        <h5 class="card-title pt-2">Translations:</h5>
                     </div>
                     <div class="card-body">
                         <ul class="list-group">
@@ -139,14 +144,14 @@
                             {% if x.active == 1 %}
 
                             <li class="list-group-item list-group-item-action"
-                                style="background-color: rgb(103, 233, 233);">{{ x.locale }}
+                                style="background-color: rgb(103, 233, 233);"><strong>{{ x.locale }}</strong> ; {{ x.name }}
                                 {% if x.seo_url == "" %}<span class="badge rounded-pill text-bg-success"
                                     style="color: black;">SEO!</span>
                                 {% endif %}
                             </li>
                             {% else %}
                             <li class="list-group-item list-group-item-action"
-                                style="background-color: rgb(231, 105, 117);">{{ x.locale }}
+                                style="background-color: rgb(231, 105, 117);"><strong>{{ x.locale }}</strong> ; {{ x.name }}
                                 {% if x.seo_url == "" %}<span class="badge rounded-pill text-bg-success">SEO!</span>
                                 {% endif %}
                             </li>

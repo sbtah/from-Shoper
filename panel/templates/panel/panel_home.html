@@ -1,11 +1,56 @@
 {% extends 'base.html' %}
+{% block title %}Panel{% endblock title %}
 {% block content %}
+<div class="card mt-5">
+    <div class="card-body shadow">
+        <a href="#" class="btn btn-primary">Create Local Product</a>
+        <a href="#" class="btn btn-primary">Create Local Category</a>
+    </div>
+</div>
+<div class="row mt-5">
+    <div class="col">
+        <div class="cold-md">
+            <div class="card text-center mb-3 shadow">
+                <div class="card-header">
+                    <h5 class="card-title p-2">Number of Images:</h5>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title p-2 fw-bold">{{ images_number }}</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="col-md">
+            <div class="card text-center mb-3 shadow">
+                <div class="card-header">
+                    <h5 class="card-title p-2">Number of Products:</h5>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title p-2 fw-bold">{{ products_number }}</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="col-md">
+            <div class="card text-center mb-3 shadow">
+                <div class="card-header">
+                    <h5 class="card-title p-2">Number of Categories:</h5>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title p-2 fw-bold">{{ categories_number }}</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="row mt-5">
     <div class="col">
         <div class="cold-md">
             <div class="card text-center mb-3 shadow" id="total-orders">
                 <div class="card-header">
-                    <h5 class="card-title p-2">Last Images:</h5>
+                    <h5 class="card-title pt-2">Last Updated Images:</h5>
                 </div>
                 <div class="card-body">
                     <ul class="list-group">
@@ -17,12 +62,11 @@
             </div>
         </div>
     </div>
-
     <div class="col">
         <div class="col-md">
             <div class="card text-center mb-3 shadow" id="orders-delivered">
                 <div class="card-header">
-                    <h5 class="card-title p-2">Last Products:</h5>
+                    <h5 class="card-title pt-2">Last Updated Products:</h5>
                 </div>
                 <div class="card-body">
                     <ul class="list-group">
@@ -34,15 +78,18 @@
             </div>
         </div>
     </div>
-
     <div class="col">
         <div class="col-md">
             <div class="card text-center mb-3 shadow" id="orders-pending">
                 <div class="card-header">
-                    <h5 class="card-title p-2">Translations:</h5>
+                    <h5 class="card-title pt-2">Last Updated Categories:</h5>
                 </div>
                 <div class="card-body">
-                    <h3 class="card-title">Number of total translation: {{ producttranslations_number }}</h3>
+                    <ul class="list-group">
+                        {% for category in categories_updated %}
+                        <li class="list-group-item"><a href="{{ category.get_absolute_url }}">{{ category }}</a></li>
+                        {% endfor %}
+                    </ul>
                 </div>
             </div>
         </div>

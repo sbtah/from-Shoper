@@ -7,6 +7,7 @@ from users import forms
 from translations.models import ProductTranslation, ImageTranslation
 from images.models import Image
 from products.models import Product
+from categories.models import Category
 
 
 class LoginUserView(SuccessMessageMixin, LoginView):
@@ -35,16 +36,11 @@ class PanelView(LoginRequiredMixin, generic.TemplateView):
         context = super().get_context_data(**kwargs)
         context["images_updated"] = Image.objects.all().order_by("-updated")[:11]
         context["products_updated"] = Product.objects.all().order_by("-updated")[:11]
-        context[
-            "producttranslations_updated"
-        ] = ProductTranslation.objects.all().order_by("-updated")[:11]
-        context["imagetranslations_updated"] = ImageTranslation.objects.all().order_by(
-            "-updated"
-        )[:11]
+        context["categories_updated"] = Category.objects.all().order_by("-updated")[:11]
+
         context["images_number"] = Image.objects.all().count()
         context["products_number"] = Product.objects.all().count()
-        context["producttranslations_number"] = ProductTranslation.objects.all().count()
-        context["imagetranslations_number"] = ImageTranslation.objects.all().count()
+        context["categories_number"] = Category.objects.all().count()
 
         return context
 

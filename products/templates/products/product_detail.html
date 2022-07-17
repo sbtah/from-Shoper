@@ -28,11 +28,10 @@
                             <li class="list-group-item">Shoper ID: {{ product.shoper_id }}</li>
                             <li class="list-group-item">Shoper EAN: {{ product.shoper_ean }}</li>
                             <li class="list-group-item">Shoper SKU: <span class="link-success fw-bold">{{ product.shoper_sku }}</span></li>
-                            <li class="list-group-item">Shoper Promo Price: <span class="link-info">
-                                    {{ product.shoper_promo_price }}</span></li>
+                            <li class="list-group-item">Shoper VOL Weight: <span class="link-danger fw-bold">{{ product.shoper_vol_weight }}</span></li>
                             <li class="list-group-item">Shoper Tax ID: {{ product.shoper_tax_id }}</li>
-                            <li class="list-group-item">Shoper Other Price: {{ product.shoper_other_price }}</li>
-                            <li class="list-group-item">Shoper Updated: {{ product.updated_shoper }}</li>
+                            <li class="list-group-item">Shoper Group ID: {{ product.shoper_group_id }}</li>
+                            <li class="list-group-item">Shoper Unit ID: {{ product.shoper_unit_id  }}</li>
                             <li class="list-group-item">Main Category ID: {{ product.shoper_main_category_id }}</li>
                             <h6 class="card-title pt-2 fw-bold">All Categories IDs:</h5>
                             <ul class="list-group">
@@ -55,6 +54,9 @@
                         <ul class="list-group">
                             <li class="list-group-item">Shoper Bestseller: {{ product.shoper_bestseller_tag }}</li>
                             <li class="list-group-item">Shoper New Product: {{ product.shoper_new_product_tag }}</li>
+                            <li class="list-group-item">Shoper Other Price: {{ product.shoper_other_price }}</li>
+                            <li class="list-group-item">Shoper Promo Price: <span class="link-info">
+                                {{ product.shoper_promo_price }}</span></li>
                             <li class="list-group-item">Current Promo ID: {{ product.shoper_promo_id }}</li>
                             <li class="list-group-item">Promo Starts: {{ product.shoper_promo_start }}</li>
                             <li class="list-group-item">Promo Ends: {{ product.shoper_promo_ends }}</li>
@@ -124,8 +126,9 @@
                     </div>
                     <div class="card-body">
                         <ul class="list-group">
-                            <li class="list-group-item">Shoper Active: {{ product.is_active_shoper }}</li>
+                            <li class="list-group-item">Shoper Created: {{ product.created_shoper }}</li>
                             <li class="list-group-item">Shoper Updated: {{ product.updated_shoper }}</li>
+                            <li class="list-group-item">Local Created: {{ product.created }}</li>
                             <li class="list-group-item">Local Updated: {{ product.updated }}</li>
                         </ul>
                     </div>
@@ -164,5 +167,4 @@
         </div>
     </div>
 </div>
-<!--  -->
 {% endblock content %}

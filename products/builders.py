@@ -33,7 +33,7 @@ def update_or_create_product(
     """Create or Update an instance of Product object from items provided from API call to Shoper API."""
     try:
         product = Product.objects.get(
-            shoper_id=shoper_id,
+            shoper_sku=shoper_sku,
         )
         if datetime.strptime(updated_shoper, "%Y-%m-%d %H:%M:%S") > datetime.strptime(
             product.updated_shoper, "%Y-%m-%d %H:%M:%S"

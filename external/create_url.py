@@ -1,3 +1,5 @@
+from external.get_token import SHOPER_STORE
+
 test = "MeowBaby® Soft Plastic Balls 7cm for the Ball Pit Certified – Set 500pcs: Violet/Light Pink/Lime Green Green/Turquoise"
 validate_string = (
     """ĂÀàâÁáäĄąĆćŹźŻżÈèÉéêĘÊęüÜŁłŃńÒòÓóöŚŠś,.<>~`’/?'";:][}{)(*&^%$#@!®–+∅Øß\xa0"""
@@ -81,7 +83,7 @@ replace_dict = {
 }
 
 
-def create_seo_url(language_code, product_name, shoper_sku):
+def create_seo_url(shoper_sku, product_name) :
     """
     Create a safe SEO relative URL for product.
     This method can be used at POST request level.
@@ -98,26 +100,7 @@ def create_seo_url(language_code, product_name, shoper_sku):
     # ID is returned in response after this post.
     # Implementation of current ID in permalink: create seperate/after PUT call to product by ID of POST response.
     # Basically setting seo_url after the creation of Product.
-    return f"{shoper_sku}{language_code[3:]}-{new.replace(' ', '-')}"
-
-
-def create_seo_url_from_id(language_code, product_name, shoper_id):
-    """
-    This function can be used only on created Product on Shoper
-    with PUT request.
-    Create a safe SEO relative URL for product.
-    """
-
-    new = ""
-    for x in product_name:
-        if x in validate_string:
-            new += replace_dict.get(x)
-        else:
-            new += x
-    return f"{language_code[3:]}-{new.replace(' ', '-')}-{shoper_id}"
-
-
-
+    return f"{shoper_sku}-{new.replace(' ', '-')}"
 
 
 def create_relative_url(original_url):
@@ -126,7 +109,4 @@ def create_relative_url(original_url):
     Used to creation of relative URLS for redirects.
     """
 
-    return original_url.split("https://meowbaby.eu")[1]
-
-
-# print(create_seo_url(language_code="en_GB", product_name=test, shoper_sku="ZPZ005"))
+    return original_url.split(f"https://{SHOPER_STORE}")[1]

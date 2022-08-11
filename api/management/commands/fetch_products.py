@@ -1,7 +1,6 @@
 from django.core.management.base import BaseCommand
 from products.models import Product
 from products.builders import update_or_create_product
-from stocks.models import Stock
 from stocks.builders import update_or_create_category_stock
 from translations.builders import update_or_create_product_translation
 from external.get_products import get_all_products_data

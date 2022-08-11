@@ -2,11 +2,9 @@ import json
 import base64
 import time
 import requests
-from external.get_token import get_token
-from external.get_token import SHOPER_STORE
+from external.get_token import SHOPER_STORE, TOKEN
 
 
-TOKEN = get_token()
 
 # TODO
 # Specify order of image as an argument to function.

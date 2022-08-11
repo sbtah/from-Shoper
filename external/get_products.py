@@ -27,6 +27,7 @@ def get_single_product(id):
     headers = {"Authorization": f"Bearer {TOKEN}"}
     response = requests.get(url, headers=headers)
     product = response.json()
+    time.sleep(0.5)
 
     return product
 
@@ -55,9 +56,12 @@ def get_all_products_data():
         time.sleep(0.5)
         res = response.json()
         items = res.get("list")
-        for i in items:
-            yield i
-
+        try:
+            for i in items:
+                yield i
+        except TypeError as e:
+            print(f"Empty page ? for page nr: {x}")
+            pass
 
 # Get all ID numbers of products from SHOPER Api.
 def get_list_of_all_shoper_product_ids():

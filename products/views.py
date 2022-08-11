@@ -1,10 +1,12 @@
 from datetime import datetime
+from re import U
 from django.views import generic
 from django.views.generic.edit import FormMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from products.models import Product
 from django.contrib import messages
 from django.urls import reverse, reverse_lazy
+from products.builders import update_or_create_product
 from products.forms import PickLanguageToCopyForm
 from external.get_products import get_single_product
 from external.post_redirects import create_redirect
@@ -61,38 +63,40 @@ class ProductUpdateFromShoperView(LoginRequiredMixin, generic.DetailView):
         """
 
         product = self.get_object()
-        # Call get_single_product function from services.py
+        # Call get_single_product function from external app.
         response = get_single_product(product.shoper_id)
 
         if datetime.strptime(
-            response["updated_shoper"], "%Y-%m-%d %H:%M:%S"
+            response["edit_date"], "%Y-%m-%d %H:%M:%S"
         ) > datetime.strptime(product.updated_shoper, "%Y-%m-%d %H:%M:%S"):
-            product.product.shoper_type = response[""]
-            product.shoper_producer_id = response[""]
-            product.shoper_group_id = response[""]
-            product.shoper_tax_id = response[""]
-            product.shoper_main_category_id = response[""]
-            product.shoper_all_categories_ids = response[""]
-            product.shoper_unit_id = response[""]
-            product.created_shoper = response[""]
-            product.updated_shoper = response[""]
-            product.shoper_other_price = response[""]
-            product.shoper_promo_price = response[""]
-            product.shoper_sku = response[""]
-            product.shoper_ean = response[""]
-            product.shoper_pkwiu = response[""]
-            product.shoper_is_product_of_day = response[""]
-            product.shoper_bestseller_tag = response[""]
-            product.shoper_new_product_tag = response[""]
-            product.shoper_vol_weight = response[""]
-            product.shoper_gauge_id = response[""]
-            product.shoper_currency_id = response[""]
-            product.shoper_promo_id = response[""]
-            product.shoper_promo_start = response[""]
-            product.shoper_promo_ends = response[""]
-            product.shoper_discount_value = response[""]
+            product.product.shoper_type = response["type"]
+            product.shoper_producer_id = response["producer_id"]
+            product.shoper_group_id = response["group_id"]
+            product.shoper_tax_id = response["tax_id"]
+            product.shoper_main_category_id = response["category_id"]
+            product.shoper_all_categories_ids = response["categories"]
+            product.shoper_unit_id = response["unit_id"]
+            product.created_shoper = response["add_date"]
+            product.updated_shoper = response["edit_date"]
+            product.shoper_other_price = response["other_price"]
+            product.shoper_promo_price = response["promo_price"]
+            product.shoper_sku = response["code"]
+            product.shoper_ean = response["ean"]
+            product.shoper_pkwiu = response["pkwiu"]
+            product.shoper_is_product_of_day = response["is_product_of_day"]
+            product.shoper_bestseller_tag = response["bestseller"]
+            product.shoper_new_product_tag = response["newproduct"]
+            product.shoper_vol_weight = response["vol_weight"]
+            product.shoper_gauge_id = response["gauge_id"]
+            product.shoper_currency_id = response["currency_id"]
+            product.shoper_promo_id = response.get("special_offer").get("promo_id")
+            product.shoper_promo_start = response.get("special_offer").get("date_from")
+            product.shoper_promo_ends = response.get("special_offer").get("date_to")
+            product.shoper_discount_value = response.get("special_offer").get("discount")
+            for x in response["translations"]:
+                print(x)
             # Todo add stock, translations , images and categories
-            product.save()
+            # product.save()
             messages.success(request, ("Product Updated."))
         else:
             messages.success(request, ("There was nothing to update."))

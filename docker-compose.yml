@@ -1,30 +1,38 @@
-version: '3.8'
+version: '3.9'
+
 services:
   shoper-api:
-    build: .
-    container_name: shoper-api
-    command: python3 manage.py runserver 0.0.0.0:8000
+    build:
+      context: .
+      args:
+        - DEV=true
     ports:
       - "8000:8000"
     volumes:
-      - .:/app
+      - ./shoper-api:/shoper-api
+    command: >
+      sh -c "python3 manage.py migrate &&
+             python3 manage.py runserver 0.0.0.0:8000"
     environment:
-      - DB_HOST=pgdb
-      - DB_NAME=app
-      - DB_USER=postgres
-      - DB_PASS=supersecretpassword
+      - DB_HOST=shoperdb
+      - DB_NAME=devdb
+      - DB_USER=devuser
+      - DB_PASS=changeme
     depends_on:
-      - pgdb
-  pgdb:
+      - shoperdb
+
+
+  shoperdb:
     image: postgres:14-alpine
-    container_name: pgdb
-    ports:
-      - "5432:5432"
-    environment:
-      - POSTGRES_DB=app
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=supersecretpassword
     volumes:
-      - pgdata:/var/lib/postgresql/data/
+      - shoper-db-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=devdb
+      - POSTGRES_USER=devuser
+      - POSTGRES_PASSWORD=changeme
+
+
 volumes:
-  pgdata:
+  shoper-db-data:
+
+#python3 manage.py wait_for_db &&

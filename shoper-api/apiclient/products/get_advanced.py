@@ -1,4 +1,5 @@
 import time
+from token import AT
 import requests
 from apiclient.helpers.get_token import SHOPER_DOMAIN, TOKEN
 from apiclient.helpers.logging import logging
@@ -266,7 +267,10 @@ def get_single_product_data(product_id):
 
 
 def from_response_product(response):
-    """"""
+    """
+    Parses product data from Shoper Api.
+    Stores data in proper variables and returns dictionary of needed data for product.
+    """
 
     try:
         shoper_id = response.get("product_id")
@@ -484,25 +488,25 @@ def from_response_stock_for_product(response):
         logging.error(f"Error while getting response: {e}")
     else:
         return {
-            "stock_id": shoper_stock_id,
-            "product_id": shoper_stock_product_id,
-            "extended": shoper_stock_extended,
-            "price": shoper_stock_price,
-            "active": shoper_stock_active,
-            "default": shoper_stock_default,
-            "stock": shoper_stock_value,
-            "warn_level": shoper_stock_warn_level,
-            "sold": shoper_stock_sold,
-            "code": shoper_stock_code,
-            "ean": shoper_stock_ean,
-            "weight": shoper_stock_weight,
-            "weight_type": shoper_stock_weight_type,
-            "availability_id": shoper_stock_availability_id,
-            "delivery_id": shoper_stock_delivery_id,
-            "gfx_id": shoper_stock_gfx_id,
-            "package": shoper_stock_package,
-            "price_wholesale": shoper_stock_price_wholesale,
-            "price_special": shoper_stock_price_special,
-            "calculation_unit_id": shoper_stock_calculation_unit_id,
-            "calculation_unit_ratio": shoper_stock_calculation_unit_ratio,
+            "shoper_stock_id": shoper_stock_id,
+            "shoper_stock_product_id": shoper_stock_product_id,
+            "shoper_stock_extended": shoper_stock_extended,
+            "shoper_stock_price": shoper_stock_price,
+            "shoper_stock_active": shoper_stock_active,
+            "shoper_stock_default": shoper_stock_default,
+            "shoper_stock_value": shoper_stock_value,
+            "shoper_stock_warn_level": shoper_stock_warn_level,
+            "shoper_stock_sold": shoper_stock_sold,
+            "shoper_stock_code": shoper_stock_code,
+            "shoper_stock_ean": shoper_stock_ean,
+            "shoper_stock_weight": shoper_stock_weight,
+            "shoper_stock_weight_type": shoper_stock_weight_type,
+            "shoper_stock_availability_id": shoper_stock_availability_id,
+            "shoper_stock_delivery_id": shoper_stock_delivery_id,
+            "shoper_stock_gfx_id": shoper_stock_gfx_id,
+            "shoper_stock_package": shoper_stock_package,
+            "shoper_stock_price_wholesale": shoper_stock_price_wholesale,
+            "shoper_stock_price_special": shoper_stock_price_special,
+            "shoper_stock_calculation_unit_id": shoper_stock_calculation_unit_id,
+            "shoper_stock_calculation_unit_ratio": shoper_stock_calculation_unit_ratio,
         }

@@ -1,8 +1,8 @@
 import json
 import time
 import requests
-from apiclient.helpers.get_token import SHOPER_DOMAIN, TOKEN
-from apiclient.helpers.create_url import create_seo_url, create_relative_url
+from helpers.get_token import SHOPER_DOMAIN, TOKEN
+from helpers.create_url import create_seo_url, create_relative_url
 
 
 def deacivate_translation_for_product(product_id, translation_code):

@@ -1,14 +1,16 @@
+import json
+import base64
 import time
+import logging
 import requests
 from apiclient.helpers.get_token import SHOPER_DOMAIN, TOKEN
-from apiclient.helpers.logging import logging
 
 
-# Simple GET Requests
-def get_number_of_product_pages():
-    """Return number of product pages from Shoper Api."""
+# Get number of pages from image list API.
+def get_number_of_image_pages():
+    """Get number of all image pages from SHOPER api"""
 
-    url = f"https://{SHOPER_DOMAIN}/webapi/rest/products"
+    url = f"https://{SHOPER_DOMAIN}/webapi/rest/product-images"
     headers = {"Authorization": f"Bearer {TOKEN}"}
 
     try:
@@ -25,17 +27,17 @@ def get_number_of_product_pages():
         logging.error("HTTPError was raised.")
         return None
     except Exception as e:
-        logging.error(f"(get_number_of_product_pages) Exception: {e}")
+        logging.error(f"(get_number_of_image_pages) Exception: {e}")
     else:
         res = response.json()
         pages = res.get("pages")
         return pages
 
 
-def get_number_of_products():
-    """Return number of all products in your Shoper store."""
+def get_number_of_images():
+    """Return number of all images in your Shoper store."""
 
-    url = f"https://{SHOPER_DOMAIN}/webapi/rest/products"
+    url = f"https://{SHOPER_DOMAIN}/webapi/rest/product-images"
     headers = {"Authorization": f"Bearer {TOKEN}"}
 
     try:
@@ -52,17 +54,20 @@ def get_number_of_products():
         logging.error("HTTPError was raised.")
         return None
     except Exception as e:
-        logging.error(f"(get_number_of_product_pages) Exception: {e}")
+        logging.error(f"(get_number_of_images) Exception: {e}")
     else:
         res = response.json()
-        number = res.get("count")
-        return number
+        count = res.get("count")
+        return count
 
 
-def get_single_product(id):
-    """Return a response with data from single product endpoint."""
+def get_single_gfx_image(id):
+    """
+    Returns a reponse from product images endpoint.
+    https://shop.url/webapi/rest/product-images/<id>
+    """
 
-    url = f"https://{SHOPER_DOMAIN}/webapi/rest/products/{id}"
+    url = f"https://{SHOPER_DOMAIN}/webapi/rest/product-images/{id}"
     headers = {"Authorization": f"Bearer {TOKEN}"}
 
     try:
@@ -79,16 +84,16 @@ def get_single_product(id):
         logging.error("HTTPError was raised.")
         return None
     except Exception as e:
-        logging.error(f"(get_single_product) Exception: {e}")
+        logging.error(f"(python_get) Exception: {e}")
     else:
-        product = response.json()
-        return product
+        image = response.json()
+        return image
 
 
-def get_all_products():
+def get_all_images():
     """Return a paginated response with all products and number of pages."""
 
-    url = f"https://{SHOPER_DOMAIN}/webapi/rest/products"
+    url = f"https://{SHOPER_DOMAIN}/webapi/rest/product-images"
     headers = {"Authorization": f"Bearer {TOKEN}"}
 
     try:
@@ -105,7 +110,7 @@ def get_all_products():
         logging.error("HTTPError was raised.")
         return None
     except Exception as e:
-        logging.error(f"(get_all_products) Exception: {e}")
+        logging.error(f"(get_number_of_images) Exception: {e}")
     else:
-        products = response.json()
-        return products
+        images = response.json()
+        return images

@@ -7,8 +7,8 @@ from apiclient.products.get_basic import get_number_of_product_pages
 
 def get_all_products_data():
     """
-    Yield all Products from Shoper Api,
-        by looping over all product pages.
+    Yield all Products for all pages from Shoper Api,
+    by looping over all pages.
     """
 
     number_of_product_pages = get_number_of_product_pages()
@@ -40,8 +40,49 @@ def get_all_products_data():
                 for product in products:
                     yield product
             except TypeError as e:
-                print(f"Empty page ? for page nr: {x} : {e}")
+                logging.error(f"Empty page ? for page nr: {x} : {e}")
                 break
+
+
+def get_all_products_data_v2():
+    """
+    Uses requests Sessions.
+    Yield all Products for all pages from Shoper Api,
+    by looping over all pages.
+    """
+
+    number_of_product_pages = get_number_of_product_pages()
+    assert number_of_product_pages, "Number of product pages is None..."
+
+    for x in range(1, number_of_product_pages + 1):
+        data = {"page": f"{x}"}
+        url = f"https://{SHOPER_DOMAIN}/webapi/rest/products"
+        headers = {"Authorization": f"Bearer {TOKEN}"}
+        with requests.Session() as ses:
+            try:
+                response = ses.get(url, headers=headers, params=data)
+                time.sleep(0.5)
+                response.raise_for_status()
+            except requests.exceptions.Timeout:
+                logging.error("Connection was timed out.")
+                return None
+            except requests.exceptions.ConnectionError:
+                logging.error("Connection Error.")
+                return None
+            except requests.exceptions.HTTPError:
+                logging.error("HTTPError was raised.")
+                return None
+            except Exception as e:
+                logging.error(f"(get_all_products_data) Exception: {e}")
+            else:
+                res = response.json()
+                products = res.get("list")
+                try:
+                    for product in products:
+                        yield product
+                except TypeError as e:
+                    print(f"Empty page ? for page nr: {x} : {e}")
+                    break
 
 
 # Get all ID numbers of products from SHOPER Api.

@@ -1,7 +1,7 @@
 import time
 import requests
-from shoper_api.helpers.get_token import SHOPER_DOMAIN, TOKEN
-from shoper_api.helpers.logging import logging
+from apiclient.helpers.get_token import SHOPER_DOMAIN, TOKEN
+from apiclient.helpers.logging import logging
 
 
 def get_number_of_categories_pages():

@@ -1,11 +1,11 @@
 import time
 import requests
-from shoper_api.helpers.get_token import SHOPER_DOMAIN, TOKEN
-from shoper_api.helpers.logging import logging
-from shoper_api.categories.get_basic import get_number_of_categories_pages
+from apiclient.helpers.get_token import SHOPER_DOMAIN, TOKEN
+from apiclient.helpers.logging import logging
+from apiclient.categories.get_basic import get_number_of_categories_pages
 
 
-def get_all_category_data():
+def get_all_categories_data():
     """
     Yield all Categories for all pages from Shoper Api,
     by looping over all pages.

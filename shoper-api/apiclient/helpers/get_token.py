@@ -10,7 +10,6 @@ load_dotenv()
 SHOPER_LOGIN = os.environ.get("SHOPER_LOGIN")
 SHOPER_PASSWORD = os.environ.get("SHOPER_PASSWORD")
 SHOPER_DOMAIN = os.environ.get("SHOPER_DOMAIN")
-print(f"!!!DEBUG: {SHOPER_LOGIN} ; {SHOPER_PASSWORD} ; {SHOPER_DOMAIN}")
 
 
 def get_token():

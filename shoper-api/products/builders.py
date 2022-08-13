@@ -1,6 +1,7 @@
 from datetime import datetime
 from products.models import Product
 from categories.models import Category
+from apiclient.helpers.logging import logging
 
 
 def update_or_create_product(
@@ -72,9 +73,9 @@ def update_or_create_product(
             )
             for category in parrent_categories:
                 category.shoper_products.add(product)
-            print(f"!! Product updated: {product}")
+            logging.info(f"!! UPDATE Product: {product}")
         else:
-            print(f"No update for Product: {product}")
+            logging.info(f"NO UPDATE for Product: {product}")
             parrent_categories = Category.objects.filter(
                 shoper_id__in=shoper_all_categories_ids
             )
@@ -113,5 +114,5 @@ def update_or_create_product(
         )
         for category in parrent_categories:
             category.shoper_products.add(product)
-        print(f"!! Product created: {product}")
+        logging.info(f"!! CREATE Product: {product}")
     return product

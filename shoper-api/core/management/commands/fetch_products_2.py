@@ -1,5 +1,5 @@
-from django.core.management.base import BaseCommand
 from products.models import Product
+from django.core.management.base import BaseCommand
 from products.builders import update_or_create_product
 from stocks.builders import update_or_create_category_stock
 from translations.builders import update_or_create_product_translation
@@ -14,16 +14,18 @@ from apiclient.products.get_advanced import (
 from apiclient.helpers.logging import logging
 
 
-def fetch_products():
+def fetch_products_v2():
     """Copy all products from SHOPER Api and saves them as Product objects in DB."""
 
-    ### TODO:
-    ### TASK : Get all products and translation data from list of IDS.
-    ### THIS can be used on list responded from an API or generated from DB.
-    ### LONG DISCOVERY TASK : List of IDs is a response from API
-    ### SHORTER VALIDATION TASK : List of IDs is a response from local db Products table.
-    for data in get_all_products_data():
-        product_data = from_response_product(response=data)
+    products_data = get_all_products_data()
+    for prod in products_data:
+
+        logging.info("=" * 78)
+        logging.info(f'PROCESSING: Product id: {prod["product_id"]}')
+        product_data = from_response_product(
+            response=prod,
+        )
+        # print(product_data["shoper_id"])
         product = update_or_create_product(
             shoper_id=product_data["shoper_id"],
             shoper_type=product_data["shoper_type"],
@@ -51,43 +53,43 @@ def fetch_products():
             shoper_promo_ends=product_data["shoper_promo_ends"],
             shoper_discount_value=product_data["shoper_discount_value"],
         )
-        logging.info(f"Processed Product: {product}")
-
         stock_response = from_response_stock_for_product(
             response=product_data["shoper_product_stock"]
         )
-        # print(stock_response)
         stock = update_or_create_category_stock(
-            shoper_stock_id=stock_response["stock_id"],
-            shoper_stock_product_id=stock_response["product_id"],
-            shoper_stock_extended=stock_response["extended"],
-            shoper_stock_price=stock_response["price"],
-            shoper_stock_active=stock_response["active"],
-            shoper_stock_default=stock_response["default"],
-            shoper_stock_value=stock_response["stock"],
-            shoper_stock_warn_level=stock_response["warn_level"],
-            shoper_stock_sold=stock_response["sold"],
-            shoper_stock_code=stock_response["code"],
-            shoper_stock_ean=stock_response["ean"],
-            shoper_stock_weight=stock_response["weight"],
-            shoper_stock_weight_type=stock_response["weight_type"],
-            shoper_stock_availability_id=stock_response["availability_id"],
-            shoper_stock_delivery_id=stock_response["delivery_id"],
-            shoper_stock_gfx_id=stock_response["gfx_id"],
-            shoper_stock_package=stock_response["package"],
-            shoper_stock_price_wholesale=stock_response["price_wholesale"],
-            shoper_stock_price_special=stock_response["price_special"],
-            shoper_stock_calculation_unit_id=stock_response["calculation_unit_id"],
+            shoper_stock_id=stock_response["shoper_stock_id"],
+            shoper_stock_product_id=stock_response["shoper_stock_product_id"],
+            shoper_stock_extended=stock_response["shoper_stock_extended"],
+            shoper_stock_price=stock_response["shoper_stock_price"],
+            shoper_stock_active=stock_response["shoper_stock_active"],
+            shoper_stock_default=stock_response["shoper_stock_default"],
+            shoper_stock_value=stock_response["shoper_stock_value"],
+            shoper_stock_warn_level=stock_response["shoper_stock_warn_level"],
+            shoper_stock_sold=stock_response["shoper_stock_sold"],
+            shoper_stock_code=stock_response["shoper_stock_code"],
+            shoper_stock_ean=stock_response["shoper_stock_ean"],
+            shoper_stock_weight=stock_response["shoper_stock_weight"],
+            shoper_stock_weight_type=stock_response["shoper_stock_weight_type"],
+            shoper_stock_availability_id=stock_response["shoper_stock_availability_id"],
+            shoper_stock_delivery_id=stock_response["shoper_stock_delivery_id"],
+            shoper_stock_gfx_id=stock_response["shoper_stock_gfx_id"],
+            shoper_stock_package=stock_response["shoper_stock_package"],
+            shoper_stock_price_wholesale=stock_response["shoper_stock_price_wholesale"],
+            shoper_stock_price_special=stock_response["shoper_stock_price_special"],
+            shoper_stock_calculation_unit_id=stock_response[
+                "shoper_stock_calculation_unit_id"
+            ],
             shoper_stock_calculation_unit_ratio=stock_response[
-                "calculation_unit_ratio"
+                "shoper_stock_calculation_unit_ratio"
             ],
         )
-        logging.info(f"Processed Stock: {stock}")
-        translations_data = from_response_translations_for_product(
-            response=product_data["shoper_product_translations"]
+        # print(stock_response)
+        translations = from_response_translations_for_product(
+            response=product_data["shoper_product_translations"],
         )
-        for trans in translations_data:
-            traslation = update_or_create_product_translation(
+        for trans in translations:
+            # print(trans["locale"])
+            translation = update_or_create_product_translation(
                 locale=trans["locale"],
                 shoper_translation_id=trans["shoper_translation_id"],
                 related_product_id=trans["related_product_id"],
@@ -106,7 +108,6 @@ def fetch_products():
                 main_page=trans["main_page"],
                 main_page_order=trans["main_page_order"],
             )
-            logging.info(f"Processed Translation: {traslation}")
 
 
 class Command(BaseCommand):
@@ -120,5 +121,5 @@ class Command(BaseCommand):
                 f"Database cleared Product objects count: {Product.objects.all().count()}"
             )
         )
-        fetch_products()
+        fetch_products_v2()
         self.stdout.write(self.style.SUCCESS("Database available!"))

@@ -7,8 +7,8 @@ from apiclient.products.get_basic import get_number_of_product_pages
 
 def get_all_products_data():
     """
-    Yield all Products for all pages from Shoper Api,
-    by looping over all pages.
+    Yield all Products from Shoper Api,
+        by looping over all product pages.
     """
 
     number_of_product_pages = get_number_of_product_pages()

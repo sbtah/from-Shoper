@@ -4,6 +4,7 @@ from products.builders import update_or_create_product
 from stocks.builders import update_or_create_category_stock
 from translations.builders import update_or_create_product_translation
 from apiclient.products.get_medium import get_all_products_data
+from apiclient.helpers.logging import logging
 
 
 def fetch_products():
@@ -188,9 +189,12 @@ def fetch_products():
                 shoper_stock_calculation_unit_ratio=shoper_stock_calculation_unit_ratio,
             )
         except TypeError:
-            print("Type Error from Stock - no stock values")
+            logging.info("Type Error from Stock - no stock values")
         try:
+            # logging.info("::DEBUG ALL IS GOOD RESPONSE FOR TRANSLATIONS")
+            # logging.info(f"::DEBUG ENTIRE OBJ: {i.get('translations')}")
             for tag in i.get("translations"):
+                logging.info(f"::DEBUG LANG TAG: {tag}")
                 locale = tag
                 shoper_translation_id = (
                     i.get("translations").get(f"{locale}").get("translation_id")
@@ -240,8 +244,14 @@ def fetch_products():
                     main_page_order=main_page_order,
                 )
         except TypeError:
-            print("Type Error from ProductTranslation - No values in loop")
-    return
+            logging.info("Type Error from ProductTranslation - No values in loop")
+            # logging.info("::DEBUG FUCKED RESPONSE FOR TRANSLATIONS")
+            # logging.info(f":: DEBUG translations OBJ :{i.get('translations')}")
+            # logging.info("=== END TRANS OBJ ===")
+            if i.get("translations"):
+                pass
+            else:
+                logging.info(f"::DEBUG HUGE DEBUG {i}")
 
 
 class Command(BaseCommand):

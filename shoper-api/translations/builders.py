@@ -6,6 +6,7 @@ from translations.models import (
     CategoryTranslation,
     ImageTranslation,
 )
+from apiclient.helpers.logging import logging
 
 
 # TODO
@@ -36,7 +37,7 @@ def update_or_create_category_translation(
             shoper_translation_id=shoper_translation_id,
         )
         if (
-            (str(related_category_id) != str(category_translation.related_category_id))
+            str(related_category_id) != str(category_translation.related_category_id)
             or (str(name) != str(category_translation.name))
             or (str(description) != str(category_translation.description))
             or (str(description_bottom) != str(category_translation.description_bottom))
@@ -48,7 +49,7 @@ def update_or_create_category_translation(
             or (str(active) != str(category_translation.active))
             or (str(is_default) != str(category_translation.is_default))
             or (str(lang_id) != str(category_translation.lang_id))
-            or (str(items) != (category_translation.items))
+            or (str(items) != str(category_translation.items))
         ):
             category_translation.related_category_id = related_category_id
             category_translation.name = name
@@ -67,14 +68,14 @@ def update_or_create_category_translation(
 
             parrent_category = Category.objects.get(shoper_id=related_category_id)
             parrent_category.categorytranslation_set.add(category_translation)
-            print(
-                f"!! CategoryTranslation updated: {category_translation.related_category_id}"
+            logging.info(
+                f"!! UPDATE CategoryTranslation: {category_translation.shoper_translation_id} for Category: {parrent_category}"
             )
         else:
             parrent_category = Category.objects.get(shoper_id=related_category_id)
             parrent_category.categorytranslation_set.add(category_translation)
-            print(
-                f"No updates for CategoryTranslation: {category_translation.related_category_id}"
+            logging.info(
+                f"NO UPDATES CategoryTranslation: {category_translation.shoper_translation_id} for Category: {parrent_category}"
             )
     except CategoryTranslation.DoesNotExist:
         category_translation = CategoryTranslation.objects.create(
@@ -96,8 +97,8 @@ def update_or_create_category_translation(
         )
         parrent_category = Category.objects.get(shoper_id=related_category_id)
         parrent_category.categorytranslation_set.add(category_translation)
-        print(
-            f"!! CategoryTranslation created: {category_translation.related_category_id}"
+        logging.info(
+            f"!! CREATE CategoryTranslation: {category_translation.shoper_translation_id} for Category: {parrent_category}"
         )
     return category_translation
 
@@ -149,7 +150,14 @@ def update_or_create_product_translation(
             or (str(translation.main_page) != str(main_page))
             or (str(translation.main_page_order) != str(main_page_order))
         ):
+
             translation.locale = locale
+            # logging.info(
+            #     f"DEBUG: shoper_translation_id: {translation.shoper_translation_id} // {shoper_translation_id}"
+            # )
+            # logging.info(
+            #     f"DEBUG: shoper_translation_id: {translation.shoper_translation_id == shoper_translation_id}"
+            # )
             translation.shoper_translation_id = shoper_translation_id
             translation.related_product_id = related_product_id
             translation.name = name
@@ -173,8 +181,8 @@ def update_or_create_product_translation(
             )
             parrent_product.producttranslation_set.add(translation)
             translation.save()
-            print(
-                f"!! ProductTranslation updated: {translation.related_product_id} Updated"
+            logging.info(
+                f"!! UPDATE ProductTranslation: {translation.related_product_id} Updated"
             )
         else:
             parrent_product = Product.objects.get(
@@ -182,8 +190,8 @@ def update_or_create_product_translation(
             )
             parrent_product.producttranslation_set.add(translation)
 
-            print(
-                f"No updates for ProductTranslation: {translation.related_product_id}"
+            logging.info(
+                f"NO UPDATES for ProductTranslation: {translation.related_product_id}"
             )
     except ProductTranslation.DoesNotExist:
         translation = ProductTranslation.objects.create(
@@ -207,7 +215,9 @@ def update_or_create_product_translation(
         )
         parrent_product = Product.objects.get(shoper_id=translation.related_product_id)
         parrent_product.producttranslation_set.add(translation)
-        print(f"!! ProductTranslation created {translation.shoper_translation_id}")
+        logging.info(
+            f"!! CREATE ProductTranslation: {translation.shoper_translation_id}"
+        )
     return translation
 
 
@@ -238,9 +248,9 @@ def update_or_create_image_translation(
             parrent_image.imagetranslation_set.add(translation)
             translation.save()
 
-            print(f"!! ImageTranslation updated: {translation}")
+            logging.info(f"!! UPDATE ImageTranslation: {translation}")
         else:
-            print(f"No updates for ImageTranslation: {translation}")
+            print(f"NO UPDATES for ImageTranslation: {translation}")
             parrent_image = Image.objects.get(shoper_gfx_id=translation.related_gfx_id)
             parrent_image.imagetranslation_set.add(translation)
     except ImageTranslation.DoesNotExist:
@@ -253,5 +263,5 @@ def update_or_create_image_translation(
         )
         parrent_image = Image.objects.get(shoper_gfx_id=translation.related_gfx_id)
         parrent_image.imagetranslation_set.add(translation)
-        print(f"!! ImageTranslation created: {translation}")
+        logging.info(f"!! CREATE ImageTranslation: {translation}")
     return translation

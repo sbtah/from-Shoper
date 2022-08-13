@@ -2,7 +2,7 @@ from categories.models import Category
 from categories.builders import update_or_create_category
 from translations.builders import update_or_create_category_translation
 from django.core.management.base import BaseCommand
-from external.get_categories import get_all_categories_data
+from apiclient.categories.get_medium import get_all_categories_data
 
 
 def fetch_categories():

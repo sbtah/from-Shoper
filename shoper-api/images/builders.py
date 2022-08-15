@@ -1,5 +1,6 @@
 from images.models import Image
 from products.models import Product
+from apiclient.helpers.logging import logging
 
 
 def update_or_create_image(
@@ -35,15 +36,20 @@ def update_or_create_image(
             image.shoper_unic = shoper_unic
             image.shoper_hidden = shoper_hidden
             image.shoper_extension = shoper_extension
-            parrent_product = Product.objects.get(shoper_id=image.shoper_product_id)
-            parrent_product.image_set.add(image)
-            image.save()
-            print(f"!! Image updated: {image}")
+            try:
+                parrent_product = Product.objects.get(shoper_id=image.shoper_product_id)
+                parrent_product.image_set.add(image)
+            except Product.DoesNotExist:
+                logging.info("!!! MISSING:: Parrent object does not exist.")
+                pass
+            finally:
+                image.save()
+                logging.info(f"! UPDATE Image: {image}")
         else:
             parrent_product = Product.objects.get(shoper_id=image.shoper_product_id)
             parrent_product.image_set.add(image)
             image.save()
-            print(f"No update for Image: {image}")
+            logging.info(f"NO UPDATE for Image: {image}")
     except Image.DoesNotExist:
         image = Image.objects.create(
             shoper_gfx_id=shoper_gfx_id,
@@ -55,7 +61,15 @@ def update_or_create_image(
             shoper_hidden=shoper_hidden,
             shoper_extension=shoper_extension,
         )
-        parrent_product = Product.objects.get(shoper_id=image.shoper_product_id)
-        parrent_product.image_set.add(image)
-        print(f"!! Image created: {Image}")
+        try:
+            parrent_product = Product.objects.get(shoper_id=image.shoper_product_id)
+            parrent_product.image_set.add(image)
+        except Product.DoesNotExist:
+            logging.error("!!! MISSING:: Parrent object does not exist.")
+            pass
+        finally:
+            image.save()
+            logging.info(f"! CREATE Image: {Image}")
+    except Exception as e:
+        logging.info(f"!! Some other Exception: {e}")
     return image

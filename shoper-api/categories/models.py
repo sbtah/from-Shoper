@@ -14,14 +14,14 @@ class Category(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     shoper_products = models.ManyToManyField(Product)
+    # TODO:
+    # Add foreign field key for parrent Store.
 
     class Meta:
         verbose_name_plural = "Categories"
 
     def __str__(self):
-        return (
-            f"Category ID:{self.shoper_id}"
-        )
+        return f"Category ID:{self.shoper_id}"
 
     def get_absolute_url(self):
         return reverse("categories:category-detail", kwargs={"pk": self.id})

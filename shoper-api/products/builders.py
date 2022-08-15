@@ -71,16 +71,22 @@ def update_or_create_product(
             parrent_categories = Category.objects.filter(
                 shoper_id__in=shoper_all_categories_ids
             )
-            for category in parrent_categories:
-                category.shoper_products.add(product)
+            if len(parrent_categories) > 0:
+                for category in parrent_categories:
+                    category.shoper_products.add(product)
+            else:
+                logging.info("!!! MISSING:: Parrent object does not exist.")
             logging.info(f"!! UPDATE Product: {product}")
         else:
             logging.info(f"NO UPDATE for Product: {product}")
             parrent_categories = Category.objects.filter(
                 shoper_id__in=shoper_all_categories_ids
             )
-            for category in parrent_categories:
-                category.shoper_products.add(product)
+            if len(parrent_categories) > 0:
+                for category in parrent_categories:
+                    category.shoper_products.add(product)
+            else:
+                logging.info("!!! MISSING:: Parrent object does not exist.")
     except Product.DoesNotExist:
         product = Product.objects.create(
             shoper_id=shoper_id,
@@ -112,7 +118,9 @@ def update_or_create_product(
         parrent_categories = Category.objects.filter(
             shoper_id__in=shoper_all_categories_ids
         )
-        for category in parrent_categories:
-            category.shoper_products.add(product)
-        logging.info(f"!! CREATE Product: {product}")
+        if len(parrent_categories) > 0:
+            for category in parrent_categories:
+                category.shoper_products.add(product)
+        else:
+            logging.info("!!! MISSING:: Parrent object does not exist.")
     return product

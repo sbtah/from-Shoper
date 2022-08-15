@@ -2,77 +2,46 @@ from images.models import Image
 from images.builders import update_or_create_image
 from translations.builders import update_or_create_image_translation
 from django.core.management.base import BaseCommand
-from external.get_images import get_all_images_data
+from apiclient.images.get_medium import get_all_images_data
+from apiclient.images.get_advanced import (
+    from_response_image,
+    from_response_translations_for_image,
+)
+from apiclient.helpers.logging import logging
 
 
 def fetch_images():
     """Copy all images from SHOPER Api and saves them as Image objects in DB."""
 
-    for i in get_all_images_data():
-        """Loops over part of response with all Images."""
+    images = get_all_images_data()
+    for img in images:
 
-        shoper_gfx_id = i.get("gfx_id")
-
-        try:
-            shoper_product_id = i.get("product_id")
-        except AttributeError:
-            shoper_product_id = ""
-
-        try:
-            shoper_main = i.get("main")
-        except AttributeError:
-            shoper_main = ""
-
-        try:
-            shoper_order = i.get("order")
-        except AttributeError:
-            shoper_order = ""
-
-        try:
-            shoper_image_name = i.get("name")
-        except AttributeError:
-            shoper_image_name = ""
-
-        try:
-            shoper_unic = i.get("unic_name")
-        except AttributeError:
-            shoper_unic = ""
-
-        try:
-            shoper_hidden = i.get("hidden")
-        except AttributeError:
-            shoper_hidden = ""
-
-        try:
-            shoper_extension = i.get("extension")
-        except AttributeError:
-            shoper_extension = ""
-        update_or_create_image(
-            shoper_gfx_id=shoper_gfx_id,
-            shoper_product_id=shoper_product_id,
-            shoper_main=shoper_main,
-            shoper_order=shoper_order,
-            shoper_image_name=shoper_image_name,
-            shoper_unic=shoper_unic,
-            shoper_hidden=shoper_hidden,
-            shoper_extension=shoper_extension,
+        logging.info("=" * 78)
+        logging.info(f'PROCESSING: Image id: {img["gfx_id"]}')
+        image_data = from_response_image(
+            response=img,
         )
-        for tag in i.get("translations"):
-            locale = tag
-            shoper_translation_id = (
-                i.get("translations").get(locale).get("translation_id")
+        image = update_or_create_image(
+            shoper_gfx_id=image_data["shoper_gfx_id"],
+            shoper_product_id=image_data["shoper_product_id"],
+            shoper_main=image_data["shoper_main"],
+            shoper_order=image_data["shoper_order"],
+            shoper_image_name=image_data["shoper_image_name"],
+            shoper_unic=image_data["shoper_unic"],
+            shoper_hidden=image_data["shoper_hidden"],
+            shoper_extension=image_data["shoper_extension"],
+        )
+        translations = from_response_translations_for_image(
+            response=image_data["shoper_image_translations"]
+        )
+        for trans in translations:
+            translation = update_or_create_image_translation(
+                locale=trans["locale"],
+                shoper_translation_id=trans["shoper_translation_id"],
+                related_gfx_id=trans["related_gfx_id"],
+                name=trans["name"],
+                lang_id=trans["lang_id"],
             )
-            related_gfx_id = i.get("translations").get(locale).get("gfx_id")
-            name = i.get("translations").get(locale).get("name")
-            lang_id = i.get("translations").get(locale).get("lang_id")
-            update_or_create_image_translation(
-                locale=locale,
-                shoper_translation_id=shoper_translation_id,
-                related_gfx_id=related_gfx_id,
-                name=name,
-                lang_id=lang_id,
-            )
-    return
 
 
 class Command(BaseCommand):

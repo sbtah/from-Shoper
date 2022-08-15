@@ -1,2 +1,8 @@
 - regex for searching skus in Shoper API
     - adding this to models extra fields
+- fix all alt texts in all images.
+- add store object as a parrent of all.
+- create new url
+- validate url
+- set redirects
+
